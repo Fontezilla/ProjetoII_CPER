@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.SepiaTone?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Line?>
+
+<AnchorPane fx:controller="com.example.cper_desktop.controllers.LoginController" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <!-- Background image with yellow filter -->
+    <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true">
+        <image>
+            <Image url="@../images/GettyImages-1032683612_Easy-Resize.com.jpg" />
+        </image>
+        <effect>
+            <SepiaTone level="0.4" />
+        </effect>
+    </ImageView>
+
+    <!-- Login Card -->
+    <StackPane layoutX="295.0" layoutY="163.0" prefHeight="395.0" prefWidth="690.0">
+        <children>
+            <!-- Background card -->
+            <Region prefHeight="427.0" prefWidth="712.0" style="                 -fx-background-color: white;                 -fx-background-radius: 12;                 -fx-border-color: #f1c40f;                 -fx-border-radius: 12;                 -fx-border-width: 3;                 -fx-padding: 20;                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 18, 0.1, 0, 8);" />
+
+            <!-- Content -->
+            <HBox alignment="CENTER" prefHeight="416.0" prefWidth="751.0" spacing="50" style="-fx-background-color: transparent;">
+                <!-- CPER Acronym Block -->
+                <VBox alignment="CENTER_LEFT" spacing="10">
+                    <Pane><children>
+                        <Label style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #f1c40f;" text="C" />
+                        <Label layoutX="33.0" layoutY="31.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="ompanhia" />
+                    </children></Pane>
+                    <Pane><children>
+                        <Label style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #f1c40f;" text="P" />
+                        <Label layoutX="30.0" layoutY="32.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="rodutora" />
+                    </children></Pane>
+                    <Pane><children>
+                        <Label style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #f1c40f;" text="E" />
+                        <Label layoutX="28.0" layoutY="31.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="nergia" />
+                    </children></Pane>
+                    <Pane><children>
+                        <Label style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #f1c40f;" text="R" />
+                        <Label layoutX="34.0" layoutY="32.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="enováveis" />
+                    </children></Pane>
+                </VBox>
+
+                <!-- Divider -->
+                <Line endY="300" startY="0" stroke="#d0d0d0" />
+
+                <!-- Login Form -->
+                <VBox alignment="CENTER" spacing="15">
+                    <Label style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Login" />
+
+                    <TextField fx:id="username" prefWidth="250" promptText="Email" />
+                    <PasswordField fx:id="password" prefWidth="250" promptText="Password" />
+
+                    <Hyperlink style="-fx-text-fill: #f1c40f;" text="Esqueceu a Palavra-passe?" />
+
+                    <Button text="Entrar"
+                            prefWidth="250"
+                            style="-fx-background-color: #f1c40f; -fx-text-fill: white; -fx-border-radius: 3;"
+                            onAction="#handleLogin" />
+                </VBox>
+            </HBox>
+        </children>
+    </StackPane>
+</AnchorPane>
