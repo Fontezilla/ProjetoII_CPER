@@ -1,8 +1,7 @@
 package com.example.cper_core.mappers;
 
-import com.example.cper_core.dtos.anomalia.AnomaliaDetailsExtendedDto;
+import com.example.cper_core.enums.*;
 import com.example.cper_core.dtos.localidade.*;
-import com.example.cper_core.entities.Anomalia;
 import com.example.cper_core.entities.Localidade;
 import org.mapstruct.*;
 
@@ -11,49 +10,45 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface LocalidadeMapper {
 
-    // -------- To DTO --------
-
+    // --- To DTO ---
     @Named("toDto")
     LocalidadeDto toDto(Localidade entity);
 
     @IterableMapping(qualifiedByName = "toDto")
     List<LocalidadeDto> toDtoList(List<Localidade> entities);
 
+    // --- To Details DTO ---
     @Named("toDetailsDto")
     LocalidadeDetailsDto toDetailsDto(Localidade entity);
 
     @IterableMapping(qualifiedByName = "toDetailsDto")
     List<LocalidadeDetailsDto> toDetailsDtoList(List<Localidade> entities);
 
-    @Named("toWithEnderecosDto")
-    LocalidadeWithEnderecosDto toWithEnderecosDto(Localidade entity);
+    // --- To Extended DTO ---
+    @Named("toExtendedDto")
+    LocalidadeDetailsExtendedDto toExtendedDto(Localidade entity);
 
-    @IterableMapping(qualifiedByName = "toWithEnderecosDto")
-    List<LocalidadeWithEnderecosDto> toWithEnderecosDtoList(List<Localidade> entities);
+    @IterableMapping(qualifiedByName = "toExtendedDto")
+    List<LocalidadeDetailsExtendedDto> toExtendedDtoList(List<Localidade> entities);
 
-    // -------- To Entity --------
+    // --- To WithRelationships DTO ---
+    @Named("toWithRelationshipsDto")
+    LocalidadeWithRelationshipsDto toWithRelationshipsDto(Localidade entity);
 
-    @Named("toEntityFromDto")
+    @IterableMapping(qualifiedByName = "toWithRelationshipsDto")
+    List<LocalidadeWithRelationshipsDto> toWithRelationshipsDtoList(List<Localidade> entities);
+
+    // --- To Entity ---
     Localidade toEntity(LocalidadeDto dto);
 
-    @Named("toEntityFromDetails")
     Localidade toEntity(LocalidadeDetailsDto dto);
 
-    @Named("toEntityFromWithEnderecos")
-    Localidade toEntity(LocalidadeWithEnderecosDto dto);
+    Localidade toEntity(LocalidadeDetailsExtendedDto dto);
 
-    // -------- Conversões de listas inversas --------
+    Localidade toEntity(LocalidadeWithRelationshipsDto dto);
 
-    @IterableMapping(qualifiedByName = "toEntityFromDto")
-    List<Localidade> toEntityList(List<LocalidadeDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromDetails")
-    List<Localidade> toEntityDetailsList(List<LocalidadeDetailsDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromWithEnderecos")
-    List<Localidade> toEntityWithEnderecosList(List<LocalidadeWithEnderecosDto> dtos);
-
+    // --- Partial Update ---
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromExtendedDto(LocalidadeDetailsDto dto, @MappingTarget Localidade entity);
+    void updateEntityFromExtendedDto(LocalidadeDetailsExtendedDto dto, @MappingTarget Localidade entity);
 }

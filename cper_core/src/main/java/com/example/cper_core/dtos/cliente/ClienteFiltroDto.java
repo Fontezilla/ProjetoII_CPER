@@ -1,33 +1,38 @@
 package com.example.cper_core.dtos.cliente;
 
+import com.example.cper_core.enums.EstadoCliente;
+import com.example.cper_core.enums.TipoCliente;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 public class ClienteFiltroDto {
 
     private Integer id;
+
     private String nome;
     private String nif;
     private String email;
     private String telefone;
-    private LocalDate dataNascimentoInicio;
-    private LocalDate dataNascimentoFim;
-    private LocalDate dataCadastroInicio;
-    private LocalDate dataCadastroFim;
-    private BigDecimal demandaContratadaMin;
-    private BigDecimal demandaContratadaMax;
+
+    private TipoCliente tipoCliente;
+    private EstadoCliente estado;
+
+    private OffsetDateTime dataCadastroInicio;
+    private OffsetDateTime dataCadastroFim;
+
     private BigDecimal consumoMedioMin;
     private BigDecimal consumoMedioMax;
 
-    // Relationships
+    private BigDecimal demandaContratadaMin;
+    private BigDecimal demandaContratadaMax;
 
-    private Set<Integer> catConsumo;
-    private Set<Integer> tipoEnergia;
-    private Set<Integer> estado;
-    private Set<Integer> idEndereco;
-    private Set<Integer> nPorta;
+    private Boolean isDeleted = false;
+
+    private Set<Integer> idsEndereco;
 }

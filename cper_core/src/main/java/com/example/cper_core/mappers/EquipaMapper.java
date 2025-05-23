@@ -1,8 +1,7 @@
 package com.example.cper_core.mappers;
 
-import com.example.cper_core.dtos.anomalia.AnomaliaDetailsExtendedDto;
+import com.example.cper_core.enums.*;
 import com.example.cper_core.dtos.equipa.*;
-import com.example.cper_core.entities.Anomalia;
 import com.example.cper_core.entities.Equipa;
 import org.mapstruct.*;
 
@@ -11,73 +10,45 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface EquipaMapper {
 
-    // -------- To DTO --------
-
+    // --- To DTO ---
     @Named("toDto")
     EquipaDto toDto(Equipa entity);
 
     @IterableMapping(qualifiedByName = "toDto")
     List<EquipaDto> toDtoList(List<Equipa> entities);
 
+    // --- To Details DTO ---
     @Named("toDetailsDto")
     EquipaDetailsDto toDetailsDto(Equipa entity);
 
     @IterableMapping(qualifiedByName = "toDetailsDto")
     List<EquipaDetailsDto> toDetailsDtoList(List<Equipa> entities);
 
-    @Named("toWithAvariaDto")
-    EquipaWithAvariaDto toWithAvariaDto(Equipa entity);
+    // --- To Extended DTO ---
+    @Named("toExtendedDto")
+    EquipaDetailsExtendedDto toExtendedDto(Equipa entity);
 
-    @IterableMapping(qualifiedByName = "toWithAvariaDto")
-    List<EquipaWithAvariaDto> toWithAvariaDtoList(List<Equipa> entities);
+    @IterableMapping(qualifiedByName = "toExtendedDto")
+    List<EquipaDetailsExtendedDto> toExtendedDtoList(List<Equipa> entities);
 
-    @Named("toWithFuncionarioDto")
-    EquipaWithFuncionarioDto toWithFuncionarioDto(Equipa entity);
+    // --- To WithRelationships DTO ---
+    @Named("toWithRelationshipsDto")
+    EquipaWithRelationshipsDto toWithRelationshipsDto(Equipa entity);
 
-    @IterableMapping(qualifiedByName = "toWithFuncionarioDto")
-    List<EquipaWithFuncionarioDto> toWithFuncionarioDtoList(List<Equipa> entities);
+    @IterableMapping(qualifiedByName = "toWithRelationshipsDto")
+    List<EquipaWithRelationshipsDto> toWithRelationshipsDtoList(List<Equipa> entities);
 
-    @Named("toWithInspecaoDto")
-    EquipaWithInspecaoDto toWithInspecaoDto(Equipa entity);
-
-    @IterableMapping(qualifiedByName = "toWithInspecaoDto")
-    List<EquipaWithInspecaoDto> toWithInspecaoDtoList(List<Equipa> entities);
-
-    // -------- To Entity --------
-
-    @Named("toEntityFromDto")
+    // --- To Entity ---
     Equipa toEntity(EquipaDto dto);
 
-    @Named("toEntityFromDetails")
     Equipa toEntity(EquipaDetailsDto dto);
 
-    @Named("toEntityFromAvaria")
-    Equipa toEntity(EquipaWithAvariaDto dto);
+    Equipa toEntity(EquipaDetailsExtendedDto dto);
 
-    @Named("toEntityFromFuncionario")
-    Equipa toEntity(EquipaWithFuncionarioDto dto);
+    Equipa toEntity(EquipaWithRelationshipsDto dto);
 
-    @Named("toEntityFromInspecao")
-    Equipa toEntity(EquipaWithInspecaoDto dto);
-
-    // -------- Conversões de listas inversas --------
-
-    @IterableMapping(qualifiedByName = "toEntityFromDto")
-    List<Equipa> toEntityList(List<EquipaDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromDetails")
-    List<Equipa> toEntityDetailsList(List<EquipaDetailsDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromAvaria")
-    List<Equipa> toEntityWithAvariaList(List<EquipaWithAvariaDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromFuncionario")
-    List<Equipa> toEntityWithFuncionarioList(List<EquipaWithFuncionarioDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromInspecao")
-    List<Equipa> toEntityWithInspecaoList(List<EquipaWithInspecaoDto> dtos);
-
+    // --- Partial Update ---
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromExtendedDto(EquipaDetailsDto dto, @MappingTarget Equipa entity);
+    void updateEntityFromExtendedDto(EquipaDetailsExtendedDto dto, @MappingTarget Equipa entity);
 }

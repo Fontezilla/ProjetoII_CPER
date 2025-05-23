@@ -1,37 +1,32 @@
 package com.example.cper_core.dtos.nota;
 
+import com.example.cper_core.dtos.solicitacao_energetica.SolicitacaoEnergeticaDto;
 import com.example.cper_core.dtos.anomalia.AnomaliaDto;
 import com.example.cper_core.dtos.avaria.AvariaDto;
 import com.example.cper_core.dtos.inspecao.InspecaoDto;
-import com.example.cper_core.entities.Nota;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.io.Serializable;
-import java.time.LocalDate;
-
-/**
- * DTO for {@link Nota}
- */
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class NotaDetailsExtendedDto extends NotaDetailsDto implements Serializable {
-    @NotNull(message = "A data de criação não pode ser nula")
-    private LocalDate dataCriacao;
+public class NotaDetailsExtendedDto extends NotaDetailsDto {
 
+    private String descricao;
+
+    private Boolean isDeleted;
+
+    @Valid
     private InspecaoDto inspecao;
 
+    @Valid
     private AnomaliaDto anomalia;
 
+    @Valid
     private AvariaDto avaria;
 
-    public NotaDetailsExtendedDto(Integer id, String descricao, String prioridade, String titulo, LocalDate dataCriacao, InspecaoDto inspecao, AnomaliaDto anomalia, AvariaDto avaria) {
-        super(id, descricao, prioridade, titulo);
-        this.dataCriacao = dataCriacao != null ? dataCriacao : LocalDate.now();
-        this.inspecao = inspecao;
-        this.anomalia = anomalia;
-        this.avaria = avaria;
-    }
+    @Valid
+    private SolicitacaoEnergeticaDto solicitacaoEnergetica;
 }

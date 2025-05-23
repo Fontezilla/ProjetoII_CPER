@@ -1,9 +1,8 @@
 package com.example.cper_core.mappers;
 
+import com.example.cper_core.enums.*;
 import com.example.cper_core.dtos.solicitacao_energetica.*;
 import com.example.cper_core.entities.SolicitacaoEnergetica;
-import com.example.cper_core.enums.EstadoSolicitacaoEnergetica;
-import com.example.cper_core.enums.Prioridade;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -11,76 +10,75 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SolicitacaoEnergeticaMapper {
 
-    // -------- Mapeamentos individuais --------
+    // --- Métodos Auxiliares de Enum ---
+    @Named("mapTipoEnergiaRenovavel")
+    default TipoEnergiaRenovavel mapTipoEnergiaRenovavel(Integer id) {
+        return id == null ? null : TipoEnergiaRenovavel.fromId(id);
+    }
 
+    @Named("mapPrioridade")
+    default Prioridade mapPrioridade(Integer id) {
+        return id == null ? null : Prioridade.fromId(id);
+    }
+
+    @Named("mapEstadoSolicitacaoEnergetica")
+    default EstadoSolicitacaoEnergetica mapEstadoSolicitacaoEnergetica(Integer id) {
+        return id == null ? null : EstadoSolicitacaoEnergetica.fromId(id);
+    }
+
+    // --- To DTO ---
     @Named("toDto")
     SolicitacaoEnergeticaDto toDto(SolicitacaoEnergetica entity);
-
-    @Named("toEntity")
-    SolicitacaoEnergetica toEntity(SolicitacaoEnergeticaDto dto);
-
-    @Named("toDetailsDto")
-    @Mapping(source = "prioridade", target = "prioridade", qualifiedByName = "mapPrioridadeToString")
-    @Mapping(source = "estado", target = "estado", qualifiedByName = "mapEstadoToString")
-    SolicitacaoEnergeticaDetailsDto toDetailsDto(SolicitacaoEnergetica entity);
-
-    @Named("toEntity")
-    SolicitacaoEnergetica toEntity(SolicitacaoEnergeticaDetailsDto dto);
-
-    @Named("toDetailsExtendedDto")
-    SolicitacaoEnergeticaDetailsExtendedDto toDetailsExtendedDto(SolicitacaoEnergetica entity);
-
-    @Named("toEntity")
-    SolicitacaoEnergetica toEntity(SolicitacaoEnergeticaDetailsExtendedDto dto);
-
-    // -------- Mapeamentos de listas --------
 
     @IterableMapping(qualifiedByName = "toDto")
     List<SolicitacaoEnergeticaDto> toDtoList(List<SolicitacaoEnergetica> entities);
 
+    // --- To Details DTO ---
+    @Named("toDetailsDto")
+    @Mapping(target = "tipoEnergia", source = "tipoEnergia", qualifiedByName = "mapTipoEnergiaRenovavel")
+    @Mapping(target = "prioridade", source = "prioridade", qualifiedByName = "mapPrioridade")
+    @Mapping(target = "estado", source = "estado", qualifiedByName = "mapEstadoSolicitacaoEnergetica")
+    SolicitacaoEnergeticaDetailsDto toDetailsDto(SolicitacaoEnergetica entity);
+
     @IterableMapping(qualifiedByName = "toDetailsDto")
     List<SolicitacaoEnergeticaDetailsDto> toDetailsDtoList(List<SolicitacaoEnergetica> entities);
 
-    @IterableMapping(qualifiedByName = "toDetailsExtendedDto")
-    List<SolicitacaoEnergeticaDetailsExtendedDto> toDetailsExtendedDtoList(List<SolicitacaoEnergetica> entities);
+    // --- To Extended DTO ---
+    @Named("toExtendedDto")
+    @Mapping(target = "tipoEnergia", source = "tipoEnergia", qualifiedByName = "mapTipoEnergiaRenovavel")
+    @Mapping(target = "prioridade", source = "prioridade", qualifiedByName = "mapPrioridade")
+    @Mapping(target = "estado", source = "estado", qualifiedByName = "mapEstadoSolicitacaoEnergetica")
+    SolicitacaoEnergeticaDetailsExtendedDto toExtendedDto(SolicitacaoEnergetica entity);
 
-    // -------- Métodos de conversão inversa --------
+    @IterableMapping(qualifiedByName = "toExtendedDto")
+    List<SolicitacaoEnergeticaDetailsExtendedDto> toExtendedDtoList(List<SolicitacaoEnergetica> entities);
 
-    @IterableMapping(qualifiedByName = "toEntity")
-    List<SolicitacaoEnergetica> toEntityList(List<SolicitacaoEnergeticaDto> dtos);
+    // --- To WithRelationships DTO ---
+    @Named("toWithRelationshipsDto")
+    SolicitacaoEnergeticaWithRelationshipsDto toWithRelationshipsDto(SolicitacaoEnergetica entity);
 
-    @IterableMapping(qualifiedByName = "toEntity")
-    List<SolicitacaoEnergetica> toEntityDetailsList(List<SolicitacaoEnergeticaDetailsDto> dtos);
+    @IterableMapping(qualifiedByName = "toWithRelationshipsDto")
+    List<SolicitacaoEnergeticaWithRelationshipsDto> toWithRelationshipsDtoList(List<SolicitacaoEnergetica> entities);
 
-    @IterableMapping(qualifiedByName = "toEntity")
-    List<SolicitacaoEnergetica> toEntityExtendedList(List<SolicitacaoEnergeticaDetailsExtendedDto> dtos);
+    // --- To Entity ---
+    SolicitacaoEnergetica toEntity(SolicitacaoEnergeticaDto dto);
 
-    // -------- Métodos auxiliares --------
+    @Mapping(target = "tipoEnergia", expression = "java(dto.getTipoEnergia() != null ? dto.getTipoEnergia().getId() : null)")
+    @Mapping(target = "prioridade", expression = "java(dto.getPrioridade() != null ? dto.getPrioridade().getId() : null)")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : null)")
+    SolicitacaoEnergetica toEntity(SolicitacaoEnergeticaDetailsDto dto);
 
-    @Named("mapPrioridadeToString")
-    default String mapPrioridadeToString(Integer prioridadeId) {
-        if (prioridadeId == null) return null;
-        return Prioridade.fromId(prioridadeId).name();
-    }
+    @Mapping(target = "tipoEnergia", expression = "java(dto.getTipoEnergia() != null ? dto.getTipoEnergia().getId() : null)")
+    @Mapping(target = "prioridade", expression = "java(dto.getPrioridade() != null ? dto.getPrioridade().getId() : null)")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : null)")
+    SolicitacaoEnergetica toEntity(SolicitacaoEnergeticaDetailsExtendedDto dto);
 
-    @Named("mapStringToPrioridade")
-    default Integer mapStringToPrioridade(String prioridadeName) {
-        if (prioridadeName == null) return null;
-        return Prioridade.fromName(prioridadeName).getId();
-    }
+    SolicitacaoEnergetica toEntity(SolicitacaoEnergeticaWithRelationshipsDto dto);
 
-    @Named("mapEstadoToString")
-    default String mapEstadoToString(Integer estadoId) {
-        if (estadoId == null) return null;
-        return EstadoSolicitacaoEnergetica.fromId(estadoId).name();
-    }
-
-    @Named("mapStringToEstado")
-    default Integer mapStringToEstado(String estadoName) {
-        if (estadoName == null) return null;
-        return EstadoSolicitacaoEnergetica.fromName(estadoName).getId();
-    }
-
+    // --- Partial Update ---
+    @Mapping(target = "tipoEnergia", expression = "java(dto.getTipoEnergia() != null ? dto.getTipoEnergia().getId() : entity.getTipoEnergia())")
+    @Mapping(target = "prioridade", expression = "java(dto.getPrioridade() != null ? dto.getPrioridade().getId() : entity.getPrioridade())")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : entity.getEstado())")
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromExtendedDto(SolicitacaoEnergeticaDetailsExtendedDto dto, @MappingTarget SolicitacaoEnergetica entity);

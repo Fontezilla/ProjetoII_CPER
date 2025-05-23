@@ -1,42 +1,34 @@
 package com.example.cper_core.dtos.contrato;
 
-import com.example.cper_core.entities.Contrato;
+import com.example.cper_core.dtos.OnCreate;
 import com.example.cper_core.enums.EstadoContrato;
 import com.example.cper_core.enums.TipoContrato;
-
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-
-/**
- * DTO for {@link Contrato}
- */
+import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ContratoDetailsDto extends ContratoDto implements Serializable {
-    @NotNull(message = "O campo tipo de contrato não pode ser nulo")
-    private String tipoContrato;
+public class ContratoDetailsDto extends ContratoDto {
 
-    @NotNull(message = "O campo quantidade de energia não pode ser nulo")
-    @Positive(message = "A quantidade de energia deve ser um valor positivo")
+    @NotNull(groups = OnCreate.class, message = "O tipo de contrato é obrigatório")
+    private TipoContrato tipoContrato;
+
+    @NotNull(groups = OnCreate.class, message = "A quantidade de energia é obrigatória")
+    @DecimalMin(value = "0.0", message = "A quantidade de energia não pode ser negativa")
     private BigDecimal qtdEnergia;
 
-    @NotBlank(message = "O campo estado não pode estar vazio")
-    private String estado;
+    @NotNull(groups = OnCreate.class, message = "A quantidade de energia por hora é obrigatória")
+    @DecimalMin(value = "0.0", message = "A quantidade de energia por hora não pode ser negativa")
+    private BigDecimal qtdEnergiaH;
 
-    public ContratoDetailsDto(Integer id, String tipoContrato, BigDecimal qtdEnergia, String estado) {
-        super(id);
-        this.tipoContrato = tipoContrato != null ? tipoContrato : TipoContrato.VENDA_POTENCIA_FIXA.toString();
-        this.qtdEnergia = qtdEnergia;
-        this.estado = estado != null ? estado : EstadoContrato.EM_ANALISE.toString();
-    }
+    @NotNull(groups = OnCreate.class, message = "O estado é obrigatório")
+    private EstadoContrato estado;
 }
+

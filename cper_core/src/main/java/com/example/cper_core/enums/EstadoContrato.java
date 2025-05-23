@@ -1,7 +1,8 @@
 package com.example.cper_core.enums;
 
-public enum EstadoContrato {
-    APAGADO(0),
+import com.example.cper_core.enums.Interface.EnumWithId;
+
+public enum EstadoContrato implements EnumWithId<EstadoContrato> {
     ATIVO(1),
     SUSPENSO(2),
     CANCELADO(3),
@@ -14,26 +15,19 @@ public enum EstadoContrato {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    public static int getIdFromEnum(EstadoContrato estadoContrato) { return EnumWithId.getIdFromEnum(estadoContrato); }
+
     public static EstadoContrato fromId(int id) {
-        for (EstadoContrato estado : values()) {
-            if (estado.id == id) {
-                return estado;
-            }
-        }
-        throw new IllegalArgumentException("EstadoContrato inválido: " + id);
+        return EnumWithId.fromId(EstadoContrato.class, id);
     }
 
     public static EstadoContrato fromName(String name) {
-        for (EstadoContrato estado : values()) {
-            if (estado.name().equalsIgnoreCase(name)) {
-                return estado;
-            }
-        }
-        throw new IllegalArgumentException("EstadoContrato inválido: " + name);
+        return EnumWithId.fromName(EstadoContrato.class, name);
     }
 
     @Override

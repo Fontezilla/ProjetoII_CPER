@@ -1,8 +1,7 @@
 package com.example.cper_core.mappers;
 
-import com.example.cper_core.dtos.anomalia.AnomaliaDetailsExtendedDto;
+import com.example.cper_core.enums.*;
 import com.example.cper_core.dtos.material.*;
-import com.example.cper_core.entities.Anomalia;
 import com.example.cper_core.entities.Material;
 import org.mapstruct.*;
 
@@ -11,7 +10,16 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MaterialMapper {
 
-    // -------- To DTO --------
+    // --- Métodos Auxiliares de Enum ---
+    @Named("mapUnidadePeso")
+    default UnidadePeso mapUnidadePeso(Integer id) {
+        return id == null ? null : UnidadePeso.fromId(id);
+    }
+
+    @Named("mapUnidadeVolume")
+    default UnidadeVolume mapUnidadeVolume(Integer id) {
+        return id == null ? null : UnidadeVolume.fromId(id);
+    }
 
     @Named("toDto")
     MaterialDto toDto(Material entity);
@@ -25,70 +33,32 @@ public interface MaterialMapper {
     @IterableMapping(qualifiedByName = "toDetailsDto")
     List<MaterialDetailsDto> toDetailsDtoList(List<Material> entities);
 
-    @Named("toDetailsExtendedDto")
-    MaterialDetailsExtendedDto toDetailsExtendedDto(Material entity);
+    @Named("toExtendedDto")
+    @Mapping(target = "uniMedidaPeso", source = "uniMedidaPeso", qualifiedByName = "mapUnidadePeso")
+    @Mapping(target = "uniMedidaVolume", source = "uniMedidaVolume", qualifiedByName = "mapUnidadeVolume")
+    MaterialDetailsExtendedDto toExtendedDto(Material entity);
 
-    @IterableMapping(qualifiedByName = "toDetailsExtendedDto")
-    List<MaterialDetailsExtendedDto> toDetailsExtendedDtoList(List<Material> entities);
+    @IterableMapping(qualifiedByName = "toExtendedDto")
+    List<MaterialDetailsExtendedDto> toExtendedDtoList(List<Material> entities);
 
-    @Named("toWithLoteDto")
-    MaterialWithLoteDto toWithLoteDto(Material entity);
+    @Named("toWithRelationshipsDto")
+    MaterialWithRelationshipsDto toWithRelationshipsDto(Material entity);
 
-    @IterableMapping(qualifiedByName = "toWithLoteDto")
-    List<MaterialWithLoteDto> toWithLoteDtoList(List<Material> entities);
+    @IterableMapping(qualifiedByName = "toWithRelationshipsDto")
+    List<MaterialWithRelationshipsDto> toWithRelationshipsDtoList(List<Material> entities);
 
-    @Named("toWithPedidoDto")
-    MaterialWithPedidoMaterialDto toWithPedidoDto(Material entity);
-
-    @IterableMapping(qualifiedByName = "toWithPedidoDto")
-    List<MaterialWithPedidoMaterialDto> toWithPedidoDtoList(List<Material> entities);
-
-    @Named("toWithSolicitacaoDto")
-    MaterialWithSolicitacaoMaterialDto toWithSolicitacaoDto(Material entity);
-
-    @IterableMapping(qualifiedByName = "toWithSolicitacaoDto")
-    List<MaterialWithSolicitacaoMaterialDto> toWithSolicitacaoDtoList(List<Material> entities);
-
-    // -------- To Entity --------
-
-    @Named("toEntityFromDto")
     Material toEntity(MaterialDto dto);
 
-    @Named("toEntityFromDetails")
     Material toEntity(MaterialDetailsDto dto);
 
-    @Named("toEntityFromExtended")
+    @Mapping(target = "uniMedidaPeso", expression = "java(dto.getUniMedidaPeso() != null ? dto.getUniMedidaPeso().getId() : null)")
+    @Mapping(target = "uniMedidaVolume", expression = "java(dto.getUniMedidaVolume() != null ? dto.getUniMedidaVolume().getId() : null)")
     Material toEntity(MaterialDetailsExtendedDto dto);
 
-    @Named("toEntityFromLote")
-    Material toEntity(MaterialWithLoteDto dto);
+    Material toEntity(MaterialWithRelationshipsDto dto);
 
-    @Named("toEntityFromPedido")
-    Material toEntity(MaterialWithPedidoMaterialDto dto);
-
-    @Named("toEntityFromSolicitacao")
-    Material toEntity(MaterialWithSolicitacaoMaterialDto dto);
-
-    // -------- Conversões de listas inversas --------
-
-    @IterableMapping(qualifiedByName = "toEntityFromDto")
-    List<Material> toEntityList(List<MaterialDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromDetails")
-    List<Material> toEntityDetailsList(List<MaterialDetailsDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromExtended")
-    List<Material> toEntityExtendedList(List<MaterialDetailsExtendedDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromLote")
-    List<Material> toEntityWithLoteList(List<MaterialWithLoteDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromPedido")
-    List<Material> toEntityWithPedidoMaterialList(List<MaterialWithPedidoMaterialDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromSolicitacao")
-    List<Material> toEntityWithSolicitacaoMaterialList(List<MaterialWithSolicitacaoMaterialDto> dtos);
-
+    @Mapping(target = "uniMedidaPeso", expression = "java(dto.getUniMedidaPeso() != null ? dto.getUniMedidaPeso().getId() : entity.getUniMedidaPeso())")
+    @Mapping(target = "uniMedidaVolume", expression = "java(dto.getUniMedidaVolume() != null ? dto.getUniMedidaVolume().getId() : entity.getUniMedidaVolume())")
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromExtendedDto(MaterialDetailsExtendedDto dto, @MappingTarget Material entity);

@@ -1,8 +1,8 @@
 package com.example.cper_core.mappers;
 
+import com.example.cper_core.enums.*;
 import com.example.cper_core.dtos.nota.*;
 import com.example.cper_core.entities.Nota;
-import com.example.cper_core.enums.Prioridade;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -10,64 +10,55 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface NotaMapper {
 
-    // -------- To DTO --------
+    // --- Método Auxiliar de Enum ---
+    @Named("mapPrioridade")
+    default Prioridade mapPrioridade(Integer id) {
+        return id == null ? null : Prioridade.fromId(id);
+    }
 
+    // --- To DTO ---
     @Named("toDto")
     NotaDto toDto(Nota entity);
 
     @IterableMapping(qualifiedByName = "toDto")
     List<NotaDto> toDtoList(List<Nota> entities);
 
+    // --- To Details DTO ---
     @Named("toDetailsDto")
-    @Mapping(source = "prioridade", target = "prioridade", qualifiedByName = "mapPrioridadeToString")
+    @Mapping(target = "prioridade", source = "prioridade", qualifiedByName = "mapPrioridade")
     NotaDetailsDto toDetailsDto(Nota entity);
 
     @IterableMapping(qualifiedByName = "toDetailsDto")
     List<NotaDetailsDto> toDetailsDtoList(List<Nota> entities);
 
-    @Named("toDetailsExtendedDto")
-    NotaDetailsExtendedDto toDetailsExtendedDto(Nota entity);
+    // --- To Extended DTO ---
+    @Named("toExtendedDto")
+    @Mapping(target = "prioridade", source = "prioridade", qualifiedByName = "mapPrioridade")
+    NotaDetailsExtendedDto toExtendedDto(Nota entity);
 
-    @IterableMapping(qualifiedByName = "toDetailsExtendedDto")
-    List<NotaDetailsExtendedDto> toDetailsExtendedDtoList(List<Nota> entities);
+    @IterableMapping(qualifiedByName = "toExtendedDto")
+    List<NotaDetailsExtendedDto> toExtendedDtoList(List<Nota> entities);
 
-    // -------- To Entity --------
+    // --- To WithRelationships DTO ---
+    @Named("toWithRelationshipsDto")
+    NotaWithRelationshipsDto toWithRelationshipsDto(Nota entity);
 
-    @Named("toEntityFromDto")
+    @IterableMapping(qualifiedByName = "toWithRelationshipsDto")
+    List<NotaWithRelationshipsDto> toWithRelationshipsDtoList(List<Nota> entities);
+
+    // --- To Entity ---
     Nota toEntity(NotaDto dto);
 
-    @Named("toEntityFromDetails")
-    @Mapping(source = "prioridade", target = "prioridade", qualifiedByName = "mapStringToPrioridade")
+    @Mapping(target = "prioridade", expression = "java(dto.getPrioridade() != null ? dto.getPrioridade().getId() : null)")
     Nota toEntity(NotaDetailsDto dto);
 
-    @Named("toEntityFromExtended")
+    @Mapping(target = "prioridade", expression = "java(dto.getPrioridade() != null ? dto.getPrioridade().getId() : null)")
     Nota toEntity(NotaDetailsExtendedDto dto);
 
-    // -------- Conversões de listas inversas --------
+    Nota toEntity(NotaWithRelationshipsDto dto);
 
-    @IterableMapping(qualifiedByName = "toEntityFromDto")
-    List<Nota> toEntityList(List<NotaDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromDetails")
-    List<Nota> toEntityDetailsList(List<NotaDetailsDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromExtended")
-    List<Nota> toEntityExtendedList(List<NotaDetailsExtendedDto> dtos);
-
-    // -------- Métodos auxiliares --------
-
-    @Named("mapPrioridadeToString")
-    default String mapPrioridadeToString(Integer prioridadeId) {
-        if (prioridadeId == null) return null;
-        return Prioridade.fromId(prioridadeId).name();
-    }
-
-    @Named("mapStringToPrioridade")
-    default Integer mapStringToPrioridade(String prioridadeName) {
-        if (prioridadeName == null) return null;
-        return Prioridade.fromName(prioridadeName).getId();
-    }
-
+    // --- Partial Update ---
+    @Mapping(target = "prioridade", expression = "java(dto.getPrioridade() != null ? dto.getPrioridade().getId() : entity.getPrioridade())")
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromExtendedDto(NotaDetailsExtendedDto dto, @MappingTarget Nota entity);

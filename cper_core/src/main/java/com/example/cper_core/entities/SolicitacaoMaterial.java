@@ -1,78 +1,65 @@
 package com.example.cper_core.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "\"solicitacao material\"")
+@Table(name = "solicitacao_material")
+@ToString(onlyExplicitlyIncluded = true)
 public class SolicitacaoMaterial {
-
-    // Attributes
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "solicitacao_material_id_gen")
     @SequenceGenerator(name = "solicitacao_material_id_gen", sequenceName = "solicitacao material_id_solicitacao_seq", allocationSize = 1)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @Column(name = "id_solicitacao", nullable = false)
     private Integer id;
 
-    @ColumnDefault("CURRENT_DATE")
-    @Column(name = "data_pedido", nullable = false)
-    private LocalDate dataPedido;
+    @Column(name = "data_pedido")
+    private OffsetDateTime dataPedido;
 
-    @Column(name = "descricao", length = Integer.MAX_VALUE)
+    @Column(name = "descricao", columnDefinition = "TEXT")
     private String descricao;
 
     @Column(name = "estado")
     private Integer estado;
 
-    // Relationships
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean isDeleted = false;
 
     @OneToMany(mappedBy = "solicitacaoMaterial")
-    private Set<MaterialSolicitacaoMaterial> materialSolicitacaomateriais = new LinkedHashSet<>();
+    @Builder.Default
+    private Set<MaterialSolicitacaoMaterial> materialSolicitacoes = new LinkedHashSet<>();
 
-    // Getters and Setters
-
-    public Integer getId() {
-        return id;
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ?
+                ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        SolicitacaoMaterial that = (SolicitacaoMaterial) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public LocalDate getDataPedido() {
-        return dataPedido;
-    }
-
-    public void setDataPedido(LocalDate dataPedido) {
-        this.dataPedido = dataPedido;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public Integer getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
-
-    public Set<MaterialSolicitacaoMaterial> getMaterialSolicitacaomateriais() {
-        return materialSolicitacaomateriais;
-    }
-
-    public void setMaterialSolicitacaomateriais(Set<MaterialSolicitacaoMaterial> materialSolicitacaomateriais) {
-        this.materialSolicitacaomateriais = materialSolicitacaomateriais;
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ?
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

@@ -1,24 +1,35 @@
 package com.example.cper_core.dtos.solicitacao_energetica;
 
+import com.example.cper_core.enums.EstadoSolicitacaoEnergetica;
+import com.example.cper_core.enums.Prioridade;
+import com.example.cper_core.enums.TipoEnergiaRenovavel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.Set;
 
 @Data
+@NoArgsConstructor
 public class SolicitacaoEnergeticaFiltroDto {
 
     private Integer id;
-    private LocalDate dataSolicitacaoInicio;
-    private LocalDate dataSolicitacaoFim;
-    private Integer tipoEnergia;
+
+    private OffsetDateTime dataSolicitacaoInicio;
+    private OffsetDateTime dataSolicitacaoFim;
+
+    private TipoEnergiaRenovavel tipoEnergia;
+
     private BigDecimal qtdSolicitadaMin;
     private BigDecimal qtdSolicitadaMax;
-    private LocalDate prazoEntregaInicio;
-    private LocalDate prazoEntregaFim;
-    private Integer prioridade;
-    private Integer estado;
-    private Integer idCliente;
-    private Integer idContrato;
-}
 
+    private Prioridade prioridade;
+
+    private EstadoSolicitacaoEnergetica estado;
+
+    private Boolean isDeleted = false;
+
+    private Set<Integer> idsCliente;
+    private Set<Integer> idsContrato;
+}

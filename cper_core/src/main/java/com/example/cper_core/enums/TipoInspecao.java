@@ -1,8 +1,9 @@
 package com.example.cper_core.enums;
 
-public enum TipoInspecao {
+import com.example.cper_core.enums.Interface.EnumWithId;
 
-    ROTINA(0),                  // Inspeção periódica de rotina
+public enum TipoInspecao implements EnumWithId<TipoInspecao> {
+    ROTINA(0),
     INSPECAO_EQUIPAMENTOS(1),
     INSPECAO_SEGURANCA_OPERACIONAL(2),
     INSPECAO_ELETRICA(3),
@@ -18,26 +19,19 @@ public enum TipoInspecao {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    public static int getIdFromEnum(TipoInspecao tipoInspecao) { return EnumWithId.getIdFromEnum(tipoInspecao); }
+
     public static TipoInspecao fromId(int id) {
-        for (TipoInspecao tipo : values()) {
-            if (tipo.id == id) {
-                return tipo;
-            }
-        }
-        throw new IllegalArgumentException("TipoInspecao inválido: " + id);
+        return EnumWithId.fromId(TipoInspecao.class, id);
     }
 
     public static TipoInspecao fromName(String name) {
-        for (TipoInspecao tipo : values()) {
-            if (tipo.name().equalsIgnoreCase(name)) {
-                return tipo;
-            }
-        }
-        throw new IllegalArgumentException("TipoInspecao inválido: " + name);
+        return EnumWithId.fromName(TipoInspecao.class, name);
     }
 
     @Override

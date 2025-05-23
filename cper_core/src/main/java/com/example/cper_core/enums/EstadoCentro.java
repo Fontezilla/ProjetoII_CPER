@@ -1,7 +1,8 @@
 package com.example.cper_core.enums;
 
-public enum EstadoCentro {
-    APAGADO(0),
+import com.example.cper_core.enums.Interface.EnumWithId;
+
+public enum EstadoCentro implements EnumWithId<EstadoCentro> {
     PLANEAMENTO(1),
     EM_CONSTRUCAO(2),
     OPERACIONAL(3),
@@ -15,26 +16,19 @@ public enum EstadoCentro {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    public static int getIdFromEnum(EstadoCentro estadoCentro) { return EnumWithId.getIdFromEnum(estadoCentro); }
+
     public static EstadoCentro fromId(int id) {
-        for (EstadoCentro estado : values()) {
-            if (estado.id == id) {
-                return estado;
-            }
-        }
-        throw new IllegalArgumentException("EstadoCentro inválido: " + id);
+        return EnumWithId.fromId(EstadoCentro.class, id);
     }
 
     public static EstadoCentro fromName(String name) {
-        for (EstadoCentro estado : values()) {
-            if (estado.name().equalsIgnoreCase(name)) {
-                return estado;
-            }
-        }
-        throw new IllegalArgumentException("EstadoCentro inválido: " + name);
+        return EnumWithId.fromName(EstadoCentro.class, name);
     }
 
     @Override

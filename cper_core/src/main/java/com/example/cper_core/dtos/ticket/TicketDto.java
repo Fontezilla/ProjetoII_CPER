@@ -1,23 +1,17 @@
 package com.example.cper_core.dtos.ticket;
 
-import com.example.cper_core.entities.Ticket;
+import com.example.cper_core.dtos.OnUpdate;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Objects;
-
-/**
- * DTO for {@link Ticket}
- */
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class TicketDto implements Serializable {
+    @NotNull(groups = OnUpdate.class, message = "O id do ticket é obrigatório")
     private Integer id;
-
-    public TicketDto(Integer id) {
-        this.id = id;
-    }
 }

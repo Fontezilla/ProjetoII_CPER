@@ -1,5 +1,6 @@
 package com.example.cper_core.mappers;
 
+import com.example.cper_core.enums.*;
 import com.example.cper_core.dtos.resposta.*;
 import com.example.cper_core.entities.Resposta;
 import org.mapstruct.*;
@@ -9,37 +10,45 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RespostaMapper {
 
-    // -------- To DTO --------
-
+    // --- To DTO ---
     @Named("toDto")
     RespostaDto toDto(Resposta entity);
 
     @IterableMapping(qualifiedByName = "toDto")
     List<RespostaDto> toDtoList(List<Resposta> entities);
 
+    // --- To Details DTO ---
     @Named("toDetailsDto")
     RespostaDetailsDto toDetailsDto(Resposta entity);
 
     @IterableMapping(qualifiedByName = "toDetailsDto")
     List<RespostaDetailsDto> toDetailsDtoList(List<Resposta> entities);
 
-    // -------- To Entity --------
+    // --- To Extended DTO ---
+    @Named("toExtendedDto")
+    RespostaDetailsExtendedDto toExtendedDto(Resposta entity);
 
-    @Named("toEntityFromDto")
+    @IterableMapping(qualifiedByName = "toExtendedDto")
+    List<RespostaDetailsExtendedDto> toExtendedDtoList(List<Resposta> entities);
+
+    // --- To WithRelationships DTO ---
+    @Named("toWithRelationshipsDto")
+    RespostaWithRelationshipsDto toWithRelationshipsDto(Resposta entity);
+
+    @IterableMapping(qualifiedByName = "toWithRelationshipsDto")
+    List<RespostaWithRelationshipsDto> toWithRelationshipsDtoList(List<Resposta> entities);
+
+    // --- To Entity ---
     Resposta toEntity(RespostaDto dto);
 
-    @Named("toEntityFromDetails")
     Resposta toEntity(RespostaDetailsDto dto);
 
-    // -------- Conversões de listas inversas --------
+    Resposta toEntity(RespostaDetailsExtendedDto dto);
 
-    @IterableMapping(qualifiedByName = "toEntityFromDto")
-    List<Resposta> toEntityList(List<RespostaDto> dtos);
+    Resposta toEntity(RespostaWithRelationshipsDto dto);
 
-    @IterableMapping(qualifiedByName = "toEntityFromDetails")
-    List<Resposta> toEntityDetailsList(List<RespostaDetailsDto> dtos);
-
+    // --- Partial Update ---
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromExtendedDto(RespostaDetailsDto dto, @MappingTarget Resposta entity);
+    void updateEntityFromExtendedDto(RespostaDetailsExtendedDto dto, @MappingTarget Resposta entity);
 }

@@ -1,40 +1,41 @@
 package com.example.cper_core.dtos.fatura;
 
-import com.example.cper_core.dtos.contrato.ContratoDto;
-import com.example.cper_core.entities.Fatura;
-import com.example.cper_core.enums.EstadoFatura;
+import com.example.cper_core.dtos.OnCreate;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-
-/**
- * DTO for {@link Fatura}
- */
+import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class FaturaDetailsDto extends FaturaDto implements Serializable {
-    @NotNull(message = "O campo valor total não pode ser nulo")
-    @Positive(message = "O valor total deve ser um valor positivo")
-    private BigDecimal vTotal;
+public class FaturaDetailsDto extends FaturaDto {
 
-    @NotNull(message = "O campo estado não pode ser nulo")
-    private String estado;
+    @NotNull(groups = OnCreate.class, message = "A data de emissao e obrigatoria")
+    private OffsetDateTime dataEmissao;
 
-    @NotNull(message = "O campo contrato não pode ser nulo")
-    private ContratoDto contrato;
+    @NotNull(groups = OnCreate.class, message = "A data de vencimento e obrigatoria")
+    private OffsetDateTime dataVencimento;
 
+    @NotNull(message = "O valor da eletricidade é obrigatorio")
+    @DecimalMin(value = "0.0", message = "O valor da eletricidade não pode ser negativo")
+    private BigDecimal vElectricidade;
 
-    public FaturaDetailsDto(Integer id, BigDecimal vTotal, String estado, ContratoDto contrato) {
-        super(id);
-        this.vTotal = vTotal;
-        this.estado = estado != null ? estado : EstadoFatura.EM_ANALISE.toString();
-        this.contrato = contrato;
-    }
+    @NotNull(groups = OnCreate.class, message = "A quantidade de energia e obrigatoria")
+    @DecimalMin(value = "0.0", message = "A quantidade de energia não pode ser negativa")
+    private BigDecimal qtdEnergia;
+
+    @NotNull(groups = OnCreate.class, message = "O valor do IVA e obrigatorio")
+    @Min(value = 0, message = "A taxa do IVA deve ser no mínimo 0%", groups = OnCreate.class)
+    @Max(value = 100, message = "A tava do IVA deve ser no máximo 100%", groups = OnCreate.class)
+    private Integer taxa;
+
+    @NotNull(groups = OnCreate.class, message = "O estado e obrigatorio")
+    private Integer estado;
 }

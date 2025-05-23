@@ -1,9 +1,8 @@
 package com.example.cper_core.mappers;
 
-import com.example.cper_core.dtos.anomalia.AnomaliaDetailsExtendedDto;
-import com.example.cper_core.dtos.lote.*;
-import com.example.cper_core.entities.Anomalia;
+import com.example.cper_core.enums.*;
 import com.example.cper_core.entities.Lote;
+import com.example.cper_core.dtos.lote.*;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -11,37 +10,45 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface LoteMapper {
 
-    // -------- To DTO --------
-
+    // --- To DTO ---
     @Named("toDto")
     LoteDto toDto(Lote entity);
 
     @IterableMapping(qualifiedByName = "toDto")
     List<LoteDto> toDtoList(List<Lote> entities);
 
+    // --- To Details DTO ---
     @Named("toDetailsDto")
     LoteDetailsDto toDetailsDto(Lote entity);
 
     @IterableMapping(qualifiedByName = "toDetailsDto")
     List<LoteDetailsDto> toDetailsDtoList(List<Lote> entities);
 
-    // -------- To Entity --------
+    // --- To Extended DTO ---
+    @Named("toExtendedDto")
+    LoteDetailsExtendedDto toExtendedDto(Lote entity);
 
-    @Named("toEntityFromDto")
+    @IterableMapping(qualifiedByName = "toExtendedDto")
+    List<LoteDetailsExtendedDto> toExtendedDtoList(List<Lote> entities);
+
+    // --- To WithRelationships DTO ---
+    @Named("toWithRelationshipsDto")
+    LoteWithRelationshipsDto toWithRelationshipsDto(Lote entity);
+
+    @IterableMapping(qualifiedByName = "toWithRelationshipsDto")
+    List<LoteWithRelationshipsDto> toWithRelationshipsDtoList(List<Lote> entities);
+
+    // --- To Entity ---
     Lote toEntity(LoteDto dto);
 
-    @Named("toEntityFromDetails")
     Lote toEntity(LoteDetailsDto dto);
 
-    // -------- Conversões de listas inversas --------
+    Lote toEntity(LoteDetailsExtendedDto dto);
 
-    @IterableMapping(qualifiedByName = "toEntityFromDto")
-    List<Lote> toEntityList(List<LoteDto> dtos);
+    Lote toEntity(LoteWithRelationshipsDto dto);
 
-    @IterableMapping(qualifiedByName = "toEntityFromDetails")
-    List<Lote> toEntityDetailsList(List<LoteDetailsDto> dtos);
-
+    // --- Partial Update ---
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromExtendedDto(LoteDetailsDto dto, @MappingTarget Lote entity);
+    void updateEntityFromExtendedDto(LoteDetailsExtendedDto dto, @MappingTarget Lote entity);
 }

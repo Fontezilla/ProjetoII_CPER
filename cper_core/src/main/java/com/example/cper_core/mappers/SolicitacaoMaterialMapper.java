@@ -1,8 +1,8 @@
 package com.example.cper_core.mappers;
 
+import com.example.cper_core.enums.*;
 import com.example.cper_core.dtos.solicitacao_material.*;
 import com.example.cper_core.entities.SolicitacaoMaterial;
-import com.example.cper_core.enums.EstadoSolicitacaoMaterial;
 import org.mapstruct.*;
 import org.mapstruct.ReportingPolicy;
 
@@ -11,65 +11,56 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SolicitacaoMaterialMapper {
 
-    // -------- To DTO --------
+    // --- Método Auxiliar de Enum ---
+    @Named("mapEstadoSolicitacaoMaterial")
+    default EstadoSolicitacaoMaterial mapEstadoSolicitacaoMaterial(Integer id) {
+        return id == null ? null : EstadoSolicitacaoMaterial.fromId(id);
+    }
 
+    // --- To DTO ---
     @Named("toDto")
     SolicitacaoMaterialDto toDto(SolicitacaoMaterial entity);
 
     @IterableMapping(qualifiedByName = "toDto")
     List<SolicitacaoMaterialDto> toDtoList(List<SolicitacaoMaterial> entities);
 
+    // --- To Details DTO ---
     @Named("toDetailsDto")
-    @Mapping(source = "estado", target = "estado", qualifiedByName = "mapEstadoToString")
+    @Mapping(target = "estado", source = "estado", qualifiedByName = "mapEstadoSolicitacaoMaterial")
     SolicitacaoMaterialDetailsDto toDetailsDto(SolicitacaoMaterial entity);
 
     @IterableMapping(qualifiedByName = "toDetailsDto")
     List<SolicitacaoMaterialDetailsDto> toDetailsDtoList(List<SolicitacaoMaterial> entities);
 
-    @Named("toWithSolicitacaoDto")
-    SolicitacaoMaterialWithSolicitacaoDto toWithSolicitacaoDto(SolicitacaoMaterial entity);
+    // --- To Extended DTO ---
+    @Named("toExtendedDto")
+    @Mapping(target = "estado", source = "estado", qualifiedByName = "mapEstadoSolicitacaoMaterial")
+    SolicitacaoMaterialDetailsExtendedDto toExtendedDto(SolicitacaoMaterial entity);
 
-    @IterableMapping(qualifiedByName = "toWithSolicitacaoDto")
-    List<SolicitacaoMaterialWithSolicitacaoDto> toWithSolicitacaoDtoList(List<SolicitacaoMaterial> entities);
+    @IterableMapping(qualifiedByName = "toExtendedDto")
+    List<SolicitacaoMaterialDetailsExtendedDto> toExtendedDtoList(List<SolicitacaoMaterial> entities);
 
-    // -------- To Entity --------
+    // --- To WithRelationships DTO ---
+    @Named("toWithRelationshipsDto")
+    SolicitacaoMaterialWithRelationshipsDto toWithRelationshipsDto(SolicitacaoMaterial entity);
 
-    @Named("toEntity")
+    @IterableMapping(qualifiedByName = "toWithRelationshipsDto")
+    List<SolicitacaoMaterialWithRelationshipsDto> toWithRelationshipsDtoList(List<SolicitacaoMaterial> entities);
+
+    // --- To Entity ---
     SolicitacaoMaterial toEntity(SolicitacaoMaterialDto dto);
 
-    @Named("toEntity")
-    @Mapping(source = "estado", target = "estado", qualifiedByName = "mapStringToEstado")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : null)")
     SolicitacaoMaterial toEntity(SolicitacaoMaterialDetailsDto dto);
 
-    @Named("toEntity")
-    SolicitacaoMaterial toEntity(SolicitacaoMaterialWithSolicitacaoDto dto);
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : null)")
+    SolicitacaoMaterial toEntity(SolicitacaoMaterialDetailsExtendedDto dto);
 
-    // -------- Conversões de listas inversas --------
+    SolicitacaoMaterial toEntity(SolicitacaoMaterialWithRelationshipsDto dto);
 
-    @IterableMapping(qualifiedByName = "toEntity")
-    List<SolicitacaoMaterial> toEntityList(List<SolicitacaoMaterialDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntity")
-    List<SolicitacaoMaterial> toEntityDetailsList(List<SolicitacaoMaterialDetailsDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntity")
-    List<SolicitacaoMaterial> toEntityWithSolicitacaoList(List<SolicitacaoMaterialWithSolicitacaoDto> dtos);
-
-    // -------- Métodos auxiliares --------
-
-    @Named("mapEstadoToString")
-    default String mapEstadoToString(Integer estadoId) {
-        if (estadoId == null) return null;
-        return EstadoSolicitacaoMaterial.fromId(estadoId).name();
-    }
-
-    @Named("mapStringToEstado")
-    default Integer mapStringToEstado(String estadoName) {
-        if (estadoName == null) return null;
-        return EstadoSolicitacaoMaterial.fromName(estadoName).getId();
-    }
-
+    // --- Partial Update ---
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : entity.getEstado())")
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromExtendedDto(SolicitacaoMaterialDetailsDto dto, @MappingTarget SolicitacaoMaterial entity);
+    void updateEntityFromExtendedDto(SolicitacaoMaterialDetailsExtendedDto dto, @MappingTarget SolicitacaoMaterial entity);
 }

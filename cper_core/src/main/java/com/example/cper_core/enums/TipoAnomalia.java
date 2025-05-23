@@ -1,7 +1,8 @@
 package com.example.cper_core.enums;
 
-public enum TipoAnomalia {
+import com.example.cper_core.enums.Interface.EnumWithId;
 
+public enum TipoAnomalia implements EnumWithId<TipoAnomalia> {
     FALHA_GERACAO(1),
     FALHA_DISTRIBUICAO(2),
     SOBRECARGA_SISTEMA(3),
@@ -24,25 +25,19 @@ public enum TipoAnomalia {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    public static int getIdFromEnum(TipoAnomalia tipoAnomalia) { return EnumWithId.getIdFromEnum(tipoAnomalia); }
+
     public static TipoAnomalia fromId(int id) {
-        for (TipoAnomalia tipo : TipoAnomalia.values()) {
-            if (tipo.getId() == id) {
-                return tipo;
-            }
-        }
-        throw new IllegalArgumentException("Tipo de Anomalia inválido: " + id);
+        return EnumWithId.fromId(TipoAnomalia.class, id);
     }
 
     public static TipoAnomalia fromName(String name) {
-        try {
-            return TipoAnomalia.valueOf(name);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Tipo de Anomalia inválido: " + name);
-        }
+        return EnumWithId.fromName(TipoAnomalia.class, name);
     }
 
     @Override

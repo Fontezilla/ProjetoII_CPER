@@ -1,35 +1,44 @@
 package com.example.cper_core.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "equipa")
+@ToString(onlyExplicitlyIncluded = true)
 public class Equipa {
-
-    // Attributes
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "equipa_id_gen")
     @SequenceGenerator(name = "equipa_id_gen", sequenceName = "equipa_id_equipa_seq", allocationSize = 1)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @Column(name = "id_equipa", nullable = false)
     private Integer id;
 
     @Column(name = "nome", nullable = false, length = 256)
     private String nome;
 
-    @ColumnDefault("CURRENT_DATE")
     @Column(name = "data_criacao", nullable = false)
-    private LocalDate dataCriacao;
+    private OffsetDateTime dataCriacao;
 
     @Column(name = "area_atuacao", length = 256)
     private String areaAtuacao;
 
-    // Relationships
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean isDeleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_departamento")
@@ -45,6 +54,7 @@ public class Equipa {
             joinColumns = @JoinColumn(name = "id_equipa"),
             inverseJoinColumns = @JoinColumn(name = "id_funcionario")
     )
+    @Builder.Default
     private Set<Funcionario> funcionarios = new LinkedHashSet<>();
 
     @ManyToMany
@@ -53,6 +63,7 @@ public class Equipa {
             joinColumns = @JoinColumn(name = "id_equipa"),
             inverseJoinColumns = @JoinColumn(name = "id_avaria")
     )
+    @Builder.Default
     private Set<Avaria> avarias = new LinkedHashSet<>();
 
     @ManyToMany
@@ -61,95 +72,22 @@ public class Equipa {
             joinColumns = @JoinColumn(name = "id_equipa"),
             inverseJoinColumns = @JoinColumn(name = "id_inspecao")
     )
+    @Builder.Default
     private Set<Inspecao> inspecoes = new LinkedHashSet<>();
 
-    // Getters and Setters
-
-    public Integer getId() {
-        return id;
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Equipa equipa = (Equipa) o;
+        return getId() != null && Objects.equals(getId(), equipa.getId());
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public void setDataCriacao(LocalDate dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public String getAreaAtuacao() {
-        return areaAtuacao;
-    }
-
-    public void setAreaAtuacao(String areaAtuacao) {
-        this.areaAtuacao = areaAtuacao;
-    }
-
-    public Funcionario getIdFuncionario() {
-        return funcionario;
-    }
-
-    public void setIdFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
-    }
-
-    public Departamento getIdDepartamento() {
-        return departamento;
-    }
-
-    public void setIdDepartamento(Departamento departamento) {
-        this.departamento = departamento;
-    }
-
-    public Departamento getDepartamento() {
-        return departamento;
-    }
-
-    public void setDepartamento(Departamento departamento) {
-        this.departamento = departamento;
-    }
-
-    public Funcionario getFuncionario() {
-        return funcionario;
-    }
-
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
-    }
-
-    public Set<Funcionario> getFuncionarios() {
-        return funcionarios;
-    }
-
-    public void setFuncionarios(Set<Funcionario> funcionarios) {
-        this.funcionarios = funcionarios;
-    }
-
-    public Set<Avaria> getAvarias() {
-        return avarias;
-    }
-
-    public void setAvarias(Set<Avaria> avarias) {
-        this.avarias = avarias;
-    }
-
-    public Set<Inspecao> getInspecoes() {
-        return inspecoes;
-    }
-
-    public void setInspecoes(Set<Inspecao> inspecoes) {
-        this.inspecoes = inspecoes;
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

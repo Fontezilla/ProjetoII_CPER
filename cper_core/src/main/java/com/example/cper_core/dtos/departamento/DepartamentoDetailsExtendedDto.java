@@ -1,39 +1,25 @@
 package com.example.cper_core.dtos.departamento;
 
-import com.example.cper_core.entities.Departamento;
-
+import com.example.cper_core.dtos.OnCreate;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-
-/**
- * DTO for {@link Departamento}
- */
+import java.time.OffsetDateTime;
 
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class DepartamentoDetailsExtendedDto extends DepartamentoDetailsDto implements Serializable {
-    @NotNull(message = "O campo data de criação não pode ser nulo")
-    private LocalDate dataCriacao;
+public class DepartamentoDetailsExtendedDto extends DepartamentoDetailsDto {
 
-    @NotNull(message = "O campo número de funcionários não pode ser nulo")
-    @Positive(message = "O número de funcionários deve ser um valor positivo")
-    private Integer numFuncionarios;
+    private String descricao;
 
-    @Positive(message = "O orçamento deve ser um valor positivo")
+    @NotNull(groups = OnCreate.class, message = "A data de criação é obrigatória")
+    private OffsetDateTime dataCriacao;
+
     private BigDecimal orcamento;
 
-
-    public DepartamentoDetailsExtendedDto(Integer id, String nome, String descricao, String setor, LocalDate dataCriacao, Integer numFuncionarios, BigDecimal orcamento) {
-        super(id, nome, descricao, setor);
-        this.dataCriacao = dataCriacao;
-        this.numFuncionarios = numFuncionarios != null ? numFuncionarios : 0;
-        this.orcamento = orcamento != null ? orcamento : BigDecimal.ZERO;
-    }
+    private Boolean isDeleted;
 }

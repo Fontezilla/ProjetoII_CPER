@@ -1,43 +1,41 @@
 package com.example.cper_core.dtos.pedido_geracao;
 
-import com.example.cper_core.entities.PedidoGeracao;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
+import com.example.cper_core.dtos.OnCreate;
+import com.example.cper_core.enums.EstadoPedidoGeracao;
+import com.example.cper_core.enums.Prioridade;
+import com.example.cper_core.enums.TipoEnergiaRenovavel;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Objects;
-
-/**
- * DTO for {@link PedidoGeracao}
- */
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class PedidoGeracaoDetailsDto extends PedidoGeracaoDto implements Serializable {
-    @NotNull(message = "O campo quantidade de energia não pode ser nulo")
-    @Positive(message = "A quantidade de energia deve ser positiva")
+public class PedidoGeracaoDetailsDto extends PedidoGeracaoDto {
+
+    @NotNull(groups = OnCreate.class, message = "A data de criação é obrigatória")
+    private LocalDate dataCriacao;
+
+    @NotNull(groups = OnCreate.class, message = "A quantidade de energia é obrigatória")
+    @DecimalMin(value = "0.0", groups = OnCreate.class, message = "A quantidade de energia deve ser maior que zero")
     private BigDecimal qtdEnergia;
 
-    @NotBlank(message = "O campo tipo de energia não pode estar vazio")
-    private String tipoEnergia;
+    @NotNull(groups = OnCreate.class, message = "A quantidade de energia por hora é obrigatória")
+    @DecimalMin(value = "0.0", groups = OnCreate.class, message = "A quantidade de energia por hora deve ser maior que zero")
+    private BigDecimal qtdEnergiaH;
 
-    @NotBlank(message = "O campo prioridade não pode estar vazio")
-    private String prioridade;
+    @NotNull(groups = OnCreate.class, message = "O tipo de energia é obrigatório")
+    private TipoEnergiaRenovavel tipoEnergia;
 
-    @NotBlank(message = "O campo estado não pode estar vazio")
-    private String estado;
+    @NotNull(groups = OnCreate.class, message = "A prioridade é obrigatória")
+    private Prioridade prioridade;
 
-    public PedidoGeracaoDetailsDto(Integer id, BigDecimal qtdEnergia, String tipoEnergia, String prioridade, String estado) {
-        super(id);
-        this.qtdEnergia = qtdEnergia;
-        this.tipoEnergia = tipoEnergia;
-        this.prioridade = prioridade;
-        this.estado = estado;
-    }
+    @NotNull(groups = OnCreate.class, message = "O estado é obrigatório")
+    private EstadoPedidoGeracao estado;
 }
+

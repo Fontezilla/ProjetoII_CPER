@@ -1,50 +1,44 @@
 package com.example.cper_core.dtos.cliente;
 
-import com.example.cper_core.entities.Cliente;
-import com.example.cper_core.enums.TipoEnergiaRenovavel;
+import com.example.cper_core.dtos.OnCreate;
+import com.example.cper_core.enums.EstadoCliente;
+import com.example.cper_core.enums.TipoCliente;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
-/**
- * DTO for {@link Cliente}
- */
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ClienteDetailsDto extends ClienteDto implements Serializable {
-    @NotBlank(message = "O campo nome não pode estar vazio")
-    @Size(max = 256, message = "O campo nome deve conter no máximo 256 caracteres")
+public class ClienteDetailsDto extends ClienteDto {
+
+    @NotNull(groups = OnCreate.class, message = "O tipo de cliente é obrigatório")
+    private TipoCliente tipoCliente;
+
+    @NotBlank(groups = OnCreate.class, message = "O nome é obrigatório")
+    @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres", groups = OnCreate.class)
     private String nome;
 
-    @NotBlank(message = "O campo NIF não pode estar vazio")
-    @Size(min = 9, max = 9, message = "O NIF deve conter exatamente 9 dígitos")
-    @Pattern(regexp = "\\d+", message = "O NIF deve conter apenas números")
+    @NotBlank(groups = OnCreate.class, message = "O NIF é obrigatório")
+    @Pattern(regexp = "\\d{9}", message = "O NIF deve ter exatamente 9 dígitos", groups = OnCreate.class)
     private String nif;
 
-    @NotBlank(message = "O campo email não pode estar vazio")
-    @Email(message = "O campo email deve ser válido")
-    @Size(max = 256, message = "O campo email deve conter no máximo 256 caracteres")
+    @NotBlank(groups = OnCreate.class, message = "O e-mail é obrigatório")
+    @Email(groups = OnCreate.class, message = "O e-mail deve ser válido")
     private String email;
 
-    @NotBlank(message = "O campo telefone não pode estar vazio")
-    @Pattern(regexp = "\\d+", message = "O telefone deve conter apenas números")
-    @Size(min = 9, max = 15, message = "O campo telefone deve ter entre 9 e 15 dígitos")
+    @NotBlank(groups = OnCreate.class, message = "A palavra-passe é obrigatória")
+    @Size(min = 6, message = "A palavra-passe deve ter pelo menos 6 caracteres", groups = OnCreate.class)
+    private String password;
+
+    @NotBlank(groups = OnCreate.class, message = "O telefone é obrigatório")
+    @Pattern(regexp = "\\d{9}", message = "O telefone deve ter exatamente 9 dígitos", groups = OnCreate.class)
     private String telefone;
 
-    @NotBlank(message = "O campo tipo de energia não pode estar vazio")
-    private String tipoEnergia;
-
-    public ClienteDetailsDto(Integer id, String nome, String nif, String email, String telefone, String tipoEnergia) {
-        super(id);
-        this.nome = nome;
-        this.nif = nif;
-        this.email = email;
-        this.telefone = telefone;
-        this.tipoEnergia = tipoEnergia != null ? tipoEnergia : TipoEnergiaRenovavel.OUTRA.toString();
-    }
+    @NotNull(groups = OnCreate.class, message = "O estado é obrigatório")
+    private EstadoCliente estado;
 }

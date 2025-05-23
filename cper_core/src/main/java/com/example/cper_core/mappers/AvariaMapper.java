@@ -1,10 +1,8 @@
 package com.example.cper_core.mappers;
 
-import com.example.cper_core.dtos.anomalia.AnomaliaDetailsExtendedDto;
+import com.example.cper_core.enums.*;
 import com.example.cper_core.dtos.avaria.*;
-import com.example.cper_core.entities.Anomalia;
 import com.example.cper_core.entities.Avaria;
-import com.example.cper_core.enums.Prioridade;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -12,74 +10,65 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AvariaMapper {
 
-    // -------- To DTO --------
+    // -------- Métodos Auxiliares de Enum --------
+    @Named("mapEstadoAvaria")
+    default EstadoAvaria mapEstadoAvaria(Integer id) {
+        return id == null ? null : EstadoAvaria.fromId(id);
+    }
 
+    @Named("mapPrioridade")
+    default Prioridade mapPrioridade(Integer id) {
+        return id == null ? null : Prioridade.fromId(id);
+    }
+
+    // -------- To DTO --------
     @Named("toDto")
     AvariaDto toDto(Avaria entity);
 
     @IterableMapping(qualifiedByName = "toDto")
     List<AvariaDto> toDtoList(List<Avaria> entities);
 
+    // -------- To Details DTO --------
     @Named("toDetailsDto")
-    @Mapping(source = "gravidade", target = "gravidade", qualifiedByName = "mapGravidadeToString")
+    @Mapping(target = "gravidade", source = "gravidade", qualifiedByName = "mapPrioridade")
+    @Mapping(target = "estado", source = "estado", qualifiedByName = "mapEstadoAvaria")
     AvariaDetailsDto toDetailsDto(Avaria entity);
 
     @IterableMapping(qualifiedByName = "toDetailsDto")
     List<AvariaDetailsDto> toDetailsDtoList(List<Avaria> entities);
 
-    @Named("toDetailsExtendedDto")
-    AvariaDetailsExtendedDto toDetailsExtendedDto(Avaria entity);
+    // -------- To Extended DTO --------
+    @Named("toExtendedDto")
+    @Mapping(target = "gravidade", source = "gravidade", qualifiedByName = "mapPrioridade")
+    @Mapping(target = "estado", source = "estado", qualifiedByName = "mapEstadoAvaria")
+    AvariaDetailsExtendedDto toExtendedDto(Avaria entity);
 
-    @IterableMapping(qualifiedByName = "toDetailsExtendedDto")
-    List<AvariaDetailsExtendedDto> toDetailsExtendedDtoList(List<Avaria> entities);
+    @IterableMapping(qualifiedByName = "toExtendedDto")
+    List<AvariaDetailsExtendedDto> toExtendedDtoList(List<Avaria> entities);
 
-    @Named("toWithEquipaDto")
-    AvariaWithEquipaDto toWithEquipaDto(Avaria entity);
+    // -------- To WithRelationships DTO --------
+    @Named("toWithRelationshipsDto")
+    AvariaWithRelationshipsDto toWithRelationshipsDto(Avaria entity);
 
-    @IterableMapping(qualifiedByName = "toWithEquipaDto")
-    List<AvariaWithEquipaDto> toWithEquipaDtoList(List<Avaria> entities);
-
-    @Named("toWithNotasDto")
-    AvariaWithNotasDto toWithNotasDto(Avaria entity);
-
-    @IterableMapping(qualifiedByName = "toWithNotasDto")
-    List<AvariaWithNotasDto> toWithNotasDtoList(List<Avaria> entities);
-
-    @Named("toWithPedidoDto")
-    AvariaWithPedidoDto toWithPedidoDto(Avaria entity);
-
-    @IterableMapping(qualifiedByName = "toWithPedidoDto")
-    List<AvariaWithPedidoDto> toWithPedidoDtoList(List<Avaria> entities);
+    @IterableMapping(qualifiedByName = "toWithRelationshipsDto")
+    List<AvariaWithRelationshipsDto> toWithRelationshipsDtoList(List<Avaria> entities);
 
     // -------- To Entity --------
-
     Avaria toEntity(AvariaDto dto);
 
-    @Mapping(source = "gravidade", target = "gravidade", qualifiedByName = "mapStringToGravidade")
+    @Mapping(target = "gravidade", expression = "java(dto.getGravidade() != null ? dto.getGravidade().getId() : null)")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : null)")
     Avaria toEntity(AvariaDetailsDto dto);
 
+    @Mapping(target = "gravidade", expression = "java(dto.getGravidade() != null ? dto.getGravidade().getId() : null)")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : null)")
     Avaria toEntity(AvariaDetailsExtendedDto dto);
 
-    Avaria toEntity(AvariaWithEquipaDto dto);
+    Avaria toEntity(AvariaWithRelationshipsDto dto);
 
-    Avaria toEntity(AvariaWithNotasDto dto);
-
-    Avaria toEntity(AvariaWithPedidoDto dto);
-
-    // -------- Métodos auxiliares --------
-
-    @Named("mapGravidadeToString")
-    default String mapGravidadeToString(Integer gravidadeId) {
-        if (gravidadeId == null) return null;
-        return Prioridade.fromId(gravidadeId).name();
-    }
-
-    @Named("mapStringToGravidade")
-    default Integer mapStringToGravidade(String gravidadeName) {
-        if (gravidadeName == null) return null;
-        return Prioridade.fromName(gravidadeName).getId();
-    }
-
+    // -------- Partial Update --------
+    @Mapping(target = "gravidade", expression = "java(dto.getGravidade() != null ? dto.getGravidade().getId() : entity.getGravidade())")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : entity.getEstado())")
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromExtendedDto(AvariaDetailsExtendedDto dto, @MappingTarget Avaria entity);

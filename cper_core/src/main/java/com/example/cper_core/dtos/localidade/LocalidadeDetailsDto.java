@@ -1,36 +1,25 @@
 package com.example.cper_core.dtos.localidade;
 
-import com.example.cper_core.entities.Localidade;
+import com.example.cper_core.dtos.OnCreate;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.io.Serializable;
-
-/**
- * DTO for {@link Localidade}
- */
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class LocalidadeDetailsDto extends LocalidadeDto implements Serializable {
-    @NotBlank(message = "O país não pode estar vazio")
-    private String pais;
+public class LocalidadeDetailsDto extends LocalidadeDto {
 
-    @NotBlank(message = "O distrito não pode estar vazio")
-    private String distrito;
+    @NotBlank(groups = OnCreate.class, message = "O nome é obrigatório")
+    private String nome;
 
-    @NotBlank(message = "A localidade não pode estar vazia")
-    private String localidade;
-
-    @NotBlank(message = "O código postal não pode estar vazio")
+    @NotBlank(groups = OnCreate.class, message = "O código postal é obrigatório")
     private String codigoPostal;
 
-    public LocalidadeDetailsDto(Integer id, String pais, String distrito, String localidade, String codigoPostal) {
-        super(id);
-        this.pais = pais;
-        this.distrito = distrito;
-        this.localidade = localidade;
-        this.codigoPostal = codigoPostal;
-    }
+    @NotBlank(groups = OnCreate.class, message = "O distrito é obrigatório")
+    private String distrito;
+
+    @NotBlank(groups = OnCreate.class, message = "O país é obrigatório")
+    private String pais;
 }

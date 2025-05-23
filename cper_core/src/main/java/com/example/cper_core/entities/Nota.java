@@ -1,35 +1,49 @@
 package com.example.cper_core.entities;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "nota")
+@ToString(onlyExplicitlyIncluded = true)
 public class Nota {
-
-    // Attributes
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "nota_id_gen")
     @SequenceGenerator(name = "nota_id_gen", sequenceName = "nota_id_nota_seq", allocationSize = 1)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @Column(name = "id_nota", nullable = false)
     private Integer id;
 
-    @Column(name = "descricao", length = Integer.MAX_VALUE)
+    @Column(name = "titulo", length = 255)
+    private String titulo;
+
+    @Column(name = "descricao", columnDefinition = "TEXT")
     private String descricao;
 
-    @ColumnDefault("CURRENT_DATE")
     @Column(name = "data_criacao", nullable = false)
+    @ColumnDefault("CURRENT_DATE")
     private LocalDate dataCriacao;
 
-    @ColumnDefault("1")
     @Column(name = "prioridade", nullable = false)
+    @ColumnDefault("1")
     private Integer prioridade;
 
-    @Column(name = "titulo")
-    private String titulo;
+    @ColumnDefault("false")
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean isDeleted = false;
 
     // Relationships
 
@@ -45,70 +59,32 @@ public class Nota {
     @JoinColumn(name = "id_avaria")
     private Avaria avaria;
 
-    // Getters and Setters
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_solicitacao")
+    private SolicitacaoEnergetica solicitacaoEnergetica;
 
-    public Integer getId() {
-        return id;
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+
+        Class<?> thisClass = this instanceof HibernateProxy
+                ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+                : getClass();
+
+        Class<?> otherClass = o instanceof HibernateProxy
+                ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+                : o.getClass();
+
+        if (!thisClass.equals(otherClass)) return false;
+        Nota nota = (Nota) o;
+        return getId() != null && Objects.equals(getId(), nota.getId());
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy
+                ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
+                : getClass().hashCode();
     }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public void setDataCriacao(LocalDate dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public Integer getPrioridade() {
-        return prioridade;
-    }
-
-    public void setPrioridade(Integer prioridade) {
-        this.prioridade = prioridade;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public Anomalia getAnomalia() {
-        return anomalia;
-    }
-
-    public void setAnomalia(Anomalia anomalia) {
-        this.anomalia = anomalia;
-    }
-
-    public Inspecao getInspecao() {
-        return inspecao;
-    }
-
-    public void setInspecao(Inspecao inspecao) {
-        this.inspecao = inspecao;
-    }
-
-    public Avaria getAvaria() {
-        return avaria;
-    }
-
-    public void setAvaria(Avaria avaria) {
-        this.avaria = avaria;
-    }
-
 }

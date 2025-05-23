@@ -1,32 +1,37 @@
 package com.example.cper_core.dtos.anomalia;
 
-import lombok.Data;
+import com.example.cper_core.enums.EstadoAnomalia;
+import com.example.cper_core.enums.Prioridade;
+import com.example.cper_core.enums.TipoAnomalia;
+import lombok.*;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 public class AnomaliaFiltroDto {
 
     private Integer id;
 
-    private Integer tipoAnomalia;
+    private TipoAnomalia tipoAnomalia;
+
+    private String titulo;
 
     private String descricao;
 
-    private LocalDate dataIdentificacaoInicio;
+    private OffsetDateTime dataIdentificacaoInicio;
 
-    private LocalDate dataIdentificacaoFim;
+    private OffsetDateTime dataIdentificacaoFim;
 
     private String localizacao;
 
-    private Integer gravidade;
+    private Prioridade gravidade;
 
-    private Integer estado;
+    private EstadoAnomalia estado;
 
-    // Relationships
+    private Boolean isDeleted = false;
 
     private Set<Integer> idsCentroProducao;
-
     private Set<Integer> idsFuncionario;
 }

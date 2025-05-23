@@ -1,39 +1,33 @@
 package com.example.cper_core.dtos.material;
 
-import jakarta.validation.constraints.NotBlank;
+import com.example.cper_core.dtos.OnCreate;
+import com.example.cper_core.enums.UnidadePeso;
+import com.example.cper_core.enums.UnidadeVolume;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**
- * DTO for {@link com.example.cper_core.entities.Material}
- */
-
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class MaterialDetailsExtendedDto extends MaterialDetailsDto implements Serializable {
-    @NotBlank(message = "A unidade de medida não pode estar vazia")
-    private String uniMedida;
+public class MaterialDetailsExtendedDto extends MaterialDetailsDto {
 
-    @NotNull(message = "O custo unitário não pode ser nulo")
-    @PositiveOrZero(message = "O custo unitário deve ser positivo ou zero")
-    private BigDecimal custoUni;
+    private String descricao;
 
-    @PositiveOrZero(message = "O peso deve ser positivo ou zero")
+    @NotNull(groups = OnCreate.class, message = "O peso é obrigatório")
     private BigDecimal peso;
 
-    @PositiveOrZero(message = "O volume deve ser positivo ou zero")
+    @NotNull(groups = OnCreate.class, message = "A unidade de medida de peso é obrigatória")
+    private UnidadePeso uniMedidaPeso;
+
+    @NotNull(groups = OnCreate.class, message = "O volume é obrigatório")
     private BigDecimal volume;
 
-    public MaterialDetailsExtendedDto(Integer id, String nome, String descricao, String categoria, String uniMedida, BigDecimal custoUni, BigDecimal peso, BigDecimal volume) {
-        super(id, nome, descricao, categoria);
-        this.uniMedida = uniMedida;
-        this.custoUni = custoUni;
-        this.peso = peso;
-        this.volume = volume;
-    }
+    @NotNull(groups = OnCreate.class, message = "A unidade de medida de volume é obrigatória")
+    private UnidadeVolume uniMedidaVolume;
+
+    private Boolean isDeleted;
 }

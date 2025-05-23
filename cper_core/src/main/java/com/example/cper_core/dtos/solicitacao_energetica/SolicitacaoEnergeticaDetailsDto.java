@@ -1,48 +1,38 @@
 package com.example.cper_core.dtos.solicitacao_energetica;
 
-import com.example.cper_core.entities.SolicitacaoEnergetica;
+import com.example.cper_core.dtos.OnCreate;
+import com.example.cper_core.enums.EstadoSolicitacaoEnergetica;
+import com.example.cper_core.enums.Prioridade;
+import com.example.cper_core.enums.TipoEnergiaRenovavel;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Objects;
-
-/**
- * DTO for {@link SolicitacaoEnergetica}
- */
+import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class SolicitacaoEnergeticaDetailsDto extends SolicitacaoEnergeticaDto implements Serializable {
+public class SolicitacaoEnergeticaDetailsDto extends SolicitacaoEnergeticaDto {
 
-    @NotNull(message = "O campo data de solicitação não pode ser nulo")
-    private LocalDate dataSolicitacao;
+    @NotNull(message = "O tipo de energia é obrigatório")
+    private TipoEnergiaRenovavel tipoEnergia;
 
-    @NotNull(message = "O campo tipo de energia não pode ser nulo")
-    private Integer tipoEnergia;
-
-    @NotNull(message = "O campo quantidade solicitada não pode ser nulo")
-    @Positive(message = "A quantidade solicitada deve ser um valor positivo")
+    @NotNull(message = "A quantidade solicitada é obrigatória")
+    @DecimalMin(value = "0", inclusive = false, message = "A quantidade solicitada deve ser maior que zero", groups = OnCreate.class)
     private BigDecimal qtdSolicitada;
 
-    @NotNull(message = "O campo prioridade não pode ser nulo")
-    private String prioridade;
+    @NotNull(message = "A quantidade solicitada por hora é obrigatória")
+    @DecimalMin(value = "0", inclusive = false, message = "A quantidade solicitada por hora deve ser maior que zero", groups = OnCreate.class)
+    private BigDecimal qtdSolicitadaH;
 
-    @NotNull(message = "O campo estado não pode ser nulo")
-    private String estado;
+    @NotNull(groups = OnCreate.class, message = "A prioridade é obrigatória")
+    private Prioridade prioridade;
 
-    public SolicitacaoEnergeticaDetailsDto(Integer id, LocalDate dataSolicitacao, Integer tipoEnergia, BigDecimal qtdSolicitada, String prioridade, String estado) {
-        super(id);
-        this.dataSolicitacao = dataSolicitacao;
-        this.tipoEnergia = tipoEnergia;
-        this.qtdSolicitada = qtdSolicitada;
-        this.prioridade = prioridade;
-        this.estado = estado;
-    }
+    @NotNull(groups = OnCreate.class, message = "O estado é obrigatório")
+    private EstadoSolicitacaoEnergetica estado;
 }

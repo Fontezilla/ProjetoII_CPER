@@ -1,146 +1,93 @@
 package com.example.cper_core.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "material")
+@ToString(onlyExplicitlyIncluded = true)
 public class Material {
-
-    // Attributes
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "material_id_gen")
     @SequenceGenerator(name = "material_id_gen", sequenceName = "material_id_material_seq", allocationSize = 1)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @Column(name = "id_material", nullable = false)
     private Integer id;
 
-    @Column(name = "nome", nullable = false, length = 256)
+    @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Column(name = "descricao", length = Integer.MAX_VALUE)
+    @Column(name = "descricao", columnDefinition = "TEXT")
     private String descricao;
 
-    @Column(name = "categoria", length = 256)
+    @Column(name = "categoria")
     private String categoria;
 
-    @Column(name = "uni_medida", length = 256)
-    private String uniMedida;
+    @Column(name = "uni_medida_peso", nullable = false)
+    private Integer uniMedidaPeso;
 
-    @ColumnDefault("0")
+    @Column(name = "uni_medida_volume", nullable = false)
+    private Integer uniMedidaVolume;
+
     @Column(name = "custo_uni", precision = 20, scale = 2)
     private BigDecimal custoUni;
 
-    @ColumnDefault("0")
     @Column(name = "peso", precision = 20, scale = 2)
     private BigDecimal peso;
 
-    @ColumnDefault("0")
     @Column(name = "volume", precision = 20, scale = 2)
     private BigDecimal volume;
 
-    // Relationships
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean isDeleted = false;
+
+    // Relacionamentos
 
     @OneToMany(mappedBy = "material")
-    private Set<MaterialSolicitacaoMaterial> materialSolicitacaomateriais = new LinkedHashSet<>();
+    @Builder.Default
+    private Set<MaterialSolicitacaoMaterial> materiaisSolicitacaoMateriais = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "material")
-    private Set<MaterialPedidoMaterial> materialPedidomateriais = new LinkedHashSet<>();
+    @Builder.Default
+    private Set<MaterialPedidoMaterial> materiaisPedidoMateriais = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "material")
+    @Builder.Default
     private Set<Lote> lotes = new LinkedHashSet<>();
 
-    // Getters and Setters
-
-    public Integer getId() {
-        return id;
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy proxy
+                ? proxy.getHibernateLazyInitializer().getPersistentClass()
+                : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy proxy
+                ? proxy.getHibernateLazyInitializer().getPersistentClass()
+                : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Material material = (Material) o;
+        return getId() != null && Objects.equals(getId(), material.getId());
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
-    public String getUniMedida() {
-        return uniMedida;
-    }
-
-    public void setUniMedida(String uniMedida) {
-        this.uniMedida = uniMedida;
-    }
-
-    public BigDecimal getCustoUni() {
-        return custoUni;
-    }
-
-    public void setCustoUni(BigDecimal custoUni) {
-        this.custoUni = custoUni;
-    }
-
-    public BigDecimal getPeso() {
-        return peso;
-    }
-
-    public void setPeso(BigDecimal peso) {
-        this.peso = peso;
-    }
-
-    public BigDecimal getVolume() {
-        return volume;
-    }
-
-    public void setVolume(BigDecimal volume) {
-        this.volume = volume;
-    }
-
-    public Set<MaterialSolicitacaoMaterial> getMaterialSolicitacaomateriais() {
-        return materialSolicitacaomateriais;
-    }
-
-    public void setMaterialSolicitacaomateriais(Set<MaterialSolicitacaoMaterial> materialSolicitacaomateriais) {
-        this.materialSolicitacaomateriais = materialSolicitacaomateriais;
-    }
-
-    public Set<MaterialPedidoMaterial> getMaterialPedidomateriais() {
-        return materialPedidomateriais;
-    }
-
-    public void setMaterialPedidomateriais(Set<MaterialPedidoMaterial> materialPedidomateriais) {
-        this.materialPedidomateriais = materialPedidomateriais;
-    }
-
-    public Set<Lote> getLotes() {
-        return lotes;
-    }
-
-    public void setLotes(Set<Lote> lotes) {
-        this.lotes = lotes;
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy proxy
+                ? proxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+                : getClass().hashCode();
     }
 }

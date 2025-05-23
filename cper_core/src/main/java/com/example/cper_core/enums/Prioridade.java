@@ -1,6 +1,8 @@
 package com.example.cper_core.enums;
 
-public enum Prioridade {
+import com.example.cper_core.enums.Interface.EnumWithId;
+
+public enum Prioridade implements EnumWithId<Prioridade> {
     MUITO_BAIXA(1),
     BAIXA(2),
     NORMAL(3),
@@ -13,26 +15,19 @@ public enum Prioridade {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    public static int getIdFromEnum(Prioridade prioridade) { return EnumWithId.getIdFromEnum(prioridade); }
+
     public static Prioridade fromId(int id) {
-        for (Prioridade prioridade : values()) {
-            if (prioridade.id == id) {
-                return prioridade;
-            }
-        }
-        throw new IllegalArgumentException("Prioridade inválida: " + id);
+        return EnumWithId.fromId(Prioridade.class, id);
     }
 
     public static Prioridade fromName(String name) {
-        for (Prioridade prioridade : values()) {
-            if (prioridade.name().equalsIgnoreCase(name)) {
-                return prioridade;
-            }
-        }
-        throw new IllegalArgumentException("Prioridade inválida: " + name);
+        return EnumWithId.fromName(Prioridade.class, name);
     }
 
     @Override

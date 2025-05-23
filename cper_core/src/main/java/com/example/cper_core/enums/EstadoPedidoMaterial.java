@@ -1,7 +1,8 @@
 package com.example.cper_core.enums;
 
-public enum EstadoPedidoMaterial {
-    APAGADO(0),
+import com.example.cper_core.enums.Interface.EnumWithId;
+
+public enum EstadoPedidoMaterial implements EnumWithId<EstadoPedidoMaterial> {
     PENDENTE(1),
     EM_PROCESSO(2),
     ENVIADO(3);
@@ -12,26 +13,19 @@ public enum EstadoPedidoMaterial {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    public static int getIdFromEnum(EstadoPedidoMaterial estadoPedidoMaterial) { return EnumWithId.getIdFromEnum(estadoPedidoMaterial); }
+
     public static EstadoPedidoMaterial fromId(int id) {
-        for (EstadoPedidoMaterial estado : values()) {
-            if (estado.id == id) {
-                return estado;
-            }
-        }
-        throw new IllegalArgumentException("EstadoPMaterial inválido: " + id);
+        return EnumWithId.fromId(EstadoPedidoMaterial.class, id);
     }
 
     public static EstadoPedidoMaterial fromName(String name) {
-        for (EstadoPedidoMaterial estado : values()) {
-            if (estado.name().equalsIgnoreCase(name)) {
-                return estado;
-            }
-        }
-        throw new IllegalArgumentException("EstadoPMaterial inválido: " + name);
+        return EnumWithId.fromName(EstadoPedidoMaterial.class, name);
     }
 
     @Override

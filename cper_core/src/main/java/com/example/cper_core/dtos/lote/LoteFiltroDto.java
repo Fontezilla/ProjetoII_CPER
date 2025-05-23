@@ -1,19 +1,34 @@
 package com.example.cper_core.dtos.lote;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.util.Set;
 
 @Data
+@NoArgsConstructor
 public class LoteFiltroDto {
 
-    private Integer idStock;
-    private Integer idMaterial;
-    private Integer qtdMin;
-    private Integer qtdMax;
-    private LocalDate dataValidadeInicio;
-    private LocalDate dataValidadeFim;
-    private LocalDate dataAdicaoInicio;
-    private LocalDate dataAdicaoFim;
+    private Integer id;
+
+    private String codigoLote;
+
+    private OffsetDateTime dataProducaoInicio;
+    private OffsetDateTime dataProducaoFim;
+
+    private OffsetDateTime dataValidadeInicio;
+    private OffsetDateTime dataValidadeFim;
+
+    private BigDecimal quantidadeTotalMin;
+    private BigDecimal quantidadeTotalMax;
+
+    private BigDecimal quantidadeDisponivelMin;
+    private BigDecimal quantidadeDisponivelMax;
+
+    private Boolean isDeleted = false;
+
+    private Set<Integer> idsMaterial;
 }
 

@@ -1,7 +1,8 @@
 package com.example.cper_core.enums;
 
-public enum TipoEnergiaRenovavel {
+import com.example.cper_core.enums.Interface.EnumWithId;
 
+public enum TipoEnergiaRenovavel implements EnumWithId<TipoEnergiaRenovavel> {
     SOLAR(1),
     EOLICA(2),
     HIDRICA(3),
@@ -18,25 +19,19 @@ public enum TipoEnergiaRenovavel {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    public static int getIdFromEnum(TipoEnergiaRenovavel tipoEnergiaRenovavel) { return EnumWithId.getIdFromEnum(tipoEnergiaRenovavel); }
+
     public static TipoEnergiaRenovavel fromId(int id) {
-        for (TipoEnergiaRenovavel tipo : TipoEnergiaRenovavel.values()) {
-            if (tipo.getId() == id) {
-                return tipo;
-            }
-        }
-        throw new IllegalArgumentException("Tipo de Energia Renovável inválido: " + id);
+        return EnumWithId.fromId(TipoEnergiaRenovavel.class, id);
     }
 
     public static TipoEnergiaRenovavel fromName(String name) {
-        try {
-            return TipoEnergiaRenovavel.valueOf(name);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Tipo de Energia Renovável inválido: " + name);
-        }
+        return EnumWithId.fromName(TipoEnergiaRenovavel.class, name);
     }
 
     @Override

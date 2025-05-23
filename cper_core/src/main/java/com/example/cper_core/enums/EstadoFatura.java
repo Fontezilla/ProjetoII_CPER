@@ -1,7 +1,8 @@
 package com.example.cper_core.enums;
 
-public enum EstadoFatura {
-    APAGADA(0),
+import com.example.cper_core.enums.Interface.EnumWithId;
+
+public enum EstadoFatura implements EnumWithId<EstadoFatura> {
     CRIADA(1),
     EM_ANALISE(2),
     ENVIADA(3),
@@ -15,26 +16,19 @@ public enum EstadoFatura {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    public static int getIdFromEnum(EstadoFatura estadoFatura) { return EnumWithId.getIdFromEnum(estadoFatura); }
+
     public static EstadoFatura fromId(int id) {
-        for (EstadoFatura estado : values()) {
-            if (estado.id == id) {
-                return estado;
-            }
-        }
-        throw new IllegalArgumentException("EstadoFatura inválido: " + id);
+        return EnumWithId.fromId(EstadoFatura.class, id);
     }
 
     public static EstadoFatura fromName(String name) {
-        for (EstadoFatura estado : values()) {
-            if (estado.name().equalsIgnoreCase(name)) {
-                return estado;
-            }
-        }
-        throw new IllegalArgumentException("EstadoFatura inválido: " + name);
+        return EnumWithId.fromName(EstadoFatura.class, name);
     }
 
     @Override

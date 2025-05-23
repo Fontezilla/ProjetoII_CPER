@@ -1,44 +1,34 @@
 package com.example.cper_core.dtos.ticket;
 
+import com.example.cper_core.dtos.OnCreate;
+import com.example.cper_core.enums.EstadoTicket;
+import com.example.cper_core.enums.Prioridade;
+import com.example.cper_core.enums.TipoTicket;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-/**
- * DTO for {@link com.example.cper_core.entities.Ticket}
- */
+import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class TicketDetailsDto extends TicketDto implements Serializable {
+public class TicketDetailsDto extends TicketDto {
 
-    @NotBlank(message = "A descrição não pode ser vazia")
+    @NotNull(groups = OnCreate.class, message = "A data de início é obrigatória")
+    private OffsetDateTime dataIni;
+
+    @NotBlank(groups = OnCreate.class, message = "A descrição é obrigatória")
     private String descricao;
 
-    @NotNull(message = "O tipo de ticket não pode ser nulo")
-    @Positive(message = "O tipo de ticket deve ser um valor positivo")
-    private Integer tipoTicket;
+    @NotNull(groups = OnCreate.class, message = "O tipo de ticket é obrigatório")
+    private TipoTicket tipoTicket;
 
-    @NotNull(message = "A prioridade não pode ser nula")
-    @Positive(message = "A prioridade deve ser um valor positivo")
-    private String prioridade;
+    private Prioridade prioridade;
 
-    @NotNull(message = "O estado não pode ser nulo")
-    @Positive(message = "O estado deve ser um valor positivo")
-    private String estado;
-
-    public TicketDetailsDto(Integer id, String descricao, Integer tipoTicket, String prioridade, String estado) {
-        super(id);
-        this.descricao = descricao;
-        this.tipoTicket = tipoTicket;
-        this.prioridade = prioridade;
-        this.estado = estado;
-    }
+    @NotNull(groups = OnCreate.class, message = "O estado do ticket é obrigatório")
+    private EstadoTicket estado;
 }

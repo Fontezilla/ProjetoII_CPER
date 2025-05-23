@@ -1,8 +1,8 @@
 package com.example.cper_core.enums;
 
-import java.util.Arrays;
+import com.example.cper_core.enums.Interface.EnumWithId;
 
-public enum Setor {
+public enum Setor implements EnumWithId<Setor> {
     TEMPORARIO(0),
     COMERCIAL(1),
     FINANCEIRO(2),
@@ -22,22 +22,19 @@ public enum Setor {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    public static int getIdFromEnum(Setor setor) { return EnumWithId.getIdFromEnum(setor); }
+
     public static Setor fromId(int id) {
-        return Arrays.stream(values())
-                .filter(setor -> setor.id == id)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Setor inválido: " + id));
+        return EnumWithId.fromId(Setor.class, id);
     }
 
     public static Setor fromName(String name) {
-        return Arrays.stream(values())
-                .filter(setor -> setor.name().equalsIgnoreCase(name))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Setor inválido: " + name));
+        return EnumWithId.fromName(Setor.class, name);
     }
 
     @Override

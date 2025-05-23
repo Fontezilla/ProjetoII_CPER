@@ -1,49 +1,76 @@
 package com.example.cper_core.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "\"pedido geracao\"")
+@Table(name = "\"pedido_geracao\"")
+@ToString(onlyExplicitlyIncluded = true)
 public class PedidoGeracao {
-
-    // Attributes
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pedido_geracao_id_gen")
     @SequenceGenerator(name = "pedido_geracao_id_gen", sequenceName = "pedido geracao_id_pedidog_seq", allocationSize = 1)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @Column(name = "\"id_pedidoG\"", nullable = false)
     private Integer id;
 
-    @ColumnDefault("CURRENT_DATE")
     @Column(name = "data_criacao", nullable = false)
+    @ColumnDefault("CURRENT_DATE")
     private LocalDate dataCriacao;
 
     @Column(name = "data_previsao")
     private LocalDate dataPrevisao;
 
-    @ColumnDefault("0")
     @Column(name = "qtd_energia", nullable = false, precision = 20, scale = 2)
+    @ColumnDefault("0")
     private BigDecimal qtdEnergia;
+
+    @NotNull
+    @Column(name = "qtd_energia_h", nullable = false, precision = 20, scale = 2)
+    private BigDecimal qtdEnergiaH;
+
+    @ColumnDefault("0")
+    @Column(name = "qtd_energia_produzida", precision = 20, scale = 2)
+    private BigDecimal qtdEnergiaProduzida;
+
+    @ColumnDefault("0")
+    @Column(name = "qtd_energia_produzida_h", precision = 20, scale = 2)
+    private BigDecimal qtdEnergiaProduzidaH;
 
     @Column(name = "tipo_energia")
     private Integer tipoEnergia;
 
-    @ColumnDefault("1")
     @Column(name = "prioridade")
+    @ColumnDefault("1")
     private Integer prioridade;
 
-    @Column(name = "obs", length = Integer.MAX_VALUE)
+    @Column(name = "obs", columnDefinition = "TEXT")
     private String obs;
 
-    @Column(name = "relatorio_final", length = Integer.MAX_VALUE)
+    @Column(name = "relatorio_final", columnDefinition = "TEXT")
     private String relatorioFinal;
 
     @Column(name = "estado")
     private Integer estado;
+
+    @ColumnDefault("false")
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean isDeleted = false;
 
     // Relationships
 
@@ -59,117 +86,28 @@ public class PedidoGeracao {
     @JoinColumn(name = "id_funcionario")
     private Funcionario funcionario;
 
-    // Getters and Setters
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
 
-    public Integer getId() {
-        return id;
+        Class<?> thisClass = this instanceof HibernateProxy
+                ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+                : getClass();
+
+        Class<?> otherClass = o instanceof HibernateProxy
+                ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+                : o.getClass();
+
+        if (!thisClass.equals(otherClass)) return false;
+        PedidoGeracao that = (PedidoGeracao) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public void setDataCriacao(LocalDate dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public LocalDate getDataPrevisao() {
-        return dataPrevisao;
-    }
-
-    public void setDataPrevisao(LocalDate dataPrevisao) {
-        this.dataPrevisao = dataPrevisao;
-    }
-
-    public BigDecimal getQtdEnergia() {
-        return qtdEnergia;
-    }
-
-    public void setQtdEnergia(BigDecimal qtdEnergia) {
-        this.qtdEnergia = qtdEnergia;
-    }
-
-    public Integer getTipoEnergia() {
-        return tipoEnergia;
-    }
-
-    public void setTipoEnergia(Integer tipoEnergia) {
-        this.tipoEnergia = tipoEnergia;
-    }
-
-    public Integer getPrioridade() {
-        return prioridade;
-    }
-
-    public void setPrioridade(Integer prioridade) {
-        this.prioridade = prioridade;
-    }
-
-    public String getObs() {
-        return obs;
-    }
-
-    public void setObs(String obs) {
-        this.obs = obs;
-    }
-
-    public String getRelatorioFinal() {
-        return relatorioFinal;
-    }
-
-    public void setRelatorioFinal(String relatorioFinal) {
-        this.relatorioFinal = relatorioFinal;
-    }
-
-    public Integer getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
-
-    public Contrato getContrato() {
-        return contrato;
-    }
-
-    public void setIdContrato(Contrato contrato) {
-        this.contrato = contrato;
-    }
-
-    public Funcionario getIdFuncionario() {
-        return funcionario;
-    }
-
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
-    }
-
-    public CentroProducao getCentro() {
-        return centroProducao;
-    }
-
-    public void setCentro(CentroProducao centroProducao) {
-        this.centroProducao = centroProducao;
-    }
-
-    public void setContrato(Contrato contrato) {
-        this.contrato = contrato;
-    }
-
-    public CentroProducao getCentroProducao() {
-        return centroProducao;
-    }
-
-    public void setCentroProducao(CentroProducao centroProducao) {
-        this.centroProducao = centroProducao;
-    }
-
-    public Funcionario getFuncionario() {
-        return funcionario;
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy
+                ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
+                : getClass().hashCode();
     }
 }

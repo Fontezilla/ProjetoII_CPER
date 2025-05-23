@@ -1,33 +1,46 @@
 package com.example.cper_core.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.Objects;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "resposta")
+@ToString(onlyExplicitlyIncluded = true)
 public class Resposta {
-
-    // Attributes
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "resposta_id_gen")
     @SequenceGenerator(name = "resposta_id_gen", sequenceName = "resposta_id_resposta_seq", allocationSize = 1)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @Column(name = "id_resposta", nullable = false)
     private Integer id;
 
-    @Column(name = "resposta", length = Integer.MAX_VALUE)
+    @Column(name = "resposta", nullable = false, columnDefinition = "TEXT")
     private String resposta;
 
-    @ColumnDefault("CURRENT_DATE")
     @Column(name = "data_resposta")
-    private LocalDate dataResposta;
+    private OffsetDateTime dataResposta;
 
-    // Relationships
+    @Column(name = "is_cliente")
+    @Builder.Default
+    private Boolean isCliente = false;
+
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean isDeleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_ticket")
+    @JoinColumn(name = "id_ticket", nullable = false)
     private Ticket ticket;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,53 +51,22 @@ public class Resposta {
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
-    // Getters and Setters
-
-    public Integer getId() {
-        return id;
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ?
+                ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Resposta resposta = (Resposta) o;
+        return getId() != null && Objects.equals(getId(), resposta.getId());
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getResposta() {
-        return resposta;
-    }
-
-    public void setResposta(String resposta) {
-        this.resposta = resposta;
-    }
-
-    public LocalDate getDataResposta() {
-        return dataResposta;
-    }
-
-    public void setDataResposta(LocalDate dataResposta) {
-        this.dataResposta = dataResposta;
-    }
-
-    public Ticket getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(Ticket ticket) {
-        this.ticket = ticket;
-    }
-
-    public Funcionario getFuncionario() {
-        return funcionario;
-    }
-
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ?
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

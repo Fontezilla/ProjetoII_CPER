@@ -1,10 +1,8 @@
 package com.example.cper_core.mappers;
 
-import com.example.cper_core.dtos.anomalia.AnomaliaDetailsExtendedDto;
-import com.example.cper_core.dtos.contrato.*;
-import com.example.cper_core.entities.Anomalia;
-import com.example.cper_core.entities.Contrato;
 import com.example.cper_core.enums.*;
+import com.example.cper_core.dtos.contrato.*;
+import com.example.cper_core.entities.Contrato;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -12,102 +10,65 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ContratoMapper {
 
-    // -------- To DTO --------
+    // --- Métodos Auxiliares de Enum ---
+    @Named("mapTipoContrato")
+    default TipoContrato mapTipoContrato(Integer id) {
+        return id == null ? null : TipoContrato.fromId(id);
+    }
 
+    @Named("mapEstadoContrato")
+    default EstadoContrato mapEstadoContrato(Integer id) {
+        return id == null ? null : EstadoContrato.fromId(id);
+    }
+
+    // --- To DTO ---
     @Named("toDto")
     ContratoDto toDto(Contrato entity);
 
     @IterableMapping(qualifiedByName = "toDto")
     List<ContratoDto> toDtoList(List<Contrato> entities);
 
+    // --- To Details DTO ---
     @Named("toDetailsDto")
-    @Mapping(source = "tipoContrato", target = "tipoContrato", qualifiedByName = "mapTipoToString")
-    @Mapping(source = "estado", target = "estado", qualifiedByName = "mapEstadoToString")
+    @Mapping(target = "tipoContrato", source = "tipoContrato", qualifiedByName = "mapTipoContrato")
+    @Mapping(target = "estado", source = "estado", qualifiedByName = "mapEstadoContrato")
     ContratoDetailsDto toDetailsDto(Contrato entity);
 
     @IterableMapping(qualifiedByName = "toDetailsDto")
     List<ContratoDetailsDto> toDetailsDtoList(List<Contrato> entities);
 
-    @Named("toDetailsExtendedDto")
-    ContratoDetailsExtendedDto toDetailsExtendedDto(Contrato entity);
+    // --- To Extended DTO ---
+    @Named("toExtendedDto")
+    @Mapping(target = "tipoContrato", source = "tipoContrato", qualifiedByName = "mapTipoContrato")
+    @Mapping(target = "estado", source = "estado", qualifiedByName = "mapEstadoContrato")
+    ContratoDetailsExtendedDto toExtendedDto(Contrato entity);
 
-    @IterableMapping(qualifiedByName = "toDetailsExtendedDto")
-    List<ContratoDetailsExtendedDto> toDetailsExtendedDtoList(List<Contrato> entities);
+    @IterableMapping(qualifiedByName = "toExtendedDto")
+    List<ContratoDetailsExtendedDto> toExtendedDtoList(List<Contrato> entities);
 
-    @Named("toWithFaturaDto")
-    ContratoWithFaturaDto toWithFaturaDto(Contrato entity);
+    // --- To WithRelationships DTO ---
+    @Named("toWithRelationshipsDto")
+    ContratoWithRelationshipsDto toWithRelationshipsDto(Contrato entity);
 
-    @IterableMapping(qualifiedByName = "toWithFaturaDto")
-    List<ContratoWithFaturaDto> toWithFaturaDtoList(List<Contrato> entities);
+    @IterableMapping(qualifiedByName = "toWithRelationshipsDto")
+    List<ContratoWithRelationshipsDto> toWithRelationshipsDtoList(List<Contrato> entities);
 
-    @Named("toWithPedidoDto")
-    ContratoWithPedidoDto toWithPedidoDto(Contrato entity);
-
-    @IterableMapping(qualifiedByName = "toWithPedidoDto")
-    List<ContratoWithPedidoDto> toWithPedidoDtoList(List<Contrato> entities);
-
-    // -------- To Entity --------
-
-    @Named("toEntityFromDto")
+    // --- To Entity ---
     Contrato toEntity(ContratoDto dto);
 
-    @Named("toEntityFromDetails")
-    @Mapping(source = "tipoContrato", target = "tipoContrato", qualifiedByName = "mapStringToTipo")
-    @Mapping(source = "estado", target = "estado", qualifiedByName = "mapStringToEstado")
+    @Mapping(target = "tipoContrato", expression = "java(dto.getTipoContrato() != null ? dto.getTipoContrato().getId() : null)")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : null)")
     Contrato toEntity(ContratoDetailsDto dto);
 
-    @Named("toEntityFromExtended")
+    @Mapping(target = "tipoContrato", expression = "java(dto.getTipoContrato() != null ? dto.getTipoContrato().getId() : null)")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : null)")
     Contrato toEntity(ContratoDetailsExtendedDto dto);
 
-    @Named("toEntityFromFatura")
-    Contrato toEntity(ContratoWithFaturaDto dto);
+    Contrato toEntity(ContratoWithRelationshipsDto dto);
 
-    @Named("toEntityFromPedido")
-    Contrato toEntity(ContratoWithPedidoDto dto);
-
-    // -------- Conversões de listas inversas --------
-
-    @IterableMapping(qualifiedByName = "toEntityFromDto")
-    List<Contrato> toEntityList(List<ContratoDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromDetails")
-    List<Contrato> toEntityDetailsList(List<ContratoDetailsDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromExtended")
-    List<Contrato> toEntityExtendedList(List<ContratoDetailsExtendedDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromFatura")
-    List<Contrato> toEntityWithFaturaList(List<ContratoWithFaturaDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromPedido")
-    List<Contrato> toEntityWithPedidoList(List<ContratoWithPedidoDto> dtos);
-
-    // -------- Métodos auxiliares --------
-
-    @Named("mapTipoToString")
-    default String mapTipoToString(Integer TipoContratoId) {
-        if (TipoContratoId == null) return null;
-        return TipoContrato.fromId(TipoContratoId).name();
-    }
-
-    @Named("mapStringToTipo")
-    default Integer mapStringToTipo(String TipoContratoName) {
-        if (TipoContratoName == null) return null;
-        return TipoContrato.fromName(TipoContratoName).getId();
-    }
-
-    @Named("mapEstadoToString")
-    default String mapEstadoToString(Integer estadoId) {
-        if (estadoId == null) return null;
-        return EstadoContrato.fromId(estadoId).name();
-    }
-
-    @Named("mapStringToEstado")
-    default Integer mapStringToEstado(String estadoName) {
-        if (estadoName == null) return null;
-        return EstadoContrato.fromName(estadoName).getId();
-    }
-
+    // --- Partial Update ---
+    @Mapping(target = "tipoContrato", expression = "java(dto.getTipoContrato() != null ? dto.getTipoContrato().getId() : entity.getTipoContrato())")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : entity.getEstado())")
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromExtendedDto(ContratoDetailsExtendedDto dto, @MappingTarget Contrato entity);

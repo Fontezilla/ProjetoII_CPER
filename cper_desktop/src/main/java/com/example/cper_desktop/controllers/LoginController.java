@@ -1,7 +1,7 @@
+/*
+
 package com.example.cper_desktop.controllers;
 
-import com.example.cper_core.dtos.funcionario.FuncionarioLoginDto;
-import com.example.cper_core.dtos.funcionario.FuncionarioLoginResponseDto;
 import com.example.cper_core.services.interfaces.IFuncionarioService;
 import com.example.cper_core.utils.JwtUtils;
 import com.example.cper_desktop.utils.SessionStorage;
@@ -97,3 +97,5 @@ public class LoginController {
         alert.showAndWait();
     }
 }
+
+ */

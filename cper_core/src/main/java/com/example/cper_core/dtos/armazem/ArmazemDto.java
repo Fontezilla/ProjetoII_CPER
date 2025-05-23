@@ -1,21 +1,17 @@
 package com.example.cper_core.dtos.armazem;
 
-import com.example.cper_core.entities.Armazem;
+import com.example.cper_core.dtos.OnUpdate;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-/**
- * DTO for {@link Armazem}
- */
-
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ArmazemDto implements Serializable {
+    @NotNull(groups = OnUpdate.class, message = "O ID do armazém não pode ser nulo")
     private Integer id;
-
-    public ArmazemDto(Integer id) {
-        this.id = id;
-    }
 }

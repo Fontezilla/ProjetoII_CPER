@@ -1,13 +1,15 @@
 package com.example.cper_core.enums;
 
-public enum EstadoSolicitacaoEnergetica {
-    RECEBIDA(0),
-    EM_ANALISE(1),
-    APROVADA(2),
-    REJEITADA(3),
-    EM_ANDAMENTO(4),
-    CONCLUÍDA(5),
-    CANCELADA(6);
+import com.example.cper_core.enums.Interface.EnumWithId;
+
+public enum EstadoSolicitacaoEnergetica implements EnumWithId<EstadoSolicitacaoEnergetica> {
+    RECEBIDA(1),
+    EM_ANALISE(2),
+    APROVADA(3),
+    REJEITADA(4),
+    EM_ANDAMENTO(5),
+    CONCLUÍDA(6),
+    CANCELADA(7);
 
     private final int id;
 
@@ -15,26 +17,19 @@ public enum EstadoSolicitacaoEnergetica {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    public static int getIdFromEnum(EstadoSolicitacaoEnergetica estadoSolicitacaoEnergetica) { return EnumWithId.getIdFromEnum(estadoSolicitacaoEnergetica); }
+
     public static EstadoSolicitacaoEnergetica fromId(int id) {
-        for (EstadoSolicitacaoEnergetica estado : values()) {
-            if (estado.id == id) {
-                return estado;
-            }
-        }
-        throw new IllegalArgumentException("Estado inválido: " + id);
+        return EnumWithId.fromId(EstadoSolicitacaoEnergetica.class, id);
     }
 
     public static EstadoSolicitacaoEnergetica fromName(String name) {
-        for (EstadoSolicitacaoEnergetica estado : values()) {
-            if (estado.name().equalsIgnoreCase(name)) {
-                return estado;
-            }
-        }
-        throw new IllegalArgumentException("Estado inválido: " + name);
+        return EnumWithId.fromName(EstadoSolicitacaoEnergetica.class, name);
     }
 
     @Override

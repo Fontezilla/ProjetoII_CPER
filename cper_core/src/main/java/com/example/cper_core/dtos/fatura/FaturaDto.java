@@ -1,22 +1,18 @@
 package com.example.cper_core.dtos.fatura;
 
-import com.example.cper_core.entities.Fatura;
+import com.example.cper_core.dtos.OnUpdate;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Objects;
-
-/**
- * DTO for {@link Fatura}
- */
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class FaturaDto implements Serializable {
+    @NotNull(groups = OnUpdate.class, message = "O id da fatura é obrigatório")
     private Integer id;
-
-    public FaturaDto(Integer id) {
-        this.id = id;
-    }
 }
+

@@ -1,38 +1,47 @@
 package com.example.cper_core.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "contrato")
+@ToString(onlyExplicitlyIncluded = true)
 public class Contrato {
-
-    // Attributes
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contrato_id_gen")
     @SequenceGenerator(name = "contrato_id_gen", sequenceName = "contrato_id_contrato_seq", allocationSize = 1)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @Column(name = "id_contrato", nullable = false)
     private Integer id;
 
-    @ColumnDefault("CURRENT_DATE")
     @Column(name = "data_inicio", nullable = false)
-    private LocalDate dataInicio;
+    private OffsetDateTime dataInicio;
 
     @Column(name = "data_fim")
-    private LocalDate dataFim;
+    private OffsetDateTime dataFim;
 
     @Column(name = "tipo_contrato")
     private Integer tipoContrato;
 
-    @ColumnDefault("0")
     @Column(name = "qtd_energia", nullable = false, precision = 20, scale = 2)
     private BigDecimal qtdEnergia;
+
+    @Column(name = "qtd_energia_h", nullable = false, precision = 20, scale = 2)
+    private BigDecimal qtdEnergiaH;
 
     @Column(name = "prazo_pagamento")
     private Integer prazoPagamento;
@@ -43,19 +52,12 @@ public class Contrato {
     @Column(name = "estado")
     private Integer estado;
 
-    @Column(name = "n_porta")
-    private Integer nPorta;
+    @Column(name = "n_porta", length = 10)
+    private String nPorta;
 
-    // Relationships
-
-    @OneToOne(mappedBy = "contrato")
-    private SolicitacaoEnergetica solicitacaoEnergetica;
-
-    @OneToMany(mappedBy = "contrato")
-    private Set<Fatura> faturas = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "contrato")
-    private Set<PedidoGeracao> pedidosGeracao = new LinkedHashSet<>();
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean isDeleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_funcionario")
@@ -65,125 +67,30 @@ public class Contrato {
     @JoinColumn(name = "id_endereco")
     private Endereco endereco;
 
-    // Getters and Setters
+    @OneToOne(mappedBy = "contrato")
+    private SolicitacaoEnergetica solicitacaoEnergetica;
 
-    public Integer getId() {
-        return id;
+    @OneToMany(mappedBy = "contrato")
+    @Builder.Default
+    private Set<Fatura> faturas = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "contrato")
+    @Builder.Default
+    private Set<PedidoGeracao> pedidosGeracao = new LinkedHashSet<>();
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Contrato contrato = (Contrato) o;
+        return getId() != null && Objects.equals(getId(), contrato.getId());
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public LocalDate getDataInicio() {
-        return dataInicio;
-    }
-
-    public void setDataInicio(LocalDate dataInicio) {
-        this.dataInicio = dataInicio;
-    }
-
-    public LocalDate getDataFim() {
-        return dataFim;
-    }
-
-    public void setDataFim(LocalDate dataFim) {
-        this.dataFim = dataFim;
-    }
-
-    public Integer getTipoContrato() {
-        return tipoContrato;
-    }
-
-    public void setTipoContrato(Integer tipoContrato) {
-        this.tipoContrato = tipoContrato;
-    }
-
-    public BigDecimal getQtdEnergia() {
-        return qtdEnergia;
-    }
-
-    public void setQtdEnergia(BigDecimal qtdEnergia) {
-        this.qtdEnergia = qtdEnergia;
-    }
-
-    public Integer getPrazoPagamento() {
-        return prazoPagamento;
-    }
-
-    public void setPrazoPagamento(Integer prazoPagamento) {
-        this.prazoPagamento = prazoPagamento;
-    }
-
-    public Integer getMultaAtraso() {
-        return multaAtraso;
-    }
-
-    public void setMultaAtraso(Integer multaAtraso) {
-        this.multaAtraso = multaAtraso;
-    }
-
-    public Integer getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
-
-    public Integer getNPorta() {
-        return nPorta;
-    }
-
-    public void setNPorta(Integer nPorta) {
-        this.nPorta = nPorta;
-    }
-
-    public Funcionario getIdFuncionario() {
-        return funcionario;
-    }
-
-    public void setIdFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
-    }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
-
-    public SolicitacaoEnergetica getSolicitacaoEnergetica() {
-        return solicitacaoEnergetica;
-    }
-
-    public void setSolicitacaoEnergetica(SolicitacaoEnergetica solicitacaoEnergetica) {
-        this.solicitacaoEnergetica = solicitacaoEnergetica;
-    }
-
-    public Set<Fatura> getFaturas() {
-        return faturas;
-    }
-
-    public void setFaturas(Set<Fatura> faturas) {
-        this.faturas = faturas;
-    }
-
-    public Set<PedidoGeracao> getPedidosGeracao() {
-        return pedidosGeracao;
-    }
-
-    public void setPedidosGeracao(Set<PedidoGeracao> pedidosGeracao) {
-        this.pedidosGeracao = pedidosGeracao;
-    }
-
-    public Funcionario getFuncionario() {
-        return funcionario;
-    }
-
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

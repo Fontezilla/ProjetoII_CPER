@@ -1,53 +1,69 @@
 package com.example.cper_core.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "inspecao")
+@ToString(onlyExplicitlyIncluded = true)
 public class Inspecao {
-
-    // Attributes
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inspecao_id_gen")
     @SequenceGenerator(name = "inspecao_id_gen", sequenceName = "inspecao_id_inspecao_seq", allocationSize = 1)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @Column(name = "id_inspecao", nullable = false)
     private Integer id;
 
-    @Column(name = "descricao", length = Integer.MAX_VALUE)
+    @Column(name = "titulo", nullable = false)
+    private String titulo;
+
+    @Column(name = "descricao", columnDefinition = "TEXT")
     private String descricao;
 
-    @ColumnDefault("CURRENT_DATE")
     @Column(name = "data", nullable = false)
-    private LocalDate data;
+    private OffsetDateTime data;
 
     @Column(name = "tipo")
     private Integer tipo;
 
-    @Column(name = "area_inspecionada", length = Integer.MAX_VALUE)
+    @Column(name = "area_inspecionada", columnDefinition = "TEXT")
     private String areaInspecionada;
 
-    @Column(name = "resultados", length = Integer.MAX_VALUE)
+    @Column(name = "resultados", columnDefinition = "TEXT")
     private String resultados;
 
     @Column(name = "estado")
     private Integer estado;
 
-    // Relationships
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean isDeleted = false;
+
+    // Relações
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_anomalia", unique = true)
     private Anomalia anomalia;
 
     @OneToMany(mappedBy = "inspecao")
+    @Builder.Default
     private Set<Nota> notas = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "inspecao")
+    @Builder.Default
     private Set<Avaria> avarias = new LinkedHashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -60,115 +76,28 @@ public class Inspecao {
             joinColumns = @JoinColumn(name = "id_inspecao"),
             inverseJoinColumns = @JoinColumn(name = "id_equipa")
     )
+    @Builder.Default
     private Set<Equipa> equipas = new LinkedHashSet<>();
 
-    // Getters and Setters
-
-    public Integer getId() {
-        return id;
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy proxy
+                ? proxy.getHibernateLazyInitializer().getPersistentClass()
+                : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy proxy
+                ? proxy.getHibernateLazyInitializer().getPersistentClass()
+                : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Inspecao inspecao = (Inspecao) o;
+        return getId() != null && Objects.equals(getId(), inspecao.getId());
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
-
-    public Integer getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(Integer tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getAreaInspecionada() {
-        return areaInspecionada;
-    }
-
-    public void setAreaInspecionada(String areaInspecionada) {
-        this.areaInspecionada = areaInspecionada;
-    }
-
-    public String getResultados() {
-        return resultados;
-    }
-
-    public void setResultados(String resultados) {
-        this.resultados = resultados;
-    }
-
-    public Integer getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
-
-    public Anomalia getAnomalia() {
-        return anomalia;
-    }
-
-    public void setIdAnomalia(Anomalia anomalia) {
-        this.anomalia = anomalia;
-    }
-
-    public CentroProducao getCentro() {
-        return centroProducao;
-    }
-
-    public void setCentro(CentroProducao centroProducao) {
-        this.centroProducao = centroProducao;
-    }
-
-    public void setAnomalia(Anomalia anomalia) {
-        this.anomalia = anomalia;
-    }
-
-    public Set<Nota> getNotas() {
-        return notas;
-    }
-
-    public void setNotas(Set<Nota> notas) {
-        this.notas = notas;
-    }
-
-    public Set<Avaria> getAvarias() {
-        return avarias;
-    }
-
-    public void setAvarias(Set<Avaria> avarias) {
-        this.avarias = avarias;
-    }
-
-    public CentroProducao getCentroProducao() {
-        return centroProducao;
-    }
-
-    public void setCentroProducao(CentroProducao centroProducao) {
-        this.centroProducao = centroProducao;
-    }
-
-    public Set<Equipa> getEquipas() {
-        return equipas;
-    }
-
-    public void setEquipas(Set<Equipa> equipas) {
-        this.equipas = equipas;
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy proxy
+                ? proxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+                : getClass().hashCode();
     }
 }

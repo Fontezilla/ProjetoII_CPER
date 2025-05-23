@@ -1,42 +1,35 @@
 package com.example.cper_core.dtos.armazem;
 
+import com.example.cper_core.dtos.OnCreate;
 import com.example.cper_core.dtos.departamento.DepartamentoDto;
 import com.example.cper_core.dtos.endereco.EnderecoDto;
 import com.example.cper_core.dtos.funcionario.FuncionarioDto;
-import com.example.cper_core.entities.Armazem;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.io.Serializable;
-import java.time.LocalDate;
-
-/**
- * DTO for {@link Armazem}
- */
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ArmazemDetailsExtendedDto extends ArmazemDetailsDto implements Serializable {
+public class ArmazemDetailsExtendedDto extends ArmazemDetailsDto {
 
-    @NotNull(message = "O campo data de criação não pode ser nulo")
-    private LocalDate dataCriacao;
-
-    @NotNull(message = "O campo data de atualização não pode ser nulo")
-    private LocalDate dataUpdate;
-
+    @NotNull(groups = OnCreate.class, message = "O departamento é obrigatório")
+    @Valid
     private DepartamentoDto departamento;
 
+    @NotBlank(groups = OnCreate.class, message = "O número da porta é obrigatório")
+    private String nPorta;
+
+    @Valid
+    @NotNull(groups = OnCreate.class, message = "O endereco é obrigatório")
+    private EnderecoDto endereco;
+
+    @Valid
     private FuncionarioDto responsavel;
 
-    public ArmazemDetailsExtendedDto(Integer id, String nome, Integer capacidadeTotal, Integer capacidadeOcupada,
-                                     Integer nPorta, EnderecoDto endereco, LocalDate dataCriacao,
-                                     LocalDate dataUpdate, DepartamentoDto departamento,
-                                     FuncionarioDto responsavel, String estado) {
-        super(id, nome, capacidadeTotal, capacidadeOcupada, nPorta, endereco, estado);
-        this.dataCriacao = dataCriacao != null ? dataCriacao : LocalDate.now();
-        this.dataUpdate = dataUpdate != null ? dataUpdate : LocalDate.now();
-        this.departamento = departamento;
-        this.responsavel = responsavel;
-    }
+    private Boolean isDeleted;
 }
+

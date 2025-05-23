@@ -1,59 +1,69 @@
 package com.example.cper_core.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "\"solicitacao energetica\"")
+@Table(name = "solicitacao_energetica")
+@ToString(onlyExplicitlyIncluded = true)
 public class SolicitacaoEnergetica {
-
-    // Attributes
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "solicitacao_energetica_id_gen")
     @SequenceGenerator(name = "solicitacao_energetica_id_gen", sequenceName = "solicitacao energetica_id_solicitacao_seq", allocationSize = 1)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @Column(name = "id_solicitacao", nullable = false)
     private Integer id;
 
-    @ColumnDefault("CURRENT_DATE")
-    @Column(name = "data_solicitacao", nullable = false)
-    private LocalDate dataSolicitacao;
+    @Column(name = "data_solicitacao")
+    private OffsetDateTime dataSolicitacao;
 
-    @Column(name = "tipo_energia")
+    @Column(name = "tipo_energia", nullable = false)
     private Integer tipoEnergia;
 
-    @ColumnDefault("0")
-    @Column(name = "qtd_solicitada", nullable = false, precision = 20)
+    @Column(name = "qtd_solicitada", nullable = false, precision = 20, scale = 2)
     private BigDecimal qtdSolicitada;
 
-    @Column(name = "prazo_entrega")
-    private LocalDate prazoEntrega;
+    @Column(name = "qtd_solicitada_h", nullable = false, precision = 20, scale = 2)
+    private BigDecimal qtdSolicitadaH;
 
-    @ColumnDefault("1")
-    @Column(name = "prioridade", nullable = false)
+    @Column(name = "prazo_entrega", nullable = false)
+    private OffsetDateTime prazoEntrega;
+
+    @Column(name = "prioridade")
     private Integer prioridade;
 
-    @ColumnDefault("1")
-    @Column(name = "estado", nullable = false)
+    @Column(name = "estado")
     private Integer estado;
 
-    // Relationships
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean isDeleted = false;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cliente", nullable = false)
+    private Cliente cliente;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_contrato", unique = true)
+    @JoinColumn(name = "id_contrato")
     private Contrato contrato;
 
     @OneToMany(mappedBy = "solicitacaoEnergetica")
-    private Set<Comentario> comentarios = new LinkedHashSet<>();
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_cliente")
-    private Cliente cliente;
+    @Builder.Default
+    private Set<Nota> notas = new LinkedHashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -61,95 +71,25 @@ public class SolicitacaoEnergetica {
             joinColumns = @JoinColumn(name = "id_solicitacao"),
             inverseJoinColumns = @JoinColumn(name = "id_funcionario")
     )
+    @Builder.Default
     private Set<Funcionario> funcionarios = new LinkedHashSet<>();
 
-    // Getters and Setters
-
-    public Integer getId() {
-        return id;
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ?
+                ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        SolicitacaoEnergetica that = (SolicitacaoEnergetica) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public LocalDate getDataSolicitacao() {
-        return dataSolicitacao;
-    }
-
-    public void setDataSolicitacao(LocalDate dataSolicitacao) {
-        this.dataSolicitacao = dataSolicitacao;
-    }
-
-    public Integer getTipoEnergia() {
-        return tipoEnergia;
-    }
-
-    public void setTipoEnergia(Integer tipoEnergia) {
-        this.tipoEnergia = tipoEnergia;
-    }
-
-    public BigDecimal getQtdSolicitada() {
-        return qtdSolicitada;
-    }
-
-    public void setQtdSolicitada(BigDecimal qtdSolicitada) {
-        this.qtdSolicitada = qtdSolicitada;
-    }
-
-    public LocalDate getPrazoEntrega() {
-        return prazoEntrega;
-    }
-
-    public void setPrazoEntrega(LocalDate prazoEntrega) {
-        this.prazoEntrega = prazoEntrega;
-    }
-
-    public Integer getPrioridade() {
-        return prioridade;
-    }
-
-    public void setPrioridade(Integer prioridade) {
-        this.prioridade = prioridade;
-    }
-
-    public Integer getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
-
-    public Contrato getContrato() {
-        return contrato;
-    }
-
-    public void setContrato(Contrato contrato) {
-        this.contrato = contrato;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public Set<Comentario> getComentarios() {
-        return comentarios;
-    }
-
-    public void setComentarios(Set<Comentario> comentarios) {
-        this.comentarios = comentarios;
-    }
-
-    public Set<Funcionario> getFuncionarios() {
-        return funcionarios;
-    }
-
-    public void setFuncionarios(Set<Funcionario> funcionarios) {
-        this.funcionarios = funcionarios;
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ?
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

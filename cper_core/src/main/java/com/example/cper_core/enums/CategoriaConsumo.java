@@ -1,6 +1,8 @@
 package com.example.cper_core.enums;
 
-public enum CategoriaConsumo {
+import com.example.cper_core.enums.Interface.EnumWithId;
+
+public enum CategoriaConsumo implements EnumWithId<CategoriaConsumo> {
     RESIDENCIAL(1),
     COMERCIAL(2),
     INDUSTRIAL(3),
@@ -14,26 +16,19 @@ public enum CategoriaConsumo {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    public static int getIdFromEnum(TipoTicket tipoTicket) { return EnumWithId.getIdFromEnum(tipoTicket); }
+
     public static CategoriaConsumo fromId(int id) {
-        for (CategoriaConsumo categoria : values()) {
-            if (categoria.id == id) {
-                return categoria;
-            }
-        }
-        throw new IllegalArgumentException("CategoriaConsumo inválida: " + id);
+        return EnumWithId.fromId(CategoriaConsumo.class, id);
     }
 
     public static CategoriaConsumo fromName(String name) {
-        for (CategoriaConsumo categoria : values()) {
-            if (categoria.name().equalsIgnoreCase(name)) {
-                return categoria;
-            }
-        }
-        throw new IllegalArgumentException("CategoriaConsumo inválida: " + name);
+        return EnumWithId.fromName(CategoriaConsumo.class, name);
     }
 
     @Override

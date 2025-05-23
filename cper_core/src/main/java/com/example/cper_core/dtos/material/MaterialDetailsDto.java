@@ -1,33 +1,27 @@
 package com.example.cper_core.dtos.material;
 
-import com.example.cper_core.entities.Material;
+import com.example.cper_core.dtos.OnCreate;
+import com.example.cper_core.enums.UnidadePeso;
+import com.example.cper_core.enums.UnidadeVolume;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
-/**
- * DTO for {@link Material}
- */
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class MaterialDetailsDto extends MaterialDto implements Serializable {
-    @NotBlank(message = "O nome do material não pode estar vazio")
+public class MaterialDetailsDto extends MaterialDto {
+
+    @NotBlank(groups = OnCreate.class, message = "O nome é obrigatório")
     private String nome;
 
-    private String descricao;
-
-    @NotBlank(message = "A categoria do material não pode estar vazia")
+    @NotBlank(groups = OnCreate.class, message = "A categoria é obrigatória")
     private String categoria;
 
-    public MaterialDetailsDto(Integer id, String nome, String descricao, String categoria) {
-        super(id);
-        this.nome = nome;
-        this.descricao = descricao;
-        this.categoria = categoria;
-    }
+    @NotNull(groups = OnCreate.class, message = "O custo unitário é obrigatório")
+    private BigDecimal custoUni;
 }

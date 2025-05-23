@@ -1,25 +1,18 @@
 package com.example.cper_core.dtos.lote;
 
-import com.example.cper_core.dtos.material.MaterialDto;
-import com.example.cper_core.dtos.stock.StockDto;
-import com.example.cper_core.entities.Lote;
+import com.example.cper_core.dtos.OnUpdate;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-/**
- * DTO for {@link Lote}
- */
-
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class LoteDto implements Serializable {
-    private  StockDto stock;
-    private  MaterialDto material;
-
-    public LoteDto(StockDto stock, MaterialDto material) {
-        this.stock = stock;
-        this.material = material;
-    }
+    @NotNull(groups = OnUpdate.class, message = "O id do lote não pode ser nulo.")
+    private Integer id;
 }
+

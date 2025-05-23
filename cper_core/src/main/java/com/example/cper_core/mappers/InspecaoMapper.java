@@ -1,11 +1,8 @@
 package com.example.cper_core.mappers;
 
-import com.example.cper_core.dtos.anomalia.AnomaliaDetailsExtendedDto;
+import com.example.cper_core.enums.*;
 import com.example.cper_core.dtos.inspecao.*;
-import com.example.cper_core.entities.Anomalia;
 import com.example.cper_core.entities.Inspecao;
-import com.example.cper_core.enums.EstadoInspecao;
-import com.example.cper_core.enums.TipoInspecao;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -13,88 +10,65 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface InspecaoMapper {
 
-    // -------- To DTO --------
+    // --- Métodos Auxiliares de Enum ---
+    @Named("mapTipoInspecao")
+    default TipoInspecao mapTipoInspecao(Integer id) {
+        return id == null ? null : TipoInspecao.fromId(id);
+    }
 
+    @Named("mapEstadoInspecao")
+    default EstadoInspecao mapEstadoInspecao(Integer id) {
+        return id == null ? null : EstadoInspecao.fromId(id);
+    }
+
+    // --- To DTO ---
     @Named("toDto")
     InspecaoDto toDto(Inspecao entity);
 
     @IterableMapping(qualifiedByName = "toDto")
     List<InspecaoDto> toDtoList(List<Inspecao> entities);
 
+    // --- To Details DTO ---
     @Named("toDetailsDto")
-    @Mapping(source = "tipo", target = "tipo", qualifiedByName = "mapTipoToString")
-    @Mapping(source = "estado", target = "estado", qualifiedByName = "mapEstadoToString")
+    @Mapping(target = "tipo", source = "tipo", qualifiedByName = "mapTipoInspecao")
+    @Mapping(target = "estado", source = "estado", qualifiedByName = "mapEstadoInspecao")
     InspecaoDetailsDto toDetailsDto(Inspecao entity);
 
     @IterableMapping(qualifiedByName = "toDetailsDto")
     List<InspecaoDetailsDto> toDetailsDtoList(List<Inspecao> entities);
 
-    @Named("toWithDetailsExtendedDto")
-    InspecaoDetailsExtendedDto toWithDetailsExtendedDto(Inspecao entity);
+    // --- To Extended DTO ---
+    @Named("toExtendedDto")
+    @Mapping(target = "tipo", source = "tipo", qualifiedByName = "mapTipoInspecao")
+    @Mapping(target = "estado", source = "estado", qualifiedByName = "mapEstadoInspecao")
+    InspecaoDetailsExtendedDto toExtendedDto(Inspecao entity);
 
-    @IterableMapping(qualifiedByName = "toWithDetailsExtendedDto")
-    List<InspecaoDetailsExtendedDto> toWithDetailsExtendedDtoList(List<Inspecao> entities);
+    @IterableMapping(qualifiedByName = "toExtendedDto")
+    List<InspecaoDetailsExtendedDto> toExtendedDtoList(List<Inspecao> entities);
 
-    @Named("toWithAvariaDto")
-    InspecaoWithAvariaDto toWithAvariaDto(Inspecao entity);
+    // --- To WithRelationships DTO ---
+    @Named("toWithRelationshipsDto")
+    InspecaoWithRelationshipsDto toWithRelationshipsDto(Inspecao entity);
 
-    @IterableMapping(qualifiedByName = "toWithAvariaDto")
-    List<InspecaoWithAvariaDto> toWithAvariaDtoList(List<Inspecao> entities);
+    @IterableMapping(qualifiedByName = "toWithRelationshipsDto")
+    List<InspecaoWithRelationshipsDto> toWithRelationshipsDtoList(List<Inspecao> entities);
 
-    @Named("toWithEquipaDto")
-    InspecaoWithEquipaDto toWithEquipaDto(Inspecao entity);
-
-    @IterableMapping(qualifiedByName = "toWithEquipaDto")
-    List<InspecaoWithEquipaDto> toWithEquipaDtoList(List<Inspecao> entities);
-
-    @Named("toWithNotasDto")
-    InspecaoWithNotasDto toWithNotasDto(Inspecao entity);
-
-    @IterableMapping(qualifiedByName = "toWithNotasDto")
-    List<InspecaoWithNotasDto> toWithNotasDtoList(List<Inspecao> entities);
-
-    // -------- To Entity --------
-
+    // --- To Entity ---
     Inspecao toEntity(InspecaoDto dto);
 
-    @Mapping(source = "tipo", target = "tipo", qualifiedByName = "mapStringToTipo")
-    @Mapping(source = "estado", target = "estado", qualifiedByName = "mapStringToEstado")
+    @Mapping(target = "tipo", expression = "java(dto.getTipo() != null ? dto.getTipo().getId() : null)")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : null)")
     Inspecao toEntity(InspecaoDetailsDto dto);
 
+    @Mapping(target = "tipo", expression = "java(dto.getTipo() != null ? dto.getTipo().getId() : null)")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : null)")
     Inspecao toEntity(InspecaoDetailsExtendedDto dto);
 
-    Inspecao toEntity(InspecaoWithAvariaDto dto);
+    Inspecao toEntity(InspecaoWithRelationshipsDto dto);
 
-    Inspecao toEntity(InspecaoWithEquipaDto dto);
-
-    Inspecao toEntity(InspecaoWithNotasDto dto);
-
-    // -------- Métodos auxiliares --------
-
-    @Named("mapTipoToString")
-    default String mapTipoToString(Integer tipoId) {
-        if (tipoId == null) return null;
-        return TipoInspecao.fromId(tipoId).name();
-    }
-
-    @Named("mapStringToTipo")
-    default Integer mapStringToTipo(String tipoName) {
-        if (tipoName == null) return null;
-        return TipoInspecao.fromName(tipoName).getId();
-    }
-
-    @Named("mapEstadoToString")
-    default String mapEstadoToString(Integer estadoId) {
-        if (estadoId == null) return null;
-        return EstadoInspecao.fromId(estadoId).name();
-    }
-
-    @Named("mapStringToEstado")
-    default Integer mapStringToEstado(String estadoName) {
-        if (estadoName == null) return null;
-        return EstadoInspecao.fromName(estadoName).getId();
-    }
-
+    // --- Partial Update ---
+    @Mapping(target = "tipo", expression = "java(dto.getTipo() != null ? dto.getTipo().getId() : entity.getTipo())")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : entity.getEstado())")
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromExtendedDto(InspecaoDetailsExtendedDto dto, @MappingTarget Inspecao entity);

@@ -1,6 +1,8 @@
 package com.example.cper_core.enums;
 
-public enum TipoContrato {
+import com.example.cper_core.enums.Interface.EnumWithId;
+
+public enum TipoContrato implements EnumWithId<TipoContrato> {
     VENDA_POTENCIA_FIXA(0),
     VENDA_CONSUMO_VARIAVEL(1),
     VENDA_LONGO_PRAZO(2),
@@ -13,26 +15,19 @@ public enum TipoContrato {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    public static int getIdFromEnum(TipoContrato tipoContrato) { return EnumWithId.getIdFromEnum(tipoContrato); }
+
     public static TipoContrato fromId(int id) {
-        for (TipoContrato tipo : values()) {
-            if (tipo.id == id) {
-                return tipo;
-            }
-        }
-        throw new IllegalArgumentException("ContratoTipo inválido: " + id);
+        return EnumWithId.fromId(TipoContrato.class, id);
     }
 
     public static TipoContrato fromName(String name) {
-        for (TipoContrato tipo : values()) {
-            if (tipo.name().equalsIgnoreCase(name)) {
-                return tipo;
-            }
-        }
-        throw new IllegalArgumentException("ContratoTipo inválido: " + name);
+        return EnumWithId.fromName(TipoContrato.class, name);
     }
 
     @Override

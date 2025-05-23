@@ -1,24 +1,21 @@
+
 package com.example.cper_core.services.interfaces;
 
 import com.example.cper_core.dtos.solicitacao_energetica.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
+import java.util.Set;
 
-public interface ISolicitacaoEnergeticaService {
+public interface ISolicitacaoEnergeticaService extends IXService<
+        SolicitacaoEnergeticaDto,
+        SolicitacaoEnergeticaDetailsDto,
+        SolicitacaoEnergeticaDetailsExtendedDto,
+        SolicitacaoEnergeticaFiltroDto,
+        SolicitacaoEnergeticaWithRelationshipsDto,
+        Integer
+        > {
 
-    // Generic CRUD operations
-
-    Page<SolicitacaoEnergeticaDetailsDto> listAll(Pageable pageable);
-
-    Page<SolicitacaoEnergeticaDetailsDto> listFiltered(Pageable pageable, SolicitacaoEnergeticaDto filter);
-
-    Optional<SolicitacaoEnergeticaDetailsExtendedDto> getById(Integer id);
-
-    SolicitacaoEnergeticaDetailsExtendedDto create(SolicitacaoEnergeticaDetailsExtendedDto dto);
-
-    SolicitacaoEnergeticaDetailsExtendedDto update(Integer id, SolicitacaoEnergeticaDetailsExtendedDto dto);
-
-    void softDelete(Integer id);
+    void linkToFuncionarios(Integer idSolicitacaoEnergetica, Set<Integer> idsFuncionarios);
+    void unlinkFromFuncionarios(Integer idSolicitacaoEnergetica, Set<Integer> idsFuncionarios);
 }

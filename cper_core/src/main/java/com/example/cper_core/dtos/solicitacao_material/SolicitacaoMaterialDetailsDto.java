@@ -1,34 +1,26 @@
 package com.example.cper_core.dtos.solicitacao_material;
 
-import com.example.cper_core.entities.SolicitacaoMaterial;
-import jakarta.validation.constraints.NotBlank;
+import com.example.cper_core.dtos.OnCreate;
+import com.example.cper_core.enums.EstadoSolicitacaoMaterial;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
-/**
- * DTO for {@link SolicitacaoMaterial}
- */
+import java.time.OffsetDateTime;
 
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class SolicitacaoMaterialDetailsDto extends SolicitacaoMaterialDto implements Serializable {
-    @NotNull(message = "A data do pedido não pode ser nula")
-    private LocalDate dataPedido;
+public class SolicitacaoMaterialDetailsDto extends SolicitacaoMaterialDto {
 
-    @NotBlank(message = "A descrição não pode estar vazia")
+    @NotNull(groups = OnCreate.class, message = "A data do pedido é obrigatório.")
+    private OffsetDateTime dataPedido;
+
+    @NotNull(groups = OnCreate.class, message = "A descrição é obrigatória.")
     private String descricao;
 
-    @NotBlank(message = "O estado não pode estar vazio")
-    private String estado;
+    @NotNull(groups = OnCreate.class, message = "O estado é obrigatório.")
+    private EstadoSolicitacaoMaterial estado;
 
-    public SolicitacaoMaterialDetailsDto(Integer id, LocalDate dataPedido, String descricao, String estado) {
-        super(id);
-        this.dataPedido = dataPedido;
-        this.descricao = descricao;
-        this.estado = estado;
-    }
 }

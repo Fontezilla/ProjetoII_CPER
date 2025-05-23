@@ -1,43 +1,31 @@
 package com.example.cper_core.dtos.armazem;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.example.cper_core.enums.EstadoArmazem;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 public class ArmazemFiltroDto {
 
     private Integer id;
 
     private String nome;
 
-    private LocalDate dataCriacaoInicio;
+    private BigDecimal capacidadeTotal;
 
-    private LocalDate dataCriacaoFim;
+    private BigDecimal capacidadeOcupada;
 
-    private LocalDate dataUpdateInicio;
+    private EstadoArmazem estado;
 
-    private LocalDate dataUpdateFim;
+    private String nPorta;
 
-    private Integer capacidadeTotalMin;
+    private Boolean isDeleted = false;
 
-    private Integer capacidadeTotalMax;
-
-    private Integer capacidadeOcupadaMin;
-
-    private Integer capacidadeOcupadaMax;
-
-    private Integer nPorta;
-
-    private Integer estado;
-
-    // Relationships
-
-    private Set<Integer> idDepartamento;
-
-    private Set<Integer> idEndereco;
-
-    private Set<Integer> idResponsavel;
+    private Set<Integer> idsDepartamento;
+    private Set<Integer> idsEndereco;
+    private Set<Integer> idsFuncionario;
 }

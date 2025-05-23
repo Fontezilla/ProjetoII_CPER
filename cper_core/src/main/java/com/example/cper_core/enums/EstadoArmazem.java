@@ -1,12 +1,13 @@
 package com.example.cper_core.enums;
 
-public enum EstadoArmazem {
-    APAGADO(0),
+import com.example.cper_core.enums.Interface.EnumWithId;
+
+public enum EstadoArmazem implements EnumWithId<EstadoArmazem> {
     ATIVO(1),
     EM_MANUTENCAO(2),
     ENCERRADO(3),
     EM_CONSTRUCAO(4),
-    INATIVO(5),;
+    INATIVO(5);
 
     private final int id;
 
@@ -14,26 +15,19 @@ public enum EstadoArmazem {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    public static int getIdFromEnum(EstadoArmazem estadoArmazem) { return EnumWithId.getIdFromEnum(estadoArmazem); }
+
     public static EstadoArmazem fromId(int id) {
-        for (EstadoArmazem estado : values()) {
-            if (estado.id == id) {
-                return estado;
-            }
-        }
-        throw new IllegalArgumentException("Estado inválido: " + id);
+        return EnumWithId.fromId(EstadoArmazem.class, id);
     }
 
     public static EstadoArmazem fromName(String name) {
-        for (EstadoArmazem estado : values()) {
-            if (estado.name().equalsIgnoreCase(name)) {
-                return estado;
-            }
-        }
-        throw new IllegalArgumentException("Estado inválido: " + name);
+        return EnumWithId.fromName(EstadoArmazem.class, name);
     }
 
     @Override

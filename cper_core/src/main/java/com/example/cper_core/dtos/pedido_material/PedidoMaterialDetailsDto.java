@@ -1,39 +1,30 @@
 package com.example.cper_core.dtos.pedido_material;
 
-import jakarta.validation.constraints.NotBlank;
+import com.example.cper_core.dtos.OnCreate;
+import com.example.cper_core.enums.EstadoPedidoMaterial;
+import com.example.cper_core.enums.Prioridade;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Objects;
-
-/**
- * DTO for {@link com.example.cper_core.entities.PedidoMaterial}
- */
 
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class PedidoMaterialDetailsDto extends PedidoMaterialDto implements Serializable {
+public class PedidoMaterialDetailsDto extends PedidoMaterialDto {
 
-    @NotNull(message = "A data de criação não pode ser nula")
+    @NotNull(groups = OnCreate.class, message = "A data de criação é obrigatória")
     private LocalDate dataCriacao;
 
-    @NotBlank(message = "A descrição não pode estar vazia")
+    @NotNull(groups = OnCreate.class, message = "A descricao é obrigatória")
     private String descricao;
 
-    @NotBlank(message = "A prioridade não pode estar vazia")
-    private String prioridade;
+    @NotNull(groups = OnCreate.class, message = "A prioridade é obrigatória")
+    private Prioridade prioridade;
 
-    @NotBlank(message = "O estado não pode estar vazio")
-    private String estado;
-
-    public PedidoMaterialDetailsDto(Integer id, LocalDate dataCriacao, String descricao, String prioridade, String estado) {
-        super(id);
-        this.dataCriacao = dataCriacao;
-        this.descricao = descricao;
-        this.prioridade = prioridade;
-        this.estado = estado;
-    }
+    @NotNull(groups = OnCreate.class, message = "O estado é obrigatório")
+    private EstadoPedidoMaterial estado;
 }
+

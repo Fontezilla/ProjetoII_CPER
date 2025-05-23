@@ -1,35 +1,42 @@
 package com.example.cper_core.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "ticket")
+@ToString(onlyExplicitlyIncluded = true)
 public class Ticket {
-
-    // Attributes
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ticket_id_gen")
     @SequenceGenerator(name = "ticket_id_gen", sequenceName = "ticket_id_ticket_seq", allocationSize = 1)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @Column(name = "id_ticket", nullable = false)
     private Integer id;
 
-    @ColumnDefault("CURRENT_DATE")
-    @Column(name = "data_ini", nullable = false)
-    private LocalDate dataIni;
+    @Column(name = "data_ini")
+    private OffsetDateTime dataIni;
 
     @Column(name = "data_fim")
-    private LocalDate dataFim;
+    private OffsetDateTime dataFim;
 
-    @Column(name = "descricao", nullable = false, length = 256)
+    @Column(name = "descricao", columnDefinition = "TEXT")
     private String descricao;
 
-    @Column(name = "comentario", length = Integer.MAX_VALUE)
+    @Column(name = "comentario", columnDefinition = "TEXT")
     private String comentario;
 
     @Column(name = "tipo_ticket")
@@ -41,10 +48,13 @@ public class Ticket {
     @Column(name = "estado")
     private Integer estado;
 
-    // Relationships
+    @Column(name = "is_closed")
+    @Builder.Default
+    private Boolean isClosed = false;
 
-    @OneToMany(mappedBy = "ticket")
-    private Set<Resposta> respostas = new LinkedHashSet<>();
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean isDeleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_funcionario")
@@ -54,101 +64,26 @@ public class Ticket {
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
-    // Getters and Setters
+    @OneToMany(mappedBy = "ticket")
+    @Builder.Default
+    private Set<Resposta> respostas = new LinkedHashSet<>();
 
-    public Integer getId() {
-        return id;
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ?
+                ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Ticket ticket = (Ticket) o;
+        return getId() != null && Objects.equals(getId(), ticket.getId());
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public LocalDate getDataIni() {
-        return dataIni;
-    }
-
-    public void setDataIni(LocalDate dataIni) {
-        this.dataIni = dataIni;
-    }
-
-    public LocalDate getDataFim() {
-        return dataFim;
-    }
-
-    public void setDataFim(LocalDate dataFim) {
-        this.dataFim = dataFim;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getComentario() {
-        return comentario;
-    }
-
-    public void setComentario(String comentario) {
-        this.comentario = comentario;
-    }
-
-    public Integer getTipoTicket() {
-        return tipoTicket;
-    }
-
-    public void setTipoTicket(Integer tipoTicket) {
-        this.tipoTicket = tipoTicket;
-    }
-
-    public Integer getPrioridade() {
-        return prioridade;
-    }
-
-    public void setPrioridade(Integer prioridade) {
-        this.prioridade = prioridade;
-    }
-
-    public Integer getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
-
-    public Funcionario getIdFuncionario() {
-        return funcionario;
-    }
-
-    public void setIdFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public Set<Resposta> getRespostas() {
-        return respostas;
-    }
-
-    public void setRespostas(Set<Resposta> respostas) {
-        this.respostas = respostas;
-    }
-
-    public Funcionario getFuncionario() {
-        return funcionario;
-    }
-
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ?
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

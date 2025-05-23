@@ -1,42 +1,25 @@
 package com.example.cper_core.services.interfaces;
 
 import com.example.cper_core.dtos.equipa.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.example.cper_core.entities.Equipa;
 
-import java.util.Optional;
+import java.util.Set;
 
-public interface IEquipaService {
+public interface IEquipaService extends IXService<
+        EquipaDto,
+        EquipaDetailsDto,
+        EquipaDetailsExtendedDto,
+        EquipaFiltroDto,
+        EquipaWithRelationshipsDto,
+        Integer
+        > {
 
-    // Generic CRUD operations
+    void linkToFuncionarios(Integer idEquipa, Set<Integer> idsFuncionarios);
+    void unlinkFromFuncionarios(Integer idEquipa, Set<Integer> idsFuncionarios);
 
-    Page<EquipaDetailsDto> listAll(Pageable pageable);
+    void linkToAvarias(Integer idEquipa, Set<Integer> idsAvarias);
+    void unlinkFromAvarias(Integer idEquipa, Set<Integer> idsAvarias);
 
-    Page<EquipaDetailsDto> listFiltered(Pageable pageable, EquipaFiltroDto filter);
-
-    Optional<EquipaDetailsDto> getById(Integer id);
-
-    EquipaDetailsDto create(EquipaDetailsDto dto);
-
-    EquipaDetailsDto update(Integer id, EquipaDetailsDto dto);
-
-    void softDelete(Integer id);
-
-    // Association operations: Avaria
-
-    EquipaWithAvariaDto linkAvaria(Integer idEquipa, Integer idAvaria);
-
-    EquipaWithAvariaDto unlinkAvaria(Integer idEquipa, Integer idAvaria);
-
-    // Association operations: Funcionario
-
-    EquipaWithFuncionarioDto linkFuncionario(Integer idEquipa, Integer idFuncionario);
-
-    EquipaWithFuncionarioDto unlinkFuncionario(Integer idEquipa, Integer idFuncionario);
-
-    // Association operations: Inspecao
-
-    EquipaWithInspecaoDto linkInspecao(Integer idEquipa, Integer idInspecao);
-
-    EquipaWithInspecaoDto unlinkInspecao(Integer idEquipa, Integer idInspecao);
+    void linkToInspecoes(Integer idEquipa, Set<Integer> idsInspecoes);
+    void unlinkFromInspecoes(Integer idEquipa, Set<Integer> idsInspecoes);
 }

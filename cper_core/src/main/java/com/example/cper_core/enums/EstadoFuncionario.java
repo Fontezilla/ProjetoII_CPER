@@ -1,7 +1,8 @@
 package com.example.cper_core.enums;
 
-public enum EstadoFuncionario {
-    APAGADO(0),
+import com.example.cper_core.enums.Interface.EnumWithId;
+
+public enum EstadoFuncionario implements EnumWithId<EstadoFuncionario> {
     ATIVO(1),
     OCUPADO(2),
     AUSENTE(3),
@@ -13,26 +14,19 @@ public enum EstadoFuncionario {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    public static int getIdFromEnum(EstadoFuncionario estadoFuncionario) { return EnumWithId.getIdFromEnum(estadoFuncionario); }
+
     public static EstadoFuncionario fromId(int id) {
-        for (EstadoFuncionario estado : values()) {
-            if (estado.id == id) {
-                return estado;
-            }
-        }
-        throw new IllegalArgumentException("Estado inválido: " + id);
+        return EnumWithId.fromId(EstadoFuncionario.class, id);
     }
 
     public static EstadoFuncionario fromName(String name) {
-        for (EstadoFuncionario estado : values()) {
-            if (estado.name().equalsIgnoreCase(name)) {
-                return estado;
-            }
-        }
-        throw new IllegalArgumentException("Estado inválido: " + name);
+        return EnumWithId.fromName(EstadoFuncionario.class, name);
     }
 
     @Override

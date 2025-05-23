@@ -1,21 +1,30 @@
 package com.example.cper_core.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "armazem")
+@ToString(onlyExplicitlyIncluded = true)
 public class Armazem {
-
-    // -------- Attributes --------
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "armazem_id_gen")
     @SequenceGenerator(name = "armazem_id_gen", sequenceName = "armazem_id_armazem_seq", allocationSize = 1)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @Column(name = "id_armazem", nullable = false)
     private Integer id;
 
@@ -23,26 +32,28 @@ public class Armazem {
     private String nome;
 
     @Column(name = "data_criacao")
-    @ColumnDefault("CURRENT_DATE")
-    private LocalDate dataCriacao;
+    private OffsetDateTime dataCriacao;
 
     @Column(name = "data_update")
-    private LocalDate dataUpdate;
+    private OffsetDateTime dataUpdate;
 
     @Column(name = "capacidade_total")
-    @ColumnDefault("0")
-    private Integer capacidadeTotal;
+    private BigDecimal capacidadeTotal;
 
     @Column(name = "capacidade_ocupada")
-    private Integer capacidadeOcupada;
+    private BigDecimal capacidadeOcupada;
 
     @Column(name = "n_porta")
-    private Integer nPorta;
+    private String nPorta;
 
     @Column(name = "estado")
     private Integer estado;
 
-    // -------- Relationships --------
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean isDeleted = false;
+
+    // --- Relationships ---
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_departamento")
@@ -56,125 +67,32 @@ public class Armazem {
     @JoinColumn(name = "id_funcionario")
     private Funcionario responsavel;
 
+    @OneToMany(mappedBy = "armazem")
+    @Builder.Default
+    private Set<ArmazemLote> lotes = new LinkedHashSet<>();
+
     @ManyToMany
     @JoinTable(
             name = "funcionario_armazem",
             joinColumns = @JoinColumn(name = "id_armazem"),
             inverseJoinColumns = @JoinColumn(name = "id_funcionario")
     )
+    @Builder.Default
     private Set<Funcionario> funcionarios = new LinkedHashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "armazem_stock",
-            joinColumns = @JoinColumn(name = "id_armazem"),
-            inverseJoinColumns = @JoinColumn(name = "id_stock")
-    )
-    private Set<Stock> stocks = new LinkedHashSet<>();
-
-    // -------- Getters and Setters --------
-
-    public Integer getId() {
-        return id;
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Armazem armazem = (Armazem) o;
+        return getId() != null && Objects.equals(getId(), armazem.getId());
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public void setDataCriacao(LocalDate dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public LocalDate getDataUpdate() {
-        return dataUpdate;
-    }
-
-    public void setDataUpdate(LocalDate dataUpdate) {
-        this.dataUpdate = dataUpdate;
-    }
-
-    public Integer getCapacidadeTotal() {
-        return capacidadeTotal;
-    }
-
-    public void setCapacidadeTotal(Integer capacidadeTotal) {
-        this.capacidadeTotal = capacidadeTotal;
-    }
-
-    public Integer getCapacidadeOcupada() {
-        return capacidadeOcupada;
-    }
-
-    public void setCapacidadeOcupada(Integer capacidadeOcupada) {
-        this.capacidadeOcupada = capacidadeOcupada;
-    }
-
-    public Integer getNPorta() {
-        return nPorta;
-    }
-
-    public void setNPorta(Integer nPorta) {
-        this.nPorta = nPorta;
-    }
-
-    public Integer getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
-
-    public Departamento getDepartamento() {
-        return departamento;
-    }
-
-    public void setDepartamento(Departamento departamento) {
-        this.departamento = departamento;
-    }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
-
-    public Funcionario getResponsavel() {
-        return responsavel;
-    }
-
-    public void setResponsavel(Funcionario responsavel) {
-        this.responsavel = responsavel;
-    }
-
-    public Set<Funcionario> getFuncionarios() {
-        return funcionarios;
-    }
-
-    public void setFuncionarios(Set<Funcionario> funcionarios) {
-        this.funcionarios = funcionarios;
-    }
-
-    public Set<Stock> getStocks() {
-        return stocks;
-    }
-
-    public void setStocks(Set<Stock> stocks) {
-        this.stocks = stocks;
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

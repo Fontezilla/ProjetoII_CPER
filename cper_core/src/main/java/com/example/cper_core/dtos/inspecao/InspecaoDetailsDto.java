@@ -1,43 +1,30 @@
 package com.example.cper_core.dtos.inspecao;
 
-import com.example.cper_core.dtos.centro_producao.CentroProducaoDto;
-import com.example.cper_core.entities.Inspecao;
-import jakarta.validation.constraints.NotBlank;
+import com.example.cper_core.dtos.OnCreate;
+import com.example.cper_core.enums.EstadoInspecao;
+import com.example.cper_core.enums.TipoInspecao;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
-/**
- * DTO for {@link Inspecao}
- */
+import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class InspecaoDetailsDto extends InspecaoDto implements Serializable {
-    @NotBlank(message = "A descrição não pode estar vazia")
-    private String descricao;
+public class InspecaoDetailsDto extends InspecaoDto {
 
-    @NotNull(message = "O tipo de inspeção não pode ser nulo")
-    @Positive(message = "O tipo de inspeção deve ser um número positivo")
-    private String tipo;
+    @NotNull(groups = OnCreate.class, message = "O título é obrigatório")
+    private String titulo;
 
-    @NotNull(message = "O estado da inspeção não pode ser nulo")
-    @Positive(message = "O estado da inspeção deve ser um número positivo")
-    private String estado;
+    @NotNull(groups = OnCreate.class, message = "A data da inspeção é obrigatória")
+    private OffsetDateTime data;
 
-    @NotNull(message = "O centro de produção não pode ser nulo")
-    private CentroProducaoDto centroProducao;
+    @NotNull(groups = OnCreate.class, message = "O tipo de inspeção é obrigatório")
+    private TipoInspecao tipo;
 
-    public InspecaoDetailsDto(Integer id, String descricao, String tipo, String estado, CentroProducaoDto centroProducao) {
-        super(id);
-        this.descricao = descricao;
-        this.tipo = tipo;
-        this.estado = estado;
-        this.centroProducao = centroProducao;
-    }
+
+    @NotNull(groups = OnCreate.class, message = "O estado é obrigatório")
+    private EstadoInspecao estado;
 }

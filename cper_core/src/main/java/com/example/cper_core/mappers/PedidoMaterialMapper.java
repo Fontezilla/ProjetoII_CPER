@@ -1,9 +1,8 @@
 package com.example.cper_core.mappers;
 
+import com.example.cper_core.enums.*;
 import com.example.cper_core.dtos.pedido_material.*;
 import com.example.cper_core.entities.PedidoMaterial;
-import com.example.cper_core.enums.EstadoPedidoMaterial;
-import com.example.cper_core.enums.Prioridade;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -11,91 +10,66 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PedidoMaterialMapper {
 
-    // -------- To DTO --------
+    // --- Métodos Auxiliares de Enum ---
+    @Named("mapPrioridade")
+    default Prioridade mapPrioridade(Integer id) {
+        return id == null ? null : Prioridade.fromId(id);
+    }
 
+    @Named("mapEstadoPedidoMaterial")
+    default EstadoPedidoMaterial mapEstadoPedidoMaterial(Integer id) {
+        return id == null ? null : EstadoPedidoMaterial.fromId(id);
+    }
+
+    // --- To DTO ---
     @Named("toDto")
     PedidoMaterialDto toDto(PedidoMaterial entity);
 
     @IterableMapping(qualifiedByName = "toDto")
     List<PedidoMaterialDto> toDtoList(List<PedidoMaterial> entities);
 
+    // --- To Details DTO ---
     @Named("toDetailsDto")
-    @Mapping(source = "prioridade", target = "prioridade", qualifiedByName = "mapPrioridadeToString")
-    @Mapping(source = "estado", target = "estado", qualifiedByName = "mapEstadoToString")
+    @Mapping(target = "prioridade", source = "prioridade", qualifiedByName = "mapPrioridade")
+    @Mapping(target = "estado", source = "estado", qualifiedByName = "mapEstadoPedidoMaterial")
     PedidoMaterialDetailsDto toDetailsDto(PedidoMaterial entity);
 
     @IterableMapping(qualifiedByName = "toDetailsDto")
     List<PedidoMaterialDetailsDto> toDetailsDtoList(List<PedidoMaterial> entities);
 
-    @Named("toWithAvariaDto")
-    PedidoMaterialWithAvariaDto toWithAvariaDto(PedidoMaterial entity);
+    // --- To Extended DTO ---
+    @Named("toExtendedDto")
+    @Mapping(target = "prioridade", source = "prioridade", qualifiedByName = "mapPrioridade")
+    @Mapping(target = "estado", source = "estado", qualifiedByName = "mapEstadoPedidoMaterial")
+    PedidoMaterialDetailsExtendedDto toExtendedDto(PedidoMaterial entity);
 
-    @IterableMapping(qualifiedByName = "toWithAvariaDto")
-    List<PedidoMaterialWithAvariaDto> toWithAvariaDtoList(List<PedidoMaterial> entities);
+    @IterableMapping(qualifiedByName = "toExtendedDto")
+    List<PedidoMaterialDetailsExtendedDto> toExtendedDtoList(List<PedidoMaterial> entities);
 
-    @Named("toWithPedidoDto")
-    PedidoMaterialWithPedidoMaterialDto toWithPedidoDto(PedidoMaterial entity);
+    // --- To WithRelationships DTO ---
+    @Named("toWithRelationshipsDto")
+    PedidoMaterialWithRelationshipsDto toWithRelationshipsDto(PedidoMaterial entity);
 
-    @IterableMapping(qualifiedByName = "toWithPedidoDto")
-    List<PedidoMaterialWithPedidoMaterialDto> toWithPedidoDtoList(List<PedidoMaterial> entities);
+    @IterableMapping(qualifiedByName = "toWithRelationshipsDto")
+    List<PedidoMaterialWithRelationshipsDto> toWithRelationshipsDtoList(List<PedidoMaterial> entities);
 
-    // -------- To Entity --------
-
-    @Named("toEntityFromDto")
+    // --- To Entity ---
     PedidoMaterial toEntity(PedidoMaterialDto dto);
 
-    @Named("toEntityFromDetails")
-    @Mapping(source = "prioridade", target = "prioridade", qualifiedByName = "mapStringToPrioridade")
-    @Mapping(source = "estado", target = "estado", qualifiedByName = "mapStringToEstado")
+    @Mapping(target = "prioridade", expression = "java(dto.getPrioridade() != null ? dto.getPrioridade().getId() : null)")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : null)")
     PedidoMaterial toEntity(PedidoMaterialDetailsDto dto);
 
-    @Named("toEntityFromAvaria")
-    PedidoMaterial toEntity(PedidoMaterialWithAvariaDto dto);
+    @Mapping(target = "prioridade", expression = "java(dto.getPrioridade() != null ? dto.getPrioridade().getId() : null)")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : null)")
+    PedidoMaterial toEntity(PedidoMaterialDetailsExtendedDto dto);
 
-    @Named("toEntityFromPedido")
-    PedidoMaterial toEntity(PedidoMaterialWithPedidoMaterialDto dto);
+    PedidoMaterial toEntity(PedidoMaterialWithRelationshipsDto dto);
 
-    // -------- Conversões de listas inversas --------
-
-    @IterableMapping(qualifiedByName = "toEntityFromDto")
-    List<PedidoMaterial> toEntityList(List<PedidoMaterialDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromDetails")
-    List<PedidoMaterial> toEntityDetailsList(List<PedidoMaterialDetailsDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromAvaria")
-    List<PedidoMaterial> toEntityWithAvariaList(List<PedidoMaterialWithAvariaDto> dtos);
-
-    @IterableMapping(qualifiedByName = "toEntityFromPedido")
-    List<PedidoMaterial> toEntityWithPedidoList(List<PedidoMaterialWithPedidoMaterialDto> dtos);
-
-    // -------- Métodos auxiliares --------
-
-    @Named("mapPrioridadeToString")
-    default String mapPrioridadeToString(Integer prioridadeId) {
-        if (prioridadeId == null) return null;
-        return Prioridade.fromId(prioridadeId).name();
-    }
-
-    @Named("mapStringToPrioridade")
-    default Integer mapStringToPrioridade(String prioridadeName) {
-        if (prioridadeName == null) return null;
-        return Prioridade.fromName(prioridadeName).getId();
-    }
-
-    @Named("mapEstadoToString")
-    default String mapEstadoToString(Integer estadoId) {
-        if (estadoId == null) return null;
-        return EstadoPedidoMaterial.fromId(estadoId).name();
-    }
-
-    @Named("mapStringToEstado")
-    default Integer mapStringToEstado(String estadoName) {
-        if (estadoName == null) return null;
-        return EstadoPedidoMaterial.fromName(estadoName).getId();
-    }
-
+    // --- Partial Update ---
+    @Mapping(target = "prioridade", expression = "java(dto.getPrioridade() != null ? dto.getPrioridade().getId() : entity.getPrioridade())")
+    @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : entity.getEstado())")
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromExtendedDto(PedidoMaterialDetailsDto dto, @MappingTarget PedidoMaterial entity);
+    void updateEntityFromExtendedDto(PedidoMaterialDetailsExtendedDto dto, @MappingTarget PedidoMaterial entity);
 }
