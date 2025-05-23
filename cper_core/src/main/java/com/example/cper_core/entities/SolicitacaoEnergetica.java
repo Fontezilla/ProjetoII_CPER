@@ -22,7 +22,7 @@ public class SolicitacaoEnergetica {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "solicitacao_energetica_id_gen")
-    @SequenceGenerator(name = "solicitacao_energetica_id_gen", sequenceName = "solicitacao energetica_id_solicitacao_seq", allocationSize = 1)
+    @SequenceGenerator(name = "solicitacao_energetica_id_gen", sequenceName = "solicitacao_energetica_id_solicitacao_seq", allocationSize = 1)
     @EqualsAndHashCode.Include
     @ToString.Include
     @Column(name = "id_solicitacao", nullable = false)

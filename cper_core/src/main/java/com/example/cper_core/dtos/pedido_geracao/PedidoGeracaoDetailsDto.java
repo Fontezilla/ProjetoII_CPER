@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
@@ -19,7 +20,7 @@ import java.time.LocalDate;
 public class PedidoGeracaoDetailsDto extends PedidoGeracaoDto {
 
     @NotNull(groups = OnCreate.class, message = "A data de criação é obrigatória")
-    private LocalDate dataCriacao;
+    private OffsetDateTime dataCriacao;
 
     @NotNull(groups = OnCreate.class, message = "A quantidade de energia é obrigatória")
     @DecimalMin(value = "0.0", groups = OnCreate.class, message = "A quantidade de energia deve ser maior que zero")

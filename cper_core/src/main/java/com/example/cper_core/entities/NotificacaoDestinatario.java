@@ -17,7 +17,8 @@ import java.util.Objects;
 public class NotificacaoDestinatario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notificacao_destinatario_id_gen")
+    @SequenceGenerator(name = "notificacao_destinatario_id_gen", sequenceName = "notificacao_destinatario_id_seq", allocationSize = 1)
     @Column(name = "id", nullable = false)
     @EqualsAndHashCode.Include
     @ToString.Include

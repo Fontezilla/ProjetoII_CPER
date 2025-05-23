@@ -9,11 +9,15 @@ import com.example.cper_core.enums.JwtTipoUtilizador;
 import com.example.cper_core.repositories.ClienteRepository;
 import com.example.cper_core.repositories.FuncionarioRepository;
 import com.example.cper_core.utils.JwtUtils;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Service
+@Transactional
 public class AuthService {
 
     private final ClienteRepository clienteRepository;

@@ -3,20 +3,16 @@ package com.example.cper_desktop.controllers;
 import com.example.cper_core.dtos.login.LoginRequestDto;
 import com.example.cper_core.dtos.login.LoginResponseDto;
 import com.example.cper_core.enums.JwtTipoUtilizador;
+import com.example.cper_core.services.AuthService;
 import com.example.cper_desktop.utils.Navigation;
 import com.example.cper_desktop.utils.SessionStorage;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import org.springframework.stereotype.Component;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.Set;
-
+@Component
 public class LoginController {
 
     @FXML private TextField emailField;
@@ -24,8 +20,12 @@ public class LoginController {
     @FXML private ComboBox<JwtTipoUtilizador> tipoCombo;
     @FXML private Label errorLabel;
 
-    private final HttpClient httpClient = HttpClient.newHttpClient();
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final AuthService authService;
+
+    // Injeção via construtor (Spring Boot cuida disso)
+    public LoginController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @FXML
     public void initialize() {
@@ -48,39 +48,20 @@ public class LoginController {
         requestDto.setPassword(password);
 
         try {
-            String requestBody = mapper.writeValueAsString(requestDto);
+            LoginResponseDto response = authService.login(tipo, requestDto);
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8080/auth/login?type=" + tipo.name()))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                    .build();
+            // Guarda dados em sessão (podes adaptar)
+            SessionStorage.setToken(response.getToken());
+            SessionStorage.setTipo(response.getTipo());
+            SessionStorage.setSetorPrincipal(response.getSetorPrincipal());
+            SessionStorage.setSetoresAssociados(response.getSetoresAssociados());
 
-            httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                    .thenAccept(response -> {
-                        try {
-                            LoginResponseDto responseDto = mapper.readValue(response.body(), LoginResponseDto.class);
+            Platform.runLater(() -> Navigation.goTo("dashboard.fxml"));
 
-                            SessionStorage.setToken(responseDto.getToken());
-                            SessionStorage.setTipo(responseDto.getTipo());
-                            SessionStorage.setSetorPrincipal(responseDto.getSetorPrincipal());
-                            SessionStorage.setSetoresAssociados(responseDto.getSetoresAssociados());
-
-                            Platform.runLater(() -> {
-                                Navigation.goTo("dashboard.fxml");
-                            });
-
-                        } catch (Exception e) {
-                            Platform.runLater(() -> errorLabel.setText("Erro ao processar resposta."));
-                        }
-                    })
-                    .exceptionally(e -> {
-                        Platform.runLater(() -> errorLabel.setText("Falha na ligação com o servidor."));
-                        return null;
-                    });
-
+        } catch (RuntimeException e) {
+            errorLabel.setText(e.getMessage());
         } catch (Exception e) {
-            errorLabel.setText("Erro ao preparar pedido.");
+            errorLabel.setText("Erro inesperado durante o login.");
         }
     }
 }

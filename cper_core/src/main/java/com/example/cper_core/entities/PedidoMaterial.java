@@ -6,6 +6,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class PedidoMaterial {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pedido__id_gen")
-    @SequenceGenerator(name = "pedido__id_gen", sequenceName = "pedido material_id_pedido_seq", allocationSize = 1)
+    @SequenceGenerator(name = "pedido__id_gen", sequenceName = "pedido_material_id_pedido_seq", allocationSize = 1)
     @EqualsAndHashCode.Include
     @ToString.Include
     @Column(name = "id_pedido", nullable = false)
@@ -30,7 +31,7 @@ public class PedidoMaterial {
 
     @Column(name = "data_criacao", nullable = false)
     @ColumnDefault("CURRENT_DATE")
-    private LocalDate dataCriacao;
+    private OffsetDateTime dataCriacao;
 
     @Column(name = "descricao", columnDefinition = "TEXT")
     private String descricao;

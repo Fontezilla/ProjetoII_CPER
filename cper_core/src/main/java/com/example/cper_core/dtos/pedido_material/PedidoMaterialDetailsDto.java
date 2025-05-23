@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
@@ -16,7 +17,7 @@ import java.time.LocalDate;
 public class PedidoMaterialDetailsDto extends PedidoMaterialDto {
 
     @NotNull(groups = OnCreate.class, message = "A data de criação é obrigatória")
-    private LocalDate dataCriacao;
+    private OffsetDateTime dataCriacao;
 
     @NotNull(groups = OnCreate.class, message = "A descricao é obrigatória")
     private String descricao;

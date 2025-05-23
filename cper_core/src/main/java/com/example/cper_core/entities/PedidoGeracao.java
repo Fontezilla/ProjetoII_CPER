@@ -8,6 +8,7 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @Getter
@@ -22,7 +23,7 @@ public class PedidoGeracao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pedido_geracao_id_gen")
-    @SequenceGenerator(name = "pedido_geracao_id_gen", sequenceName = "pedido geracao_id_pedidog_seq", allocationSize = 1)
+    @SequenceGenerator(name = "pedido_geracao_id_gen", sequenceName = "pedido_geracao_id_pedidog_seq", allocationSize = 1)
     @EqualsAndHashCode.Include
     @ToString.Include
     @Column(name = "\"id_pedidoG\"", nullable = false)
@@ -30,10 +31,10 @@ public class PedidoGeracao {
 
     @Column(name = "data_criacao", nullable = false)
     @ColumnDefault("CURRENT_DATE")
-    private LocalDate dataCriacao;
+    private OffsetDateTime dataCriacao;
 
     @Column(name = "data_previsao")
-    private LocalDate dataPrevisao;
+    private OffsetDateTime dataPrevisao;
 
     @Column(name = "qtd_energia", nullable = false, precision = 20, scale = 2)
     @ColumnDefault("0")

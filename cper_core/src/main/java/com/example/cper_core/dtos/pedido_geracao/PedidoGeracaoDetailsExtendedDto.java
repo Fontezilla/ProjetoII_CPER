@@ -12,13 +12,14 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class PedidoGeracaoDetailsExtendedDto extends PedidoGeracaoDetailsDto {
 
-    private LocalDate dataPrevisao;
+    private OffsetDateTime dataPrevisao;
 
     private BigDecimal qtdEnergiaProduzida;
 

@@ -4,7 +4,9 @@ import com.example.cper_desktop.utils.Navigation;
 import com.example.cper_desktop.utils.SessionStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DashboardController {
 
     @FXML
