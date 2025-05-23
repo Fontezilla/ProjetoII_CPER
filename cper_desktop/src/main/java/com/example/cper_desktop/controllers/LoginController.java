@@ -1,101 +1,86 @@
-/*
-
 package com.example.cper_desktop.controllers;
 
-import com.example.cper_core.services.interfaces.IFuncionarioService;
-import com.example.cper_core.utils.JwtUtils;
+import com.example.cper_core.dtos.login.LoginRequestDto;
+import com.example.cper_core.dtos.login.LoginResponseDto;
+import com.example.cper_core.enums.JwtTipoUtilizador;
+import com.example.cper_desktop.utils.Navigation;
 import com.example.cper_desktop.utils.SessionStorage;
-import io.jsonwebtoken.Claims;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import javafx.scene.control.*;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.Set;
 
-@Component
 public class LoginController {
 
-    @FXML private TextField username;
-    @FXML private PasswordField password;
+    @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
+    @FXML private ComboBox<JwtTipoUtilizador> tipoCombo;
+    @FXML private Label errorLabel;
 
-    private final IFuncionarioService funcionarioService;
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    @Autowired
-    public LoginController(IFuncionarioService funcionarioService) {
-        this.funcionarioService = funcionarioService;
+    @FXML
+    public void initialize() {
+        tipoCombo.getItems().setAll(JwtTipoUtilizador.values());
     }
 
     @FXML
-    public void handleLogin(ActionEvent event) {
-        String email = username.getText();
-        String pass = password.getText();
+    public void onLoginButtonClick(ActionEvent event) {
+        String email = emailField.getText();
+        String password = passwordField.getText();
+        JwtTipoUtilizador tipo = tipoCombo.getValue();
 
-        FuncionarioLoginDto loginDto = new FuncionarioLoginDto(pass, email);
-        Optional<FuncionarioLoginResponseDto> login = funcionarioService.login(loginDto);
-
-        if (login.isPresent()) {
-            String token = login.get().getToken();
-
-            try {
-                Claims claims = JwtUtils.extractClaims(token);
-
-                // Extrair informações do token
-                String nome = claims.get("nome", String.class);
-                String tipo = claims.get("tipo", String.class);
-                List<String> setores = claims.get("setores", List.class); // pode ser null
-
-                // Guardar sessão
-                SessionStorage.getInstance().setToken(token);
-                SessionStorage.getInstance().setNome(nome);
-                SessionStorage.getInstance().setTipo(tipo);
-                SessionStorage.getInstance().setSetores(setores);
-
-                openDashboard();
-
-            } catch (Exception e) {
-                showError("Erro ao decodificar o token JWT.");
-                e.printStackTrace();
-            }
-
-        } else {
-            showError("Email ou password incorretos.");
+        if (email.isBlank() || password.isBlank() || tipo == null) {
+            errorLabel.setText("Todos os campos são obrigatórios.");
+            return;
         }
-    }
 
-    private void openDashboard() {
+        LoginRequestDto requestDto = new LoginRequestDto();
+        requestDto.setEmail(email);
+        requestDto.setPassword(password);
+
         try {
-            AnchorPane root = FXMLLoader.load(getClass().getResource("/views/main.fxml"));
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("CPER Desktop - Principal");
-            stage.show();
+            String requestBody = mapper.writeValueAsString(requestDto);
 
-            Stage loginStage = (Stage) username.getScene().getWindow();
-            loginStage.close();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/auth/login?type=" + tipo.name()))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
 
-        } catch (IOException e) {
-            showError("Erro ao abrir o painel principal.");
-            e.printStackTrace();
+            httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenAccept(response -> {
+                        try {
+                            LoginResponseDto responseDto = mapper.readValue(response.body(), LoginResponseDto.class);
+
+                            SessionStorage.setToken(responseDto.getToken());
+                            SessionStorage.setTipo(responseDto.getTipo());
+                            SessionStorage.setSetorPrincipal(responseDto.getSetorPrincipal());
+                            SessionStorage.setSetoresAssociados(responseDto.getSetoresAssociados());
+
+                            Platform.runLater(() -> {
+                                Navigation.goTo("dashboard.fxml");
+                            });
+
+                        } catch (Exception e) {
+                            Platform.runLater(() -> errorLabel.setText("Erro ao processar resposta."));
+                        }
+                    })
+                    .exceptionally(e -> {
+                        Platform.runLater(() -> errorLabel.setText("Falha na ligação com o servidor."));
+                        return null;
+                    });
+
+        } catch (Exception e) {
+            errorLabel.setText("Erro ao preparar pedido.");
         }
-    }
-
-    private void showError(String msg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Erro de Autenticação");
-        alert.setHeaderText("Falha ao autenticar");
-        alert.setContentText(msg);
-        alert.showAndWait();
     }
 }
-
- */

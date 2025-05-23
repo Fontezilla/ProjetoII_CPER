@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +19,7 @@ public class NotaDetailsDto extends NotaDto {
     private String titulo;
 
     @NotNull(groups = OnCreate.class, message = "A data de criação é obrigatória")
-    private LocalDate dataCriacao;
+    private OffsetDateTime dataCriacao;
 
     @NotNull(groups = OnCreate.class, message = "A prioridade é obrigatória")
     private Prioridade prioridade;

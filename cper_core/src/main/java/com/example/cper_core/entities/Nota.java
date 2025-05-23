@@ -6,6 +6,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @Getter
@@ -34,7 +35,7 @@ public class Nota {
 
     @Column(name = "data_criacao", nullable = false)
     @ColumnDefault("CURRENT_DATE")
-    private LocalDate dataCriacao;
+    private OffsetDateTime dataCriacao;
 
     @Column(name = "prioridade", nullable = false)
     @ColumnDefault("1")
