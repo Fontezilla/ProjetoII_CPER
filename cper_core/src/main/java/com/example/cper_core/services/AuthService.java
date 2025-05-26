@@ -12,7 +12,6 @@ import com.example.cper_core.utils.JwtUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,11 +33,12 @@ public class AuthService {
 
     public LoginResponseDto login(JwtTipoUtilizador type, LoginRequestDto request) {
         String token;
-        Integer setorPrincipal = null;
-        Set<Integer> setoresAssociados = new HashSet<>();
+        Integer setorPrincipal = -1;
+        Set<Integer> setoresAssociados = Set.of();
+
 
         switch (type) {
-            case CLIENTE: {
+            case CLIENTE -> {
                 Cliente cliente = clienteRepository.findByEmail(request.getEmail())
                         .orElseThrow(() -> new RuntimeException("Utilizador não encontrado"));
 
@@ -46,11 +46,10 @@ public class AuthService {
                     throw new RuntimeException("Password inválida");
                 }
 
-                token = jwtUtil.generateToken(cliente.getEmail(), type, null, null);
-                break;
+                token = jwtUtil.generateToken(cliente.getEmail(), cliente.getNome(), cliente.getId(), type, setorPrincipal, setoresAssociados);
             }
 
-            case FUNCIONARIO: {
+            case FUNCIONARIO -> {
                 Funcionario funcionario = funcionarioRepository.findByEmail(request.getEmail())
                         .orElseThrow(() -> new RuntimeException("Utilizador não encontrado"));
 
@@ -62,18 +61,16 @@ public class AuthService {
                     setorPrincipal = funcionario.getDepartamento().getSetor();
                 }
 
-                 setoresAssociados = funcionario.getDepartamentos()
-                        .stream()
-                        .map(Departamento::getSetor).collect(Collectors.toSet());
+                setoresAssociados = funcionario.getDepartamentos().stream()
+                        .map(Departamento::getSetor)
+                        .collect(Collectors.toSet());
 
-                token = jwtUtil.generateToken(funcionario.getEmail(), type, setorPrincipal, setoresAssociados);
-                break;
+                token = jwtUtil.generateToken(funcionario.getEmail(), funcionario.getNome(), funcionario.getId(), type, setorPrincipal, setoresAssociados);
             }
 
-            default:
-                throw new RuntimeException("Tipo de utilizador inválido");
+            default -> throw new RuntimeException("Tipo de utilizador inválido");
         }
 
-        return new LoginResponseDto(token, type, setorPrincipal, setoresAssociados.isEmpty() ? null : setoresAssociados);
+        return new LoginResponseDto(token, jwtUtil.getExpiracao(token));
     }
 }

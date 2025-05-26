@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Group?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
@@ -19,58 +22,150 @@
 
     <children>
 
-        <!-- Background -->
-        <ImageView pickOnBounds="true" preserveRatio="true" fitWidth="1280.0" fitHeight="720.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <!-- Fundo de vidro (imagem de background com efeito) -->
+        <ImageView fitHeight="720.0" fitWidth="1281.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <image>
                 <Image url="@../../images/Background-glass-effect.png" />
             </image>
         </ImageView>
 
-        <!-- Main content area -->
-        <StackPane fx:id="mainContent" prefHeight="630.0" prefWidth="1080.0"
-                   AnchorPane.topAnchor="90.0"
-                   AnchorPane.leftAnchor="100.0"
-                   AnchorPane.rightAnchor="100.0"
-                   style="-fx-background-color: white; -fx-border-color: transparent;" />
+        <!-- Zona principal onde o conteúdo será injetado dinamicamente -->
+        <StackPane fx:id="mainContent" layoutY="60.0" prefHeight="660.0" prefWidth="1080.0" style="-fx-background-color: white; -fx-border-color: transparent;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="60.0" />
 
-        <!-- Top Bar -->
-        <AnchorPane prefHeight="90.0" prefWidth="1280.0" style="-fx-background-color: #f1c40f;" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <!-- Barra superior (TopBar) com logo, hambúrguer, definições e logout -->
+        <AnchorPane id="appBar" prefHeight="60.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Rectangle height="90.0" width="1280.0" fill="#f1c40f" stroke="TRANSPARENT">
-                    <effect>
-                        <DropShadow height="30.0" radius="7.0" spread="0.6" width="0.0">
-                            <color>
-                                <Color red="0.447" green="0.447" blue="0.447" />
-                            </color>
-                        </DropShadow>
-                    </effect>
+
+                <!-- Retângulo amarelo com sombra para destaque -->
+                <Rectangle fill="#f1c40f" height="60.0" stroke="TRANSPARENT" width="1280.0">
+               <effect>
+                  <DropShadow radius="4.75" width="0.0" />
+               </effect>
                 </Rectangle>
-
-                <!-- Logo Section -->
-                <Group layoutX="100.0" layoutY="4.0">
-                    <children>
-                        <Circle fill="WHITE" layoutX="90.0" layoutY="44.0" radius="30.0" stroke="TRANSPARENT" />
-                        <Circle fill="#f1c40f" layoutX="90.0" layoutY="44.0" radius="27.0" stroke="TRANSPARENT" />
-                        <Label layoutX="66.0" layoutY="32.0" text="CPER" textAlignment="CENTER" textFill="WHITE">
-                            <font>
-                                <Font name="Arial Black" size="16.0" />
-                            </font>
+            <StackPane layoutX="34.0" layoutY="14.0" prefHeight="30.0" prefWidth="30.0">
+               <children>
+                        <Circle fill="WHITE" radius="16.0" />
+                        <Circle fill="#f1c40f" radius="15.0" />
+                        <Label text="CPER" textFill="WHITE">
+                            <font><Font name="Arial Bold" size="10.0" /></font>
                         </Label>
-                    </children>
-                </Group>
+               </children>
+            </StackPane>
+            <HBox layoutX="1100.0" layoutY="15.0" prefHeight="30.0">
+               <children>
+                  <StackPane prefHeight="30.0" prefWidth="30.0">
+                     <children>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" preserveRatio="true">
+                                  <image>
+                              <Image url="@../../images/icons8-settings-144.png" />
+                           </image>
+                              </ImageView>
+                              <Button fx:id="userSettings" onAction="#onSettingsClick" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" />
+                     </children>
+                  </StackPane>
+                  <StackPane prefHeight="30.0" prefWidth="20.0">
+                     <children>
+            
+                                              <!-- Separador visual -->
+                            <Line endY="17.5" stroke="white" strokeLineCap="ROUND" />
+                     </children>
+                  </StackPane>
+                  <StackPane prefHeight="30.0" prefWidth="30.0">
+                     <children>
+                              <ImageView fitHeight="44.0" fitWidth="30.0" preserveRatio="true">
+                                  <image>
+                              <Image url="@../../images/icons8-logout-100.png" />
+                           </image>
+                              </ImageView>
+                              <Button fx:id="logOut" onAction="#onLogOutClick" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" />
+                     </children>
+                  </StackPane>
+               </children>
+            </HBox>
+            <StackPane layoutX="100.0" layoutY="15.0" prefHeight="30.0" prefWidth="30.0">
+               <children>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/equal_9453910.png" />
+                     </image>
+                  </ImageView>
+                        <Button fx:id="openMenu" onAction="#toggleMenu" prefHeight="19.0" prefWidth="33.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" />
+               </children>
+            </StackPane>
 
-                <!-- Hamburger Menu -->
-                <VBox layoutX="100.0" layoutY="35.0" spacing="5.0">
-                    <children>
-                        <Line endX="30" startX="0" stroke="white" strokeLineCap="ROUND" strokeWidth="5.0" />
-                        <Line endX="30" startX="0" stroke="white" strokeLineCap="ROUND" strokeWidth="5.0" />
-                        <Line endX="15" startX="0" stroke="white" strokeLineCap="ROUND" strokeWidth="5.0" />
-                    </children>
-                </VBox>
-
-                <Button layoutX="100.0" layoutY="37.0" onAction="#toggleMenu"
-                        style="-fx-background-color: transparent; -fx-border-color: transparent;" />
             </children>
         </AnchorPane>
+
+        <!-- Menu Lateral Overlay com fundo escurecido e conteúdo dinâmico -->
+        <AnchorPane fx:id="menuOverlay" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: rgba(0, 0, 0, 0.4);" visible="false">
+            <children>
+            <Pane layoutX="350.0" onMouseClicked="#toggleMenu" prefHeight="720.0" prefWidth="930.0" />
+            <AnchorPane fx:id="menuPane" prefHeight="720.0" prefWidth="350.0">
+               <children>
+      
+                            <!-- Scroll com VBox dinâmico para inserir botões/menu programaticamente -->
+                      <ScrollPane layoutY="100.0" prefHeight="620.0" prefWidth="350.0" style="-fx-background-color: rgba(255, 255, 255, 1);">
+                          <content>
+                              <VBox fx:id="menuVBox" spacing="10.0">
+                                  <padding>
+                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                  </padding>
+                              </VBox>
+                          </content>
+                      </ScrollPane>
+      
+                      <!-- Título "SETOR" no topo do menu -->
+                      <StackPane layoutY="60.0" prefHeight="40.0" prefWidth="350.0" style="-fx-background-color: rgba(255, 255, 255, 1);">
+                          <children>
+                              <Label fx:id="setorLabel" text="SETOR">
+                                  <font>
+                              <Font name="Segoe UI" size="22.0" />
+                           </font>
+                              </Label>
+                          </children>
+                      </StackPane>
+                  <Pane prefHeight="60.0" prefWidth="350.0" style="-fx-background-color: #f1c40f;">
+                     <children>
+                        <StackPane layoutX="288.0" layoutY="15.0" prefHeight="30.0" prefWidth="30.0">
+                           <children>
+                                      <ImageView fitHeight="48.0" fitWidth="25.0" preserveRatio="true">
+                                          <image>
+                                    <Image url="@../../images/close.png" />
+                                 </image>
+                                      </ImageView>
+                                      <Button fx:id="closeMenu" onAction="#toggleMenu" prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" />
+                           </children>
+                        </StackPane>
+                        <StackPane layoutX="34.0" layoutY="14.0" prefHeight="25.0" prefWidth="25.0">
+                           <children>
+                              <Circle fill="WHITE" radius="16.0" />
+                              <Circle fill="#f1c40f" radius="15.0" />
+                              <Label text="CPER" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Bold" size="10.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </StackPane>
+                     </children>
+                     <effect>
+                        <DropShadow radius="4.75" width="0.0" />
+                     </effect>
+                  </Pane>
+                      <Line endY="131.0" layoutY="-31.0" startX="348.5" startY="131.0" stroke="#f1c40f" strokeWidth="3.0">
+                          <effect>
+                              <DropShadow height="6.49" offsetY="1.0" radius="1.1225" width="0.0">
+                                  <color>
+                              <Color red="0.6299999952316284" green="0.6299999952316284" blue="0.6299999952316284" />
+                           </color>
+                              </DropShadow>
+                          </effect>
+                      </Line>
+               </children>
+            </AnchorPane>
+
+            </children>
+        </AnchorPane>
+
     </children>
 </AnchorPane>

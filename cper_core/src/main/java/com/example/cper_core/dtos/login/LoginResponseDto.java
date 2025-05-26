@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.OffsetDateTime;
 import java.util.Set;
 
 @Data
@@ -12,7 +13,5 @@ import java.util.Set;
 @NoArgsConstructor
 public class LoginResponseDto {
     private String token;
-    private JwtTipoUtilizador tipo;
-    private Integer setorPrincipal;
-    private Set<Integer> setoresAssociados;
+    private OffsetDateTime expiration;
 }

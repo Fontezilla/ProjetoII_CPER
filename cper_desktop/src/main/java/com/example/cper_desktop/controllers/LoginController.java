@@ -22,23 +22,20 @@ public class LoginController {
 
     private final AuthService authService;
 
-    // Injeção via construtor (Spring Boot cuida disso)
     public LoginController(AuthService authService) {
         this.authService = authService;
     }
 
     @FXML
     public void initialize() {
-        tipoCombo.getItems().setAll(JwtTipoUtilizador.values());
     }
 
     @FXML
     public void onLoginButtonClick(ActionEvent event) {
         String email = emailField.getText();
         String password = passwordField.getText();
-        JwtTipoUtilizador tipo = tipoCombo.getValue();
 
-        if (email.isBlank() || password.isBlank() || tipo == null) {
+        if (email.isBlank() || password.isBlank()) {
             errorLabel.setText("Todos os campos são obrigatórios.");
             return;
         }
@@ -48,15 +45,11 @@ public class LoginController {
         requestDto.setPassword(password);
 
         try {
-            LoginResponseDto response = authService.login(tipo, requestDto);
+            LoginResponseDto response = authService.login(JwtTipoUtilizador.FUNCIONARIO, requestDto);
 
-            // Guarda dados em sessão (podes adaptar)
-            SessionStorage.setToken(response.getToken());
-            SessionStorage.setTipo(response.getTipo());
-            SessionStorage.setSetorPrincipal(response.getSetorPrincipal());
-            SessionStorage.setSetoresAssociados(response.getSetoresAssociados());
+            SessionStorage.initializeFromToken(response.getToken());
 
-            Platform.runLater(() -> Navigation.goTo("dashboard.fxml"));
+            Platform.runLater(() -> Navigation.goTo("layouts/BaseLayout.fxml"));
 
         } catch (RuntimeException e) {
             errorLabel.setText(e.getMessage());

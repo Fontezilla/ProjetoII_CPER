@@ -3,7 +3,8 @@ package com.example.cper_core.enums;
 import com.example.cper_core.enums.Interface.EnumWithId;
 
 public enum Setor implements EnumWithId<Setor> {
-    TEMPORARIO(0),
+    SEM_SETOR(-1),
+    ADMINISTRATIVO(0),
     COMERCIAL(1),
     FINANCEIRO(2),
     PRODUCAO_CENTRAL(3),
@@ -13,8 +14,7 @@ public enum Setor implements EnumWithId<Setor> {
     MANUTENCAO(7),
     ARMAZEM(8),
     CONSTRUCAO(9),
-    RH(10),
-    ADMINISTRATIVO(11);
+    RH(10);
 
     private final int id;
 
