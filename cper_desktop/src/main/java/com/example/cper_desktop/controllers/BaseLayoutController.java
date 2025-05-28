@@ -3,6 +3,7 @@ package com.example.cper_desktop.controllers;
 import com.example.cper_core.enums.Setor;
 import com.example.cper_desktop.utils.Navigation;
 import com.example.cper_desktop.utils.SessionStorage;
+import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +25,7 @@ import java.util.Set;
 public class BaseLayoutController {
 
     @FXML private VBox menuVBox;
+    @FXML private VBox menuVBox1;
     @FXML private StackPane mainContent;
     @FXML private AnchorPane menuOverlay;
     @FXML private AnchorPane menuPane;
@@ -49,53 +51,91 @@ public class BaseLayoutController {
         Integer setorPrincipalId = SessionStorage.getSetorPrincipal();
         Set<Integer> setoresAssociados = SessionStorage.getSetoresAssociados();
 
-        // Caso não tenha setor principal válido, não faz nada
         if (setorPrincipalId == null || setorPrincipalId == -1) return;
 
-        // Adiciona botão "Mudar de Setor" se estiver no setor 0 ou houver setores associados
+        // Mostra botão para mudar de setor se o setor for 0 (ADMINISTRATIVO) ou tiver outros setores disponíveis
         if (setorPrincipalId == 0 || (setoresAssociados != null && !setoresAssociados.isEmpty())) {
             Button mudarSetorBtn = new Button("Mudar de Setor");
             mudarSetorBtn.setPrefWidth(180);
-            mudarSetorBtn.setOnAction(e -> toggleSetores());
+            mudarSetorBtn.setOnAction(e -> mostrarSetoresDisponiveis());
             menuVBox.getChildren().add(mudarSetorBtn);
         }
 
+        Setor setorPrincipal = Setor.fromId(setorPrincipalId);
+        if (setorPrincipal == null) return;
+
+        switch (setorPrincipal) {
+            case ADMINISTRATIVO -> menusAdministrativo();
+            case COMERCIAL -> menusComercial();
+            case FINANCEIRO -> menusFinanceiro();
+            case PRODUCAO_CENTRAL -> menusProducaoCentral();
+            case PRODUCAO_GERADOR -> menusProducaoGerador();
+            case INSPECAO -> menusInspecao();
+            case PLANEAMENTO -> menusPlaneamento();
+            case MANUTENCAO -> menusManutencao();
+            case ARMAZEM -> menusArmazem();
+            case CONSTRUCAO -> menusConstrucao();
+            case RH -> menusRh();
+        }
+    }
+
+    private void mostrarSetoresDisponiveis() {
+        fadeOut(menuVBox);
+
+        menuVBox1.getChildren().clear();
+
+        Label titulo = new Label("Selecionar Setor");
+        titulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        menuVBox1.getChildren().add(titulo);
+
+        Set<Integer> setoresAssociados = SessionStorage.getSetoresAssociados();
         if (setoresAssociados != null && !setoresAssociados.isEmpty()) {
             for (Integer setorId : setoresAssociados) {
                 Setor setor = Setor.fromId(setorId);
                 if (setor != null) {
-                    Button setorBtn = new Button("Setor: " + setor.name());
-                    setorBtn.setPrefWidth(160);
-                    setorBtn.setStyle("-fx-padding: 4 20 4 40; -fx-font-size: 12;");
+                    Button setorBtn = new Button(setor.name());
+                    setorBtn.setPrefWidth(180);
                     setorBtn.setOnAction(ev -> {
                         SessionStorage.setSetorPrincipal(setor.getId());
                         Navigation.reloadBaseLayout();
                     });
-                    setorBtn.setVisible(false);
-                    setorBtn.setManaged(false);
-                    botoesSetores.add(setorBtn);
-                    menuVBox.getChildren().add(setorBtn);
+                    menuVBox1.getChildren().add(setorBtn);
                 }
             }
         }
+        Button voltarBtn = new Button("← Voltar");
+        voltarBtn.setPrefWidth(180);
+        voltarBtn.setOnAction(e -> voltarAoMenuPrincipal());
+        menuVBox1.getChildren().add(voltarBtn);
 
-        if (setorPrincipalId >= 0) {
-            Setor setorPrincipal = Setor.fromId(setorPrincipalId);
-            if (setorPrincipal == null) return;
+        fadeIn(menuVBox1);
+    }
 
-            switch (setorPrincipal) {
-                case COMERCIAL -> menusComercial();
-                case FINANCEIRO -> menusFinanceiro();
-                case PRODUCAO_CENTRAL -> menusProducaoCentral();
-                case PRODUCAO_GERADOR -> menusProducaoGerador();
-                case INSPECAO -> menusInspecao();
-                case PLANEAMENTO -> menusPlaneamento();
-                case MANUTENCAO -> menusManutencao();
-                case ARMAZEM -> menusArmazem();
-                case CONSTRUCAO -> menusConstrucao();
-                case RH -> menusRh();
-            }
-        }
+    private void voltarAoMenuPrincipal() {
+        fadeOut(menuVBox1);
+        fadeIn(menuVBox);
+    }
+
+    private void fadeOut(VBox vbox) {
+        FadeTransition ft = new FadeTransition(Duration.millis(200), vbox);
+        ft.setFromValue(1.0);
+        ft.setToValue(0.0);
+        ft.setOnFinished(e -> {
+            vbox.setVisible(false);
+            vbox.setManaged(false);
+        });
+        ft.play();
+    }
+
+    private void fadeIn(VBox vbox) {
+        vbox.setOpacity(0.0);
+        vbox.setVisible(true);
+        vbox.setManaged(true);
+
+        FadeTransition ft = new FadeTransition(Duration.millis(200), vbox);
+        ft.setFromValue(0.0);
+        ft.setToValue(1.0);
+        ft.play();
     }
 
     private void addMenuButton(String nome, String fxmlPath) {
@@ -107,14 +147,17 @@ public class BaseLayoutController {
         });
         menuVBox.getChildren().add(btn);
         botoesMenu.add(btn);
+
+        System.out.println("Botão adicionado: " + nome); // ← DEBUG
     }
+
 
     private void carregarPagina(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent view = loader.load();
             mainContent.getChildren().setAll(view);
-            toggleMenu(); // Fecha o menu após navegação
+            toggleMenu();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -131,7 +174,16 @@ public class BaseLayoutController {
     }
 
     private void abrirMenuAnimado() {
-        menuOverlay.setVisible(true);
+        // Garante que o menuVBox1 (selector de setores) não aparece por cima
+        menuVBox1.setVisible(false);
+        menuVBox1.setManaged(false);
+
+        // Garante que o menuVBox (menu do setor atual) aparece
+        menuVBox.setVisible(true);
+        menuVBox.setManaged(true);
+
+        menuOverlay.setVisible(true); // agora o overlay pode ser ativado sem problemas
+
         TranslateTransition trans = new TranslateTransition(Duration.millis(200), menuPane);
         trans.setFromX(-350);
         trans.setToX(0);
@@ -142,9 +194,7 @@ public class BaseLayoutController {
         TranslateTransition trans = new TranslateTransition(Duration.millis(200), menuPane);
         trans.setFromX(0);
         trans.setToX(-350);
-        trans.setOnFinished(e -> {
-            menuOverlay.setVisible(false);
-        });
+        trans.setOnFinished(e -> menuOverlay.setVisible(false));
         trans.play();
     }
 
@@ -164,14 +214,6 @@ public class BaseLayoutController {
         Navigation.goTo("Login.fxml");
     }
 
-    private void toggleSetores() {
-        for (Button setorBtn : botoesSetores) {
-            boolean visible = !setorBtn.isVisible();
-            setorBtn.setVisible(visible);
-            setorBtn.setManaged(visible);
-        }
-    }
-
     private void highlightMenu(String titulo) {
         for (Button btn : botoesMenu) {
             if (btn.getText().equalsIgnoreCase(titulo)) {
@@ -181,6 +223,14 @@ public class BaseLayoutController {
                 btn.setStyle(null);
             }
         }
+    }
+
+    // Menus
+
+    private void menusAdministrativo() {
+        setorLabel.setText("Administrativo");
+        addMenuButton("Utilizadores", "/views/utilizadores.fxml");
+        addMenuButton("Logs do Sistema", "/views/logs.fxml");
     }
 
     private void menusComercial() {
