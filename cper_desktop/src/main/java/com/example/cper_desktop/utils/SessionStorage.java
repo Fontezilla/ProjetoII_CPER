@@ -1,11 +1,13 @@
 package com.example.cper_desktop.utils;
 
 import com.example.cper_core.enums.JwtTipoUtilizador;
+import com.example.cper_core.enums.Setor;
 import com.example.cper_core.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SessionStorage {
 
@@ -69,5 +71,15 @@ public class SessionStorage {
         tipo = null;
         setorPrincipal = null;
         setoresAssociados = null;
+    }
+
+    public static Set<Integer> getSetoresDisponiveis() {
+        if (getSetorPrincipal() == 0) {
+            return Arrays.stream(Setor.values())
+                    .map(Setor::getId)
+                    .filter(id -> id != 0)
+                    .collect(Collectors.toSet());
+        }
+        return getSetoresAssociados();
     }
 }

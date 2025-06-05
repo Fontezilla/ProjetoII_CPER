@@ -5,6 +5,7 @@ import com.example.cper_desktop.utils.Navigation;
 import com.example.cper_desktop.utils.SessionStorage;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,9 +18,11 @@ import javafx.util.Duration;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.example.cper_desktop.reusable_components.MenuButtonItem;
 
 @Component
 public class BaseLayoutController {
@@ -32,39 +35,55 @@ public class BaseLayoutController {
     @FXML private Label setorLabel;
 
     private boolean menuAberto = false;
-    private final List<Button> botoesSetores = new ArrayList<>();
     private final List<Button> botoesMenu = new ArrayList<>();
-    private Button botaoAtual = null;
+    private static final Logger logger = Logger.getLogger(BaseLayoutController.class.getName());
+    private Integer setorMenuAtivo = null;
 
     @FXML
     public void initialize() {
         menuOverlay.setVisible(false);
-        carregarMenuSetor();
         prepararAnimacaoFechoInicial();
+
+        // Primeiro obtém o setor principal
+        setorMenuAtivo = SessionStorage.getSetorPrincipal();
+
+        // Só carrega menu se estiver definido
+        if (setorMenuAtivo != null) {
+            carregarMenuSetor();
+        } else {
+            logger.warning("Setor principal está nulo. Não foi possível carregar o menu.");
+        }
+
+        Platform.runLater(() -> {
+            if (mainContent.getScene() != null) {
+                mainContent.getScene().getStylesheets().add(
+                        Objects.requireNonNull(getClass().getResource("/styles/MenuButtonItem.css")).toExternalForm()
+                );
+            }
+        });
     }
 
     private void carregarMenuSetor() {
-        menuVBox.getChildren().clear();
-        botoesMenu.clear();
-        botoesSetores.clear();
-
-        Integer setorPrincipalId = SessionStorage.getSetorPrincipal();
-        Set<Integer> setoresAssociados = SessionStorage.getSetoresAssociados();
-
-        if (setorPrincipalId == null || setorPrincipalId == -1) return;
-
-        // Mostra botão para mudar de setor se o setor for 0 (ADMINISTRATIVO) ou tiver outros setores disponíveis
-        if (setorPrincipalId == 0 || (setoresAssociados != null && !setoresAssociados.isEmpty())) {
-            Button mudarSetorBtn = new Button("Mudar de Setor");
-            mudarSetorBtn.setPrefWidth(180);
-            mudarSetorBtn.setOnAction(e -> mostrarSetoresDisponiveis());
-            menuVBox.getChildren().add(mudarSetorBtn);
+        if (setorMenuAtivo == null) {
+            logger.warning("setorMenuAtivo está nulo ao tentar carregar o menu.");
+            return;
         }
 
-        Setor setorPrincipal = Setor.fromId(setorPrincipalId);
-        if (setorPrincipal == null) return;
+        menuVBox.getChildren().clear();
+        botoesMenu.clear();
 
-        switch (setorPrincipal) {
+        Setor setorAtual = Setor.fromId(setorMenuAtivo);
+        Integer setorPrincipal = SessionStorage.getSetorPrincipal();
+        Set<Integer> setoresDisponiveis = SessionStorage.getSetoresDisponiveis();
+
+        // Mostrar botão "Mudar de Setor" se houver mais de um setor possível
+        if (setoresDisponiveis != null && setoresDisponiveis.size() > 1) {
+            MenuButtonItem mudarSetorItem = new MenuButtonItem("Mudar de Setor", this::mostrarSetoresDisponiveis);
+            menuVBox.getChildren().add(mudarSetorItem);
+        }
+
+        // Mostrar os menus específicos do setor
+        switch (setorAtual) {
             case ADMINISTRATIVO -> menusAdministrativo();
             case COMERCIAL -> menusComercial();
             case FINANCEIRO -> menusFinanceiro();
@@ -77,36 +96,41 @@ public class BaseLayoutController {
             case CONSTRUCAO -> menusConstrucao();
             case RH -> menusRh();
         }
+
+        // Mostrar botão "Voltar ao Setor Principal" se estivermos noutro setor
+        if (setorPrincipal != null && !setorMenuAtivo.equals(setorPrincipal)) {
+            MenuButtonItem voltarPrincipal = new MenuButtonItem("Voltar ao Setor Principal", () -> {
+                this.setorMenuAtivo = setorPrincipal;
+                carregarMenuSetor();
+            });
+            menuVBox.getChildren().add(voltarPrincipal);
+        }
     }
 
     private void mostrarSetoresDisponiveis() {
         fadeOut(menuVBox);
-
         menuVBox1.getChildren().clear();
 
         Label titulo = new Label("Selecionar Setor");
         titulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         menuVBox1.getChildren().add(titulo);
 
-        Set<Integer> setoresAssociados = SessionStorage.getSetoresAssociados();
-        if (setoresAssociados != null && !setoresAssociados.isEmpty()) {
-            for (Integer setorId : setoresAssociados) {
-                Setor setor = Setor.fromId(setorId);
-                if (setor != null) {
-                    Button setorBtn = new Button(setor.name());
-                    setorBtn.setPrefWidth(180);
-                    setorBtn.setOnAction(ev -> {
-                        SessionStorage.setSetorPrincipal(setor.getId());
-                        Navigation.reloadBaseLayout();
-                    });
-                    menuVBox1.getChildren().add(setorBtn);
-                }
-            }
+        Set<Integer> setoresDisponiveis = SessionStorage.getSetoresDisponiveis();
+
+        for (Integer setorId : setoresDisponiveis) {
+            Setor setor = Setor.fromId(setorId);
+
+            MenuButtonItem setorItem = new MenuButtonItem(setor.name(), () -> {
+                this.setorMenuAtivo = setor.getId();
+                carregarMenuSetor();
+                voltarAoMenuPrincipal();
+            });
+
+            menuVBox1.getChildren().add(setorItem);
         }
-        Button voltarBtn = new Button("← Voltar");
-        voltarBtn.setPrefWidth(180);
-        voltarBtn.setOnAction(e -> voltarAoMenuPrincipal());
-        menuVBox1.getChildren().add(voltarBtn);
+
+        MenuButtonItem voltarItem = new MenuButtonItem("Voltar", this::voltarAoMenuPrincipal);
+        menuVBox1.getChildren().add(voltarItem);
 
         fadeIn(menuVBox1);
     }
@@ -139,18 +163,15 @@ public class BaseLayoutController {
     }
 
     private void addMenuButton(String nome, String fxmlPath) {
-        Button btn = new Button(nome);
-        btn.setPrefWidth(180);
-        btn.setOnAction(e -> {
+        MenuButtonItem item = new MenuButtonItem(nome, () -> {
             carregarPagina(fxmlPath);
             highlightMenu(nome);
         });
-        menuVBox.getChildren().add(btn);
-        botoesMenu.add(btn);
+        menuVBox.getChildren().add(item);
+        botoesMenu.add(item.getButton());
 
-        System.out.println("Botão adicionado: " + nome); // ← DEBUG
+        System.out.println("Botão adicionado: " + nome);
     }
-
 
     private void carregarPagina(String fxmlPath) {
         try {
@@ -159,7 +180,7 @@ public class BaseLayoutController {
             mainContent.getChildren().setAll(view);
             toggleMenu();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Erro ao carregar página FXML: " + fxmlPath, e);
         }
     }
 
@@ -174,15 +195,17 @@ public class BaseLayoutController {
     }
 
     private void abrirMenuAnimado() {
-        // Garante que o menuVBox1 (selector de setores) não aparece por cima
         menuVBox1.setVisible(false);
         menuVBox1.setManaged(false);
 
-        // Garante que o menuVBox (menu do setor atual) aparece
+        menuVBox.setOpacity(1.0);
         menuVBox.setVisible(true);
         menuVBox.setManaged(true);
 
-        menuOverlay.setVisible(true); // agora o overlay pode ser ativado sem problemas
+        menuVBox.getChildren().clear();
+        carregarMenuSetor();
+
+        menuOverlay.setVisible(true);
 
         TranslateTransition trans = new TranslateTransition(Duration.millis(200), menuPane);
         trans.setFromX(-350);
@@ -218,14 +241,13 @@ public class BaseLayoutController {
         for (Button btn : botoesMenu) {
             if (btn.getText().equalsIgnoreCase(titulo)) {
                 btn.setStyle("-fx-background-color: #f1c40f; -fx-text-fill: white;");
-                botaoAtual = btn;
             } else {
                 btn.setStyle(null);
             }
         }
     }
 
-    // Menus
+    // Menus por setor
 
     private void menusAdministrativo() {
         setorLabel.setText("Administrativo");
