@@ -39,6 +39,6 @@ public enum Setor implements EnumWithId<Setor> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

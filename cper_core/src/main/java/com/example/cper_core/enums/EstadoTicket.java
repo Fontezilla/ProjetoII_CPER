@@ -32,6 +32,6 @@ public enum EstadoTicket implements EnumWithId<EstadoTicket> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

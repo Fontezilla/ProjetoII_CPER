@@ -42,6 +42,6 @@ public enum TipoAnomalia implements EnumWithId<TipoAnomalia> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

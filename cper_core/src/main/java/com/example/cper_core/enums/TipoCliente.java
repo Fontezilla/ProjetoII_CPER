@@ -33,6 +33,6 @@ public enum TipoCliente implements EnumWithId<TipoCliente> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

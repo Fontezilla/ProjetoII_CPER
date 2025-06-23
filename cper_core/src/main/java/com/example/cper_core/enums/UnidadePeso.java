@@ -30,6 +30,6 @@ public enum UnidadePeso implements EnumWithId<UnidadePeso> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

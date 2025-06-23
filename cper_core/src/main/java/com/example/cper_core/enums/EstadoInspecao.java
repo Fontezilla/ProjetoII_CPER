@@ -33,6 +33,6 @@ public enum EstadoInspecao implements EnumWithId<EstadoInspecao> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

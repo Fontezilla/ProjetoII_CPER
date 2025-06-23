@@ -30,6 +30,6 @@ public enum TipoTicket implements EnumWithId<TipoTicket> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

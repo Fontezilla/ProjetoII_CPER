@@ -29,6 +29,6 @@ public enum EstadoSolicitacaoMaterial implements EnumWithId<EstadoSolicitacaoMat
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

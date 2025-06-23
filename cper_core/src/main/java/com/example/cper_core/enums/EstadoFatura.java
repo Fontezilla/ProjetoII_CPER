@@ -33,6 +33,6 @@ public enum EstadoFatura implements EnumWithId<EstadoFatura> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

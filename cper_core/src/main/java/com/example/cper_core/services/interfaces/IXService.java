@@ -16,6 +16,8 @@ public interface IXService<
 
     TDetailsDto getById(TId id);
 
+    TExtendedDto getExtendedById(TId id);
+
     Page<TDetailsDto> listAll(Pageable pageable);
 
     Page<TDetailsDto> listFiltered(Pageable pageable, TFiltroDto filtro);

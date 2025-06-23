@@ -32,6 +32,6 @@ public enum Prioridade implements EnumWithId<Prioridade> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

@@ -34,6 +34,6 @@ public enum EstadoSolicitacaoEnergetica implements EnumWithId<EstadoSolicitacaoE
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

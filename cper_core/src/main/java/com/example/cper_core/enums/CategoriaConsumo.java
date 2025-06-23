@@ -33,6 +33,6 @@ public enum CategoriaConsumo implements EnumWithId<CategoriaConsumo> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

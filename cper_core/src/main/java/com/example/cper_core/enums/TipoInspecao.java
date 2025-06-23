@@ -36,6 +36,6 @@ public enum TipoInspecao implements EnumWithId<TipoInspecao> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

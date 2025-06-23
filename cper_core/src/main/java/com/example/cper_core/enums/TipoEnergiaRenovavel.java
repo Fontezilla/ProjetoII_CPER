@@ -36,6 +36,6 @@ public enum TipoEnergiaRenovavel implements EnumWithId<TipoEnergiaRenovavel> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

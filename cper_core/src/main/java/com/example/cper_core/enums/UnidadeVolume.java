@@ -29,6 +29,6 @@ public enum UnidadeVolume implements EnumWithId<UnidadeVolume> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

@@ -32,6 +32,6 @@ public enum EstadoArmazem implements EnumWithId<EstadoArmazem> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

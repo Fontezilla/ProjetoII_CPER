@@ -3,11 +3,11 @@ package com.example.cper_desktop.controllers;
 import com.example.cper_core.enums.Setor;
 import com.example.cper_desktop.utils.Navigation;
 import com.example.cper_desktop.utils.SessionStorage;
+import com.example.cper_desktop.utils.SpringFXMLLoader;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,6 +16,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 import java.util.*;
@@ -24,8 +26,12 @@ import java.util.logging.Logger;
 
 import com.example.cper_desktop.reusable_components.MenuButtonItem;
 
+
+
 @Component
 public class BaseLayoutController {
+
+    private final ApplicationContext context;
 
     @FXML private VBox menuVBox;
     @FXML private VBox menuVBox1;
@@ -61,6 +67,11 @@ public class BaseLayoutController {
                 );
             }
         });
+    }
+
+    @Autowired
+    public BaseLayoutController(ApplicationContext context) {
+        this.context = context;
     }
 
     private void carregarMenuSetor() {
@@ -112,12 +123,17 @@ public class BaseLayoutController {
         menuVBox1.getChildren().clear();
 
         Label titulo = new Label("Selecionar Setor");
-        titulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        titulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-font-family: 'Segoe UI'; -fx-padding: 10px;");
+
         menuVBox1.getChildren().add(titulo);
 
         Set<Integer> setoresDisponiveis = SessionStorage.getSetoresDisponiveis();
 
         for (Integer setorId : setoresDisponiveis) {
+            if (setorId.equals(Setor.SEM_SETOR.getId())) {
+                continue;
+            }
+
             Setor setor = Setor.fromId(setorId);
 
             MenuButtonItem setorItem = new MenuButtonItem(setor.name(), () -> {
@@ -175,8 +191,8 @@ public class BaseLayoutController {
 
     private void carregarPagina(String fxmlPath) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent view = loader.load();
+            SpringFXMLLoader springLoader = new SpringFXMLLoader(context);
+            Parent view = springLoader.load(fxmlPath);
             mainContent.getChildren().setAll(view);
             toggleMenu();
         } catch (IOException e) {
@@ -227,7 +243,7 @@ public class BaseLayoutController {
 
     @FXML
     private void onSettingsClick() {
-        carregarPagina("/views/configuracoes.fxml");
+        carregarPagina("/views/perfil.fxml");
         highlightMenu("Definições");
     }
 

@@ -30,6 +30,6 @@ public enum EstadoPedidoMaterial implements EnumWithId<EstadoPedidoMaterial> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

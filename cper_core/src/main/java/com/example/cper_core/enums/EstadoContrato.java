@@ -32,6 +32,6 @@ public enum EstadoContrato implements EnumWithId<EstadoContrato> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

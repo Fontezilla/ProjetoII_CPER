@@ -29,6 +29,6 @@ public enum EstadoCliente implements EnumWithId<EstadoCliente> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

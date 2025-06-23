@@ -33,6 +33,6 @@ public enum EstadoAvaria implements EnumWithId<EstadoAvaria> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

@@ -32,6 +32,6 @@ public enum TipoContrato implements EnumWithId<TipoContrato> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

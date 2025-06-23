@@ -71,6 +71,13 @@ public abstract class AbstractXService<
     }
 
     @Override
+    public TExtendedDto getExtendedById(TId id) {
+        return repository.findById(id)
+                .map(this::toExtendedDto)
+                .orElseThrow(() -> new IllegalArgumentException("Registo não encontrado com ID " + id));
+    }
+
+    @Override
     public Page<TDetailsDto> listAll(Pageable pageable) {
         return repository.findAll(pageable).map(this::toDetailsDto);
     }

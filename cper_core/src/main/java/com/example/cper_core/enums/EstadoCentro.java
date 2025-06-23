@@ -33,6 +33,6 @@ public enum EstadoCentro implements EnumWithId<EstadoCentro> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }

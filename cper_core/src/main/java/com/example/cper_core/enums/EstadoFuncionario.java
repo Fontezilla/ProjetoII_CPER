@@ -31,6 +31,6 @@ public enum EstadoFuncionario implements EnumWithId<EstadoFuncionario> {
 
     @Override
     public String toString() {
-        return name();
+        return getLabel();
     }
 }
