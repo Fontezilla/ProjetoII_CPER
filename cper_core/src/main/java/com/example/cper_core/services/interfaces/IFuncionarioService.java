@@ -1,5 +1,6 @@
 package com.example.cper_core.services.interfaces;
 
+import com.example.cper_core.dtos.auth.UpdatePassword;
 import com.example.cper_core.dtos.funcionario.*;
 
 public interface IFuncionarioService extends IXService<
@@ -10,4 +11,5 @@ public interface IFuncionarioService extends IXService<
         FuncionarioWithRelationshipsDto,
         Integer
         > {
+    void updatePassword(int employeeId, UpdatePassword dto);
 }

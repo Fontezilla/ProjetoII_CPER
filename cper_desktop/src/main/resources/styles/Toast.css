@@ -1,0 +1,37 @@
+/* ============================= */
+/* Estilo padrão do Toast        */
+/* ============================= */
+.toast {
+    -fx-background-color: -fx-background;
+    -fx-background-radius: 15;
+    -fx-border-color: -fx-accent;
+    -fx-border-radius: 12;
+    -fx-border-width: 1.5;
+}
+
+/* ============================= */
+/* Variantes opcionais           */
+/* ============================= */
+.toast-success {
+    -fx-background-color: #2ecc71;
+    -fx-background-radius: 15;
+    -fx-border-color: #097337;
+    -fx-border-radius: 12;
+    -fx-border-width: 2;
+}
+
+.toast-error {
+    -fx-background-color: #e74c3c;
+    -fx-background-radius: 15;
+    -fx-border-color: #952110;
+    -fx-border-radius: 12;
+    -fx-border-width: 2;
+}
+
+.toast-warning {
+    -fx-background-color: #f39c12;
+    -fx-background-radius: 15;
+    -fx-border-color: #b9770e;
+    -fx-border-radius: 12;
+    -fx-border-width: 2;
+}

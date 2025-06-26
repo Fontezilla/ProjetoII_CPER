@@ -4,8 +4,9 @@
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,33 +16,31 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-
-<StackPane prefHeight="660.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cper_desktop.controllers.PerfilController" >
+<StackPane fx:id="basePane" prefHeight="660.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cper_desktop.controllers.PerfilController">
    <children>
-      <ScrollPane fx:id="mainPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="150.0" prefWidth="200.0" >
+      <ScrollPane fx:id="mainPane" fitToHeight="false" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="963.0" prefWidth="1080.0" vbarPolicy="AS_NEEDED">
          <content>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+            <StackPane maxWidth="1.7976931348623157E308">
                <padding>
                   <Insets bottom="0" left="20" right="20" top="20" />
                </padding>
                <children>
-                  <AnchorPane prefHeight="925.0" prefWidth="1038.0">
+                  <AnchorPane prefHeight="893.0" prefWidth="1039.0">
                      <children>
-                        <VBox prefHeight="865.0" prefWidth="1038.0" spacing="80.0">
+                        <VBox spacing="20.0">
                            <children>
-                              <VBox prefHeight="556.0" prefWidth="1038.0" spacing="20.0">
+                              <VBox spacing="20.0">
                                  <children>
                                     <Label text="Perfil do Utilizador">
                                        <font>
                                           <Font name="Segoe UI Bold" size="24.0" />
                                        </font>
                                     </Label>
-                                    <VBox alignment="CENTER" prefHeight="213.0" prefWidth="1001.0" spacing="10.0">
+                                    <VBox alignment="CENTER">
                                        <children>
                                           <Group>
                                              <children>
-                                                <Pane prefHeight="60.0" prefWidth="1000.0">
+                                                <Pane prefHeight="60.0" prefWidth="975.0">
                                                    <children>
                                                       <HBox alignment="CENTER" prefHeight="60.0" prefWidth="244.0" spacing="10.0">
                                                          <children>
@@ -79,24 +78,24 @@
                                                 </Pane>
                                              </children>
                                           </Group>
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="213.0" prefWidth="1001.0" spacing="10.0">
+                                       <children>
                                           <HBox alignment="CENTER" prefHeight="90.0" prefWidth="713.0" spacing="10.0">
                                              <children>
                                                 <Group>
                                                    <children>
-                                                      <Pane prefHeight="90.0" prefWidth="661.5" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 6; -fx-border-color: #e1e3e1; -fx-border-radius: 6;">
+                                                      <Pane prefHeight="90.0" prefWidth="661.5" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15; -fx-border-color: #e1e3e1; -fx-border-radius: 12;">
                                                          <children>
-                                                            <Pane layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="641.5" style="-fx-border-style: solid; -fx-background-color: #ffffff; -fx-background-radius: 6; -fx-border-color: #ffffff; -fx-border-radius: 6;">
-                                                               <children>
-                                                                  <Label fx:id="funcionario_nome" layoutX="10.0" layoutY="5.5">
-                                                                     <font>
-                                                                        <Font name="Segoe UI" size="16.0" />
-                                                                     </font>
-                                                                  </Label>
-                                                               </children>
-                                                            </Pane>
+                                                            <TextField fx:id="funcionario_nome" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="641.5">
+                                                               <font>
+                                                                  <Font name="Segoe UI" size="14.0" />
+                                                               </font>
+                                                            </TextField>
                                                          </children>
                                                       </Pane>
-                                                      <Pane prefHeight="40.0" prefWidth="661.5" style="-fx-border-radius: 6; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 6;">
+                                                      <Pane prefHeight="40.0" prefWidth="661.5" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 15;">
                                                          <children>
                                                             <Label layoutX="21.0" layoutY="8.0" text="NOME">
                                                                <font>
@@ -109,20 +108,8 @@
                                                 </Group>
                                                 <Group>
                                                    <children>
-                                                      <Pane prefHeight="90.0" prefWidth="328.5" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 6; -fx-border-color: #e1e3e1; -fx-border-radius: 6;">
-                                                         <children>
-                                                            <Pane layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="308.5" style="-fx-border-style: solid; -fx-background-color: #ffffff; -fx-background-radius: 6; -fx-border-color: #ffffff; -fx-border-radius: 6;">
-                                                               <children>
-                                                                  <Label fx:id="funcionario_cargo" layoutX="10.0" layoutY="5.5">
-                                                                     <font>
-                                                                        <Font name="Segoe UI" size="16.0" />
-                                                                     </font>
-                                                                  </Label>
-                                                               </children>
-                                                            </Pane>
-                                                         </children>
-                                                      </Pane>
-                                                      <Pane prefHeight="40.0" prefWidth="328.5" style="-fx-border-radius: 6; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 6;">
+                                                      <Pane prefHeight="90.0" prefWidth="328.5" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15; -fx-border-color: #e1e3e1; -fx-border-radius: 12;" />
+                                                      <Pane prefHeight="40.0" prefWidth="328.5" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 15;">
                                                          <children>
                                                             <Label layoutX="21.0" layoutY="8.0" text="CARGO">
                                                                <font>
@@ -131,26 +118,19 @@
                                                             </Label>
                                                          </children>
                                                       </Pane>
+                                                      <TextField fx:id="funcionario_cargo" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="308.5">
+                                                         <font>
+                                                            <Font name="Segoe UI" size="14.0" />
+                                                         </font>
+                                                      </TextField>
                                                    </children>
                                                 </Group>
                                              </children>
                                           </HBox>
                                           <Group>
                                              <children>
-                                                <Pane prefHeight="90.0" prefWidth="1000.0" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 6; -fx-border-color: #e1e3e1; -fx-border-radius: 6;">
-                                                   <children>
-                                                      <Pane layoutX="15.0" layoutY="50.0" prefHeight="30.0" prefWidth="970.0" style="-fx-border-style: solid; -fx-background-color: #ffffff; -fx-background-radius: 6; -fx-border-color: #ffffff; -fx-border-radius: 6;">
-                                                         <children>
-                                                            <Label fx:id="funcionario_email" layoutX="10.0" layoutY="5.5">
-                                                               <font>
-                                                                  <Font name="Segoe UI" size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                         </children>
-                                                      </Pane>
-                                                   </children>
-                                                </Pane>
-                                                <Pane prefHeight="40.0" prefWidth="1000.0" style="-fx-border-radius: 6; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 6;">
+                                                <Pane prefHeight="90.0" prefWidth="1000.0" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15; -fx-border-color: #e1e3e1; -fx-border-radius: 12;" />
+                                                <Pane prefHeight="40.0" prefWidth="1000.0" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 15;">
                                                    <children>
                                                       <Label layoutX="21.0" layoutY="8.0" text="E-MAIL">
                                                          <font>
@@ -159,6 +139,11 @@
                                                       </Label>
                                                    </children>
                                                 </Pane>
+                                                <TextField fx:id="funcionario_email" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="980.0">
+                                                   <font>
+                                                      <Font name="Segoe UI" size="14.0" />
+                                                   </font>
+                                                </TextField>
                                              </children>
                                           </Group>
                                        </children>
@@ -174,20 +159,8 @@
                                              <children>
                                                 <Group>
                                                    <children>
-                                                      <Pane prefHeight="90.0" prefWidth="326.67" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 6; -fx-border-color: #e1e3e1; -fx-border-radius: 6;">
-                                                         <children>
-                                                            <Pane layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67" style="-fx-border-style: solid; -fx-background-color: #ffffff; -fx-background-radius: 6; -fx-border-color: #ffffff; -fx-border-radius: 6;">
-                                                               <children>
-                                                                  <Label fx:id="funcionario_nif" layoutX="10.0" layoutY="5.5">
-                                                                     <font>
-                                                                        <Font name="Segoe UI" size="16.0" />
-                                                                     </font>
-                                                                  </Label>
-                                                               </children>
-                                                            </Pane>
-                                                         </children>
-                                                      </Pane>
-                                                      <Pane prefHeight="40.0" prefWidth="326.67" style="-fx-border-radius: 6; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 6;">
+                                                      <Pane prefHeight="90.0" prefWidth="326.67" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15; -fx-border-color: #e1e3e1; -fx-border-radius: 12;" />
+                                                      <Pane prefHeight="40.0" prefWidth="326.67" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 15;">
                                                          <children>
                                                             <Label layoutX="21.0" layoutY="8.0" text="NIF">
                                                                <font>
@@ -196,24 +169,17 @@
                                                             </Label>
                                                          </children>
                                                       </Pane>
+                                                      <TextField fx:id="funcionario_nif" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
+                                                         <font>
+                                                            <Font name="Segoe UI" size="14.0" />
+                                                         </font>
+                                                      </TextField>
                                                    </children>
                                                 </Group>
                                                 <Group>
                                                    <children>
-                                                      <Pane prefHeight="90.0" prefWidth="326.67" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 6; -fx-border-color: #e1e3e1; -fx-border-radius: 6;">
-                                                         <children>
-                                                            <Pane layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67" style="-fx-border-style: solid; -fx-background-color: #ffffff; -fx-background-radius: 6; -fx-border-color: #ffffff; -fx-border-radius: 6;">
-                                                               <children>
-                                                                  <Label fx:id="funcionario_telefone" layoutX="10.0" layoutY="5.5">
-                                                                     <font>
-                                                                        <Font name="Segoe UI" size="16.0" />
-                                                                     </font>
-                                                                  </Label>
-                                                               </children>
-                                                            </Pane>
-                                                         </children>
-                                                      </Pane>
-                                                      <Pane prefHeight="40.0" prefWidth="326.67" style="-fx-border-radius: 6; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 6;">
+                                                      <Pane prefHeight="90.0" prefWidth="326.67" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15; -fx-border-color: #e1e3e1; -fx-border-radius: 12;" />
+                                                      <Pane prefHeight="40.0" prefWidth="326.67" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 15;">
                                                          <children>
                                                             <Label layoutX="21.0" layoutY="8.0" text="TELEFONE">
                                                                <font>
@@ -222,24 +188,17 @@
                                                             </Label>
                                                          </children>
                                                       </Pane>
+                                                      <TextField fx:id="funcionario_telefone" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
+                                                         <font>
+                                                            <Font name="Segoe UI" size="14.0" />
+                                                         </font>
+                                                      </TextField>
                                                    </children>
                                                 </Group>
                                                 <Group>
                                                    <children>
-                                                      <Pane prefHeight="90.0" prefWidth="326.67" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 6; -fx-border-color: #e1e3e1; -fx-border-radius: 6;">
-                                                         <children>
-                                                            <Pane layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67" style="-fx-border-style: solid; -fx-background-color: #ffffff; -fx-background-radius: 6; -fx-border-color: #ffffff; -fx-border-radius: 6;">
-                                                               <children>
-                                                                  <Label fx:id="funcionario_dtNascimento" layoutX="10.0" layoutY="5.5">
-                                                                     <font>
-                                                                        <Font name="Segoe UI" size="16.0" />
-                                                                     </font>
-                                                                  </Label>
-                                                               </children>
-                                                            </Pane>
-                                                         </children>
-                                                      </Pane>
-                                                      <Pane prefHeight="40.0" prefWidth="326.67" style="-fx-border-radius: 6; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 6;">
+                                                      <Pane prefHeight="90.0" prefWidth="326.67" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15; -fx-border-color: #e1e3e1; -fx-border-radius: 12;" />
+                                                      <Pane prefHeight="40.0" prefWidth="326.67" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 15;">
                                                          <children>
                                                             <Label layoutX="21.0" layoutY="8.0" text="DATA DE NASCIMENTO">
                                                                <font>
@@ -248,26 +207,19 @@
                                                             </Label>
                                                          </children>
                                                       </Pane>
+                                                      <TextField fx:id="funcionario_dtNascimento" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
+                                                         <font>
+                                                            <Font name="Segoe UI" size="14.0" />
+                                                         </font>
+                                                      </TextField>
                                                    </children>
                                                 </Group>
                                              </children>
                                           </HBox>
                                           <Group>
                                              <children>
-                                                <Pane prefHeight="90.0" prefWidth="1000.0" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 6; -fx-border-color: #e1e3e1; -fx-border-radius: 6;">
-                                                   <children>
-                                                      <Pane layoutX="15.0" layoutY="50.0" prefHeight="30.0" prefWidth="970.0" style="-fx-border-style: solid; -fx-background-color: #ffffff; -fx-background-radius: 6; -fx-border-color: #ffffff; -fx-border-radius: 6;">
-                                                         <children>
-                                                            <Label fx:id="funcionario_morada" layoutX="10.0" layoutY="5.5">
-                                                               <font>
-                                                                  <Font name="Segoe UI" size="16.0" />
-                                                               </font>
-                                                            </Label>
-                                                         </children>
-                                                      </Pane>
-                                                   </children>
-                                                </Pane>
-                                                <Pane prefHeight="40.0" prefWidth="1000.0" style="-fx-border-radius: 6; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 6;">
+                                                <Pane prefHeight="90.0" prefWidth="1000.0" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15; -fx-border-color: #e1e3e1; -fx-border-radius: 12;" />
+                                                <Pane prefHeight="40.0" prefWidth="1000.0" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 15;">
                                                    <children>
                                                       <Label layoutX="21.0" layoutY="8.0" text="MORADA">
                                                          <font>
@@ -276,6 +228,11 @@
                                                       </Label>
                                                    </children>
                                                 </Pane>
+                                                <TextField fx:id="funcionario_morada" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="980.0">
+                                                   <font>
+                                                      <Font name="Segoe UI" size="14.0" />
+                                                   </font>
+                                                </TextField>
                                              </children>
                                           </Group>
                                        </children>
@@ -291,20 +248,8 @@
                                              <children>
                                                 <Group>
                                                    <children>
-                                                      <Pane prefHeight="90.0" prefWidth="326.67" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 6; -fx-border-color: #e1e3e1; -fx-border-radius: 6;">
-                                                         <children>
-                                                            <Pane layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67" style="-fx-border-style: solid; -fx-background-color: #ffffff; -fx-background-radius: 6; -fx-border-color: #ffffff; -fx-border-radius: 6;">
-                                                               <children>
-                                                                  <Label fx:id="funcionario_salario" layoutX="10.0" layoutY="5.5">
-                                                                     <font>
-                                                                        <Font name="Segoe UI" size="16.0" />
-                                                                     </font>
-                                                                  </Label>
-                                                               </children>
-                                                            </Pane>
-                                                         </children>
-                                                      </Pane>
-                                                      <Pane prefHeight="40.0" prefWidth="326.67" style="-fx-border-radius: 6; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 6;">
+                                                      <Pane prefHeight="90.0" prefWidth="326.67" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15; -fx-border-color: #e1e3e1; -fx-border-radius: 12;" />
+                                                      <Pane prefHeight="40.0" prefWidth="326.67" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 15;">
                                                          <children>
                                                             <Label layoutX="21.0" layoutY="8.0" text="SALÁRIO">
                                                                <font>
@@ -313,24 +258,17 @@
                                                             </Label>
                                                          </children>
                                                       </Pane>
+                                                      <TextField fx:id="funcionario_salario" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
+                                                         <font>
+                                                            <Font name="Segoe UI" size="14.0" />
+                                                         </font>
+                                                      </TextField>
                                                    </children>
                                                 </Group>
                                                 <Group>
                                                    <children>
-                                                      <Pane prefHeight="90.0" prefWidth="326.67" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 6; -fx-border-color: #e1e3e1; -fx-border-radius: 6;">
-                                                         <children>
-                                                            <Pane layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67" style="-fx-border-style: solid; -fx-background-color: #ffffff; -fx-background-radius: 6; -fx-border-color: #ffffff; -fx-border-radius: 6;">
-                                                               <children>
-                                                                  <Label fx:id="funcionario_estado" layoutX="10.0" layoutY="5.5">
-                                                                     <font>
-                                                                        <Font name="Segoe UI" size="16.0" />
-                                                                     </font>
-                                                                  </Label>
-                                                               </children>
-                                                            </Pane>
-                                                         </children>
-                                                      </Pane>
-                                                      <Pane prefHeight="40.0" prefWidth="326.67" style="-fx-border-radius: 6; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 6;">
+                                                      <Pane prefHeight="90.0" prefWidth="326.67" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15; -fx-border-color: #e1e3e1; -fx-border-radius: 12;" />
+                                                      <Pane prefHeight="40.0" prefWidth="326.67" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 15;">
                                                          <children>
                                                             <Label layoutX="21.0" layoutY="8.0" text="ESTADO">
                                                                <font>
@@ -339,24 +277,17 @@
                                                             </Label>
                                                          </children>
                                                       </Pane>
+                                                      <TextField fx:id="funcionario_estado" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
+                                                         <font>
+                                                            <Font name="Segoe UI" size="14.0" />
+                                                         </font>
+                                                      </TextField>
                                                    </children>
                                                 </Group>
                                                 <Group>
                                                    <children>
-                                                      <Pane prefHeight="90.0" prefWidth="326.67" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 6; -fx-border-color: #e1e3e1; -fx-border-radius: 6;">
-                                                         <children>
-                                                            <Pane layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67" style="-fx-border-style: solid; -fx-background-color: #ffffff; -fx-background-radius: 6; -fx-border-color: #ffffff; -fx-border-radius: 6;">
-                                                               <children>
-                                                                  <Label fx:id="funcionario_dtContratacao" layoutX="10.0" layoutY="5.5">
-                                                                     <font>
-                                                                        <Font name="Segoe UI" size="16.0" />
-                                                                     </font>
-                                                                  </Label>
-                                                               </children>
-                                                            </Pane>
-                                                         </children>
-                                                      </Pane>
-                                                      <Pane prefHeight="40.0" prefWidth="326.67" style="-fx-border-radius: 6; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 6;">
+                                                      <Pane prefHeight="90.0" prefWidth="326.67" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15; -fx-border-color: #e1e3e1; -fx-border-radius: 12;" />
+                                                      <Pane prefHeight="40.0" prefWidth="326.67" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 15;">
                                                          <children>
                                                             <Label layoutX="21.0" layoutY="8.0" text="DATA DE CONTRATAÇÃO">
                                                                <font>
@@ -365,6 +296,11 @@
                                                             </Label>
                                                          </children>
                                                       </Pane>
+                                                      <TextField fx:id="funcionario_dtContratacao" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
+                                                         <font>
+                                                            <Font name="Segoe UI" size="14.0" />
+                                                         </font>
+                                                      </TextField>
                                                    </children>
                                                 </Group>
                                              </children>
@@ -373,23 +309,54 @@
                                     </VBox>
                                  </children>
                               </VBox>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="295.0" spacing="24.0">
-                                 <padding>
-                                    <Insets bottom="0" left="20" right="20" top="0" />
-                                 </padding>
+                              <AnchorPane>
                                  <children>
-                                    <Button fx:id="redefinir" mnemonicParsing="false" onAction="#mostrarPopupRedefinirPasse" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 6; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 6; -fx-border-width: 2; -fx-border-style: solid;" text="REDEFINIR PASSE" textAlignment="CENTER" textFill="WHITE">
+                                    <Label fx:id="erroGeralLabel" layoutX="20.0" textFill="#e74c3c">
                                        <font>
-                                          <Font name="Segoe UI Bold" size="14.0" />
+                                          <Font name="Segoe UI" size="12.0" />
                                        </font>
-                                    </Button>
-                                    <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 6; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 6; -fx-border-width: 2; -fx-border-style: solid;" text="EDITAR" textAlignment="CENTER" textFill="WHITE">
-                                       <font>
-                                          <Font name="Segoe UI Bold" size="14.0" />
-                                       </font>
-                                    </Button>
+                                    </Label>
                                  </children>
-                              </HBox>
+                              </AnchorPane>
+                              <AnchorPane>
+                                 <children>
+                                    <HBox fx:id="normalBox" alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="1039.0" spacing="24.0">
+                                       <padding>
+                                          <Insets bottom="0" left="20" right="20" top="0" />
+                                       </padding>
+                                       <children>
+                                          <Button fx:id="redefinirBtn" mnemonicParsing="false" onAction="#mostrarPopupRedefinirPasse" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 10; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 8; -fx-border-width: 2; -fx-border-style: solid;" text="REDEFINIR PASSE" textAlignment="CENTER" textFill="WHITE">
+                                             <font>
+                                                <Font name="Segoe UI Bold" size="14.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="editarBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 10; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 8; -fx-border-width: 2; -fx-border-style: solid;" text="EDITAR" textAlignment="CENTER" textFill="WHITE">
+                                             <font>
+                                                <Font name="Segoe UI Bold" size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                    <HBox fx:id="editarBox" alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="1039.0" spacing="24.0">
+                                       <padding>
+                                          <Insets bottom="0" left="20" right="20" top="0" />
+                                       </padding>
+                                       <children>
+                                          <Button fx:id="cancelarBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 10; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 8; -fx-border-width: 2; -fx-border-style: solid;" text="CANCELAR" textAlignment="CENTER" textFill="WHITE">
+                                             <font>
+                                                <Font name="Segoe UI Bold" size="14.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="salvarBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 10; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 8; -fx-border-width: 2; -fx-border-style: solid;" text="SALVAR" textAlignment="CENTER" textFill="WHITE">
+                                             <font>
+                                                <Font name="Segoe UI Bold" size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </AnchorPane>
+                              <Pane />
                            </children>
                         </VBox>
                      </children>
@@ -398,12 +365,12 @@
             </StackPane>
          </content>
       </ScrollPane>
-      <AnchorPane fx:id="passePopup" prefHeight="200.0" prefWidth="200.0">
+      <AnchorPane fx:id="passePopup" managed="false" prefHeight="200.0" prefWidth="200.0">
          <children>
             <Pane onMouseClicked="#fecharPopup" prefHeight="660.0" prefWidth="1080.0" style="-fx-background-color: rgba(0, 0, 0, 0.4);;" />
-            <Pane layoutX="290.0" layoutY="110.0" prefHeight="440.0" prefWidth="500.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 6; -fx-border-width: 2;">
+            <Pane layoutX="290.0" layoutY="80.0" prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: #f9f9f9; -fx-background-radius: 15; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 12; -fx-border-width: 2;">
                <children>
-                  <StackPane prefHeight="440.0" prefWidth="500.0">
+                  <StackPane prefHeight="500.0" prefWidth="500.0">
                      <padding>
                         <Insets bottom="20" left="20" right="20" top="20" />
                      </padding>
@@ -424,72 +391,102 @@
                                                 <Image url="@../images/close_yellow.png" />
                                              </image>
                                           </ImageView>
-                                          <Button fx:id="closePopup" onAction="#fecharPopup" prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" />
+                                          <Button fx:id="closePopupBtn" onAction="#fecharPopup" prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" />
                                        </children>
                                     </StackPane>
                                  </children>
                               </HBox>
-                              <VBox alignment="TOP_CENTER" prefHeight="239.0" prefWidth="460.0" spacing="10.0">
+                              <VBox alignment="TOP_CENTER" spacing="2.5">
                                  <children>
                                     <Group>
                                        <children>
-                                          <Pane prefHeight="90.0" prefWidth="430.0" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 6; -fx-border-color: #e1e3e1; -fx-border-radius: 6;">
+                                          <Pane prefHeight="90.0" prefWidth="430.0" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15; -fx-border-color: #e1e3e1; -fx-border-radius: 12; -fx-border-width: 2;">
                                              <children>
-                                                <PasswordField fx:id="passwordAtualField" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="410.0" style="-fx-background-radius: 6; -fx-border-radius: 6;" />
+                                                <PasswordField fx:id="passwordAtualField" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="410.0" style="-fx-background-radius: 12; -fx-background-color: #ffffff; -fx-background-insets: 0; -fx-border-radius: 10; -fx-border-width: 1;" />
                                              </children>
                                           </Pane>
-                                          <Pane prefHeight="40.0" prefWidth="430.0" style="-fx-border-radius: 6; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 6;">
+                                          <Pane prefHeight="40.0" prefWidth="430.0" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 15;">
                                              <children>
                                                 <Label layoutX="21.0" layoutY="8.0" text="Palavra-Passe Atual">
                                                    <font>
-                                                      <Font size="16.0" />
+                                                      <Font name="System Bold" size="16.0" />
                                                    </font>
                                                 </Label>
                                              </children>
                                           </Pane>
                                        </children>
                                     </Group>
+                                    <AnchorPane>
+                                       <children>
+                                          <Label fx:id="passePop_erro1" layoutX="20.0" maxWidth="420.0" prefWidth="420.0" textFill="#e74c3c">
+                                             <font>
+                                                <Font name="Segoe UI" size="12.0" />
+                                             </font></Label>
+                                       </children>
+                                    </AnchorPane>
                                     <Group>
                                        <children>
-                                          <Pane prefHeight="90.0" prefWidth="430.0" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 6; -fx-border-color: #e1e3e1; -fx-border-radius: 6;">
+                                          <Pane prefHeight="90.0" prefWidth="430.0" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15; -fx-border-color: #e1e3e1; -fx-border-radius: 12; -fx-border-width: 2;">
                                              <children>
-                                                <PasswordField fx:id="novaPasswordField" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="410.0" style="-fx-background-radius: 6; -fx-border-radius: 6;" />
+                                                <PasswordField fx:id="novaPasswordField" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="410.0" style="-fx-background-radius: 12; -fx-background-color: #ffffff; -fx-background-insets: 0; -fx-border-radius: 10; -fx-border-width: 1;" />
                                              </children>
                                           </Pane>
-                                          <Pane prefHeight="40.0" prefWidth="430.0" style="-fx-border-radius: 6; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 6;">
+                                          <Pane prefHeight="40.0" prefWidth="430.0" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 15;">
                                              <children>
                                                 <Label layoutX="21.0" layoutY="8.0" text="Nova Palavra-Passe">
                                                    <font>
-                                                      <Font size="16.0" />
+                                                      <Font name="System Bold" size="16.0" />
                                                    </font>
                                                 </Label>
                                              </children>
                                           </Pane>
                                        </children>
                                     </Group>
+                                    <AnchorPane>
+                                       <children>
+                                          <Label fx:id="passePop_erro2" layoutX="20.0" maxWidth="420.0" prefWidth="420.0" textFill="#e74c3c">
+                                             <font>
+                                                <Font name="Segoe UI" size="12.0" />
+                                             </font></Label>
+                                       </children>
+                                    </AnchorPane>
                                     <Group>
                                        <children>
-                                          <Pane prefHeight="90.0" prefWidth="430.0" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 6; -fx-border-color: #e1e3e1; -fx-border-radius: 6;">
+                                          <Pane prefHeight="90.0" prefWidth="430.0" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15; -fx-border-color: #e1e3e1; -fx-border-radius: 12; -fx-border-width: 2;">
                                              <children>
-                                                <PasswordField fx:id="confirmarPasswordField" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="410.0" style="-fx-background-radius: 6; -fx-border-radius: 6;" />
+                                                <PasswordField fx:id="confirmarPasswordField" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="410.0" style="-fx-background-radius: 12; -fx-background-color: #ffffff; -fx-background-insets: 0; -fx-border-radius: 10; -fx-border-width: 1;" />
                                              </children>
                                           </Pane>
-                                          <Pane prefHeight="40.0" prefWidth="430.0" style="-fx-border-radius: 6; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 6;">
+                                          <Pane prefHeight="40.0" prefWidth="430.0" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #f1c40f; -fx-background-radius: 15;">
                                              <children>
                                                 <Label layoutX="21.0" layoutY="8.0" text="Confirmar Nova Palavra-Passe">
                                                    <font>
-                                                      <Font size="16.0" />
+                                                      <Font name="System Bold" size="16.0" />
                                                    </font>
                                                 </Label>
                                              </children>
                                           </Pane>
                                        </children>
                                     </Group>
+                                    <AnchorPane>
+                                       <children>
+                                          <Label fx:id="passePop_erro3" layoutX="20.0" maxWidth="420.0" prefWidth="420.0" style="-fx-font-size: 12px;" textFill="#e74c3c" visible="false" wrapText="true">
+                                          <font>
+                                                <Font name="Segoe UI" size="12.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
                                  </children>
                               </VBox>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                              <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
                                  <children>
-                                    <Button fx:id="confirmar" mnemonicParsing="false" onAction="#confirmarAlteracaoPassword" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 6; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 6; -fx-border-width: 2; -fx-border-style: solid;" text="CONFIRMAR" textAlignment="CENTER" textFill="WHITE">
+                                    <Button fx:id="cancelarPopupBtn" mnemonicParsing="false" onAction="#fecharPopup" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 10; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 8; -fx-border-width: 2; -fx-border-style: solid;" text="CANCELAR" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="Segoe UI Bold" size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="salvarPopupBtn" mnemonicParsing="false" onAction="#confirmarAlteracaoPassword" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 10; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 8; -fx-border-width: 2; -fx-border-style: solid;" text="SALVAR" textAlignment="CENTER" textFill="WHITE">
                                        <font>
                                           <Font name="Segoe UI Bold" size="14.0" />
                                        </font>

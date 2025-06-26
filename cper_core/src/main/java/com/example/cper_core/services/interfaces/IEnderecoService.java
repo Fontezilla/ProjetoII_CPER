@@ -10,4 +10,6 @@ public interface IEnderecoService extends IXService<
         EnderecoWithRelationshipsDto,
         Integer
         > {
+
+    EnderecoDetailsExtendedDto findByRuaAndLocalidade(String rua, Integer localidadeId);
 }

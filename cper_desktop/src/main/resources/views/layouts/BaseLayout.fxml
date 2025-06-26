@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -18,28 +17,35 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cper_desktop.controllers.BaseLayoutController">
+<StackPane fx:id="rootStack" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cper_desktop.controllers.BaseLayoutController">
 
     <children>
-
-        <!-- Fundo de vidro (imagem de background com efeito) -->
-        <ImageView fitHeight="720.0" fitWidth="1281.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <image>
-                <Image url="@../../images/Background-glass-effect.png" />
-            </image>
-        </ImageView>
-
-        <!-- Zona principal onde o conteúdo será injetado dinamicamente -->
-        <StackPane fx:id="mainContent" layoutY="60.0" prefHeight="660.0" prefWidth="1080.0" style="-fx-background-color: white; -fx-border-color: transparent;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="60.0" />
+      <AnchorPane>
+         <children>
+      
+              <!-- Fundo de vidro (imagem de background com efeito) -->
+              <ImageView fitHeight="721.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                      <Image url="@../../images/Background-glass-effect.png" />
+                  </image>
+              </ImageView>
+         </children>
+      </AnchorPane>
+      <AnchorPane>
+         <children>
+                          <!-- Zona principal onde o conteúdo será injetado dinamicamente -->
+              <StackPane fx:id="mainContent" layoutX="100.0" layoutY="60.0" prefHeight="660.0" prefWidth="1080.0" style="-fx-background-color: #f9f9f9; -fx-border-color: transparent;" />
+         </children>
+      </AnchorPane>
 
         <!-- Barra superior (TopBar) com logo, hambúrguer, definições e logout -->
-        <AnchorPane id="appBar" prefHeight="60.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane id="appBar" maxHeight="60.0" minHeight="60.0" minWidth="1280.0" prefHeight="60.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
 
                 <!-- Retângulo amarelo com sombra para destaque -->
-                <Rectangle fill="#f1c40f" height="60.0" stroke="TRANSPARENT" width="1280.0">
+                <Rectangle fill="#f1c40f" height="62.0" stroke="TRANSPARENT" width="1281.0">
                <effect>
-                  <DropShadow radius="4.75" width="0.0" />
+                  <DropShadow height="25.16" radius="5.79" width="0.0" />
                </effect>
                 </Rectangle>
             <StackPane layoutX="34.0" layoutY="14.0" prefHeight="30.0" prefWidth="30.0">
@@ -97,18 +103,18 @@
         </AnchorPane>
 
         <!-- Menu Lateral Overlay com fundo escurecido e conteúdo dinâmico -->
-        <AnchorPane fx:id="menuOverlay" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: rgba(0, 0, 0, 0.4);">
+        <AnchorPane fx:id="menuOverlay" style="-fx-background-color: rgba(0, 0, 0, 0.4);" visible="false">
             <children>
             <Pane layoutX="350.0" onMouseClicked="#toggleMenu" prefHeight="720.0" prefWidth="930.0" />
             <AnchorPane fx:id="menuPane" prefHeight="720.0" prefWidth="350.0">
                <children>
 
                    <!-- Scroll com VBox dinâmico para inserir botões/menu programaticamente -->
-                   <ScrollPane fitToWidth="true"  hbarPolicy="NEVER" layoutY="100.0" prefHeight="620.0" prefWidth="350.0">
+                   <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutY="100.0" prefHeight="620.0" prefWidth="350.0">
                        <content>
                            <StackPane alignment="CENTER">
-                               <VBox fx:id="menuVBox" spacing="2.0" visible="true" managed="true" alignment="CENTER" />
-                               <VBox fx:id="menuVBox1" spacing="2.0" visible="false" managed="false" alignment="CENTER" />
+                               <VBox fx:id="menuVBox" alignment="CENTER" managed="true" spacing="2.0" visible="true" />
+                               <VBox fx:id="menuVBox1" alignment="CENTER" managed="false" spacing="2.0" visible="false" />
                            </StackPane>
                        </content>
                    </ScrollPane>
@@ -167,4 +173,4 @@
         </AnchorPane>
 
     </children>
-</AnchorPane>
+</StackPane>

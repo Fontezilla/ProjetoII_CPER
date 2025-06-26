@@ -3,6 +3,8 @@ package com.example.cper_core.services;
 import com.example.cper_core.services.interfaces.IXService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -10,6 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public abstract class AbstractXService<
         TEntity,
@@ -47,6 +50,25 @@ public abstract class AbstractXService<
 
     protected void validateDto(TExtendedDto dto) {
         Set<ConstraintViolation<TExtendedDto>> violations = validator.validate(dto);
+        handleValidationViolations(violations);
+    }
+
+    protected void validateDtoFieldsPresent(TExtendedDto dto, Class<?>... grupos) {
+        Set<ConstraintViolation<TExtendedDto>> todasViolacoes = validator.validate(dto, grupos);
+
+        BeanWrapper wrapper = new BeanWrapperImpl(dto);
+
+        Set<ConstraintViolation<TExtendedDto>> violacoesReais = todasViolacoes.stream()
+                .filter(v -> {
+                    Object valor = wrapper.getPropertyValue(v.getPropertyPath().toString());
+                    return valor != null && !(valor instanceof String s && s.isBlank());
+                })
+                .collect(Collectors.toSet());
+
+        handleValidationViolations(violacoesReais);
+    }
+
+    private void handleValidationViolations(Set<ConstraintViolation<TExtendedDto>> violations) {
         if (!violations.isEmpty()) {
             StringBuilder sb = new StringBuilder("Validação falhou:\n");
             for (ConstraintViolation<?> violation : violations) {
@@ -58,7 +80,7 @@ public abstract class AbstractXService<
 
     @Override
     public TExtendedDto create(TExtendedDto dto) {
-        validateDto(dto);
+        validateDto(dto); // valida todos os campos
         TEntity entity = toEntity(dto);
         return toExtendedDto(repository.save(entity));
     }
@@ -90,7 +112,7 @@ public abstract class AbstractXService<
 
     @Override
     public TExtendedDto update(TId id, TExtendedDto dto) {
-        validateDto(dto);
+        validateDtoFieldsPresent(dto, com.example.cper_core.dtos.OnUpdate.class);
         TEntity existing = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Registo não encontrado com ID " + id));
         updateEntityFromDto(dto, existing);
@@ -108,6 +130,7 @@ public abstract class AbstractXService<
             repository.delete(entity);
         }
     }
+
     protected void validateBeforeDeleting(TEntity entity) {
         // Por defeito não faz nada. Subclasses podem implementar.
     }

@@ -117,6 +117,13 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- jBCrypt -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+
         <!-- Spring Boot Test (removido ou pode deixar se quiser rodar à mão) -->
         <!--
         <dependency>

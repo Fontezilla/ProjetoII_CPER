@@ -1,4 +1,4 @@
-package com.example.cper_desktop.reusable_components;
+package com.example.cper_desktop.controllers.reusable_components;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;

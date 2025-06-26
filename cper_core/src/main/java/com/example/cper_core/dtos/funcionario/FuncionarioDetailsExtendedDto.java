@@ -1,6 +1,7 @@
 package com.example.cper_core.dtos.funcionario;
 
 import com.example.cper_core.dtos.OnCreate;
+import com.example.cper_core.dtos.OnUpdate;
 import com.example.cper_core.dtos.departamento.DepartamentoDto;
 import com.example.cper_core.dtos.endereco.EnderecoDto;
 import jakarta.validation.Valid;
@@ -26,17 +27,17 @@ public class FuncionarioDetailsExtendedDto extends FuncionarioDetailsDto {
     private OffsetDateTime dataContratacao;
 
     @NotNull(groups = OnCreate.class, message = "O salário é obrigatório")
-    @DecimalMin(value = "0.0", inclusive = true, message = "O salário não pode ser negativo", groups = OnCreate.class)
+    @DecimalMin(value = "0.0", inclusive = true, message = "O salário não pode ser negativo", groups = {OnCreate.class, OnUpdate.class})
     private BigDecimal salario;
 
-    @NotNull(message = "O departamento é obrigatório")
+    @NotNull(groups = OnCreate.class, message = "O departamento é obrigatório")
     @Valid
     private DepartamentoDto departamento;
 
     @NotBlank(groups = OnCreate.class, message = "O número da porta é obrigatório")
     private String nPorta;
 
-    @NotNull(message = "O endereço é obrigatório")
+    @NotNull(groups = OnCreate.class, message = "O endereço é obrigatório")
     @Valid
     private EnderecoDto endereco;
 

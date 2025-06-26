@@ -1,7 +1,9 @@
 package com.example.cper_core.dtos.funcionario;
 
 import com.example.cper_core.dtos.OnCreate;
+import com.example.cper_core.dtos.OnUpdate;
 import com.example.cper_core.enums.EstadoFuncionario;
+import com.example.cper_core.validation.ValidPassword;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,19 +21,19 @@ public class FuncionarioDetailsDto extends FuncionarioDto {
     private String nome;
 
     @NotBlank(groups = OnCreate.class, message = "O NIF é obrigatório")
-    @Pattern(regexp = "\\d{9}", message = "O NIF deve ter 9 dígitos numéricos", groups = OnCreate.class)
+    @Pattern(regexp = "\\d{9}", message = "O NIF deve ter 9 dígitos numéricos", groups = {OnCreate.class, OnUpdate.class})
     private String nif;
 
     @NotBlank(groups = OnCreate.class, message = "O email é obrigatório")
-    @Email(groups = OnCreate.class, message = "O email deve ser válido")
+    @Email(message = "O email deve ser válido", groups = {OnCreate.class, OnUpdate.class})
     private String email;
 
     @NotBlank(groups = OnCreate.class, message = "A password é obrigatória")
-    @Size(min = 6, message = "A password deve ter pelo menos 6 caracteres", groups = OnCreate.class)
+    @ValidPassword(groups = {OnCreate.class, OnUpdate.class})
     private String password;
 
     @NotBlank(groups = OnCreate.class, message = "O telefone é obrigatório")
-    @Pattern(regexp = "\\d{9}", message = "O telefone deve ter 9 dígitos numéricos", groups = OnCreate.class)
+    @Pattern(regexp = "\\d{9}", message = "O telefone deve ter 9 dígitos numéricos", groups = {OnCreate.class, OnUpdate.class})
     private String telefone;
 
     private String cargo;

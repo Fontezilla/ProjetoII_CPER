@@ -1,5 +1,6 @@
 package com.example.cper_core.services;
 
+import com.example.cper_core.dtos.auth.UpdatePassword;
 import com.example.cper_core.dtos.funcionario.*;
 import com.example.cper_core.entities.Departamento;
 import com.example.cper_core.entities.Endereco;
@@ -11,9 +12,12 @@ import com.example.cper_core.repositories.FuncionarioRepository;
 import com.example.cper_core.services.interfaces.IFuncionarioService;
 import com.example.cper_core.specifications.FuncionarioSpecification;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.cper_core.utils.*;
+import static com.example.cper_core.utils.DtoUtils.*;
 
 @Service
 @Transactional
@@ -45,22 +49,38 @@ public class FuncionarioService extends AbstractXService<
     }
 
     @Override
+    public FuncionarioDetailsExtendedDto create(FuncionarioDetailsExtendedDto dto) {
+        validateDto(dto);
+
+        Funcionario entity = toEntity(dto);
+
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            entity.setPassword(PasswordUtils.hashPassword(dto.getPassword()));
+        }
+
+        return toExtendedDto(funcionarioRepository.save(entity));
+    }
+
+    @Override
     protected Funcionario toEntity(FuncionarioDetailsExtendedDto dto) {
         return funcionarioMapper.toEntity(dto);
     }
 
     @Override
     protected void updateEntityFromDto(FuncionarioDetailsExtendedDto dto, Funcionario entity) {
-        if (dto.getNome() != null) entity.setNome(dto.getNome());
-        if (dto.getNif() != null) entity.setNif(dto.getNif());
-        if (dto.getEmail() != null) entity.setEmail(dto.getEmail());
-        if (dto.getPassword() != null) entity.setPassword(dto.getPassword());
-        if (dto.getTelefone() != null) entity.setTelefone(dto.getTelefone());
-        if (dto.getCargo() != null) entity.setCargo(dto.getCargo());
-        if (dto.getDataNascimento() != null) entity.setDataNascimento(dto.getDataNascimento());
-        if (dto.getDataContratacao() != null) entity.setDataContratacao(dto.getDataContratacao());
-        if (dto.getSalario() != null) entity.setSalario(dto.getSalario());
-        if (dto.getNPorta() != null) entity.setNPorta(dto.getNPorta());
+        setIfPresent(dto.getNome(), entity::setNome);
+        setIfPresent(dto.getNif(), entity::setNif);
+        setIfPresent(dto.getEmail(), entity::setEmail);
+        setIfPresent(dto.getTelefone(), entity::setTelefone);
+        setIfPresent(dto.getCargo(), entity::setCargo);
+        setIfPresent(dto.getDataNascimento(), entity::setDataNascimento);
+        setIfPresent(dto.getDataContratacao(), entity::setDataContratacao);
+        setIfPresent(dto.getSalario(), entity::setSalario);
+        setIfPresent(dto.getNPorta(), entity::setNPorta);
+
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            entity.setPassword(PasswordUtils.hashPassword(dto.getPassword()));
+        }
 
         if (dto.getDepartamento() != null) {
             Departamento departamento = departamentoRepository.findById(dto.getDepartamento().getId())
@@ -73,6 +93,20 @@ public class FuncionarioService extends AbstractXService<
                     .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado"));
             entity.setEndereco(endereco);
         }
+    }
+
+    @Override
+    public void updatePassword(int employeeId, UpdatePassword dto) {
+        Funcionario employee = funcionarioRepository.findById(employeeId)
+                .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado."));
+
+        if (!PasswordUtils.checkPassword(dto.getCurrentPassword(), employee.getPassword())) {
+            throw new IllegalArgumentException("Palavra-passe atual incorreta.");
+        }
+
+        String hashedPassword = PasswordUtils.hashPassword(dto.getNewPassword());
+        employee.setPassword(hashedPassword);
+        funcionarioRepository.save(employee);
     }
 
     @Override

@@ -24,6 +24,8 @@ public class EnderecoService extends AbstractXService<
         > implements IEnderecoService {
 
     private final EnderecoMapper enderecoMapper;
+    private final EnderecoRepository enderecoRepository;
+
     public EnderecoService(
             EnderecoRepository enderecoRepository,
             EnderecoMapper enderecoMapper,
@@ -31,6 +33,15 @@ public class EnderecoService extends AbstractXService<
     ) {
         super(enderecoRepository, enderecoRepository, validator);
         this.enderecoMapper = enderecoMapper;
+        this.enderecoRepository = enderecoRepository;
+    }
+
+    @Override
+    public EnderecoDetailsExtendedDto findByRuaAndLocalidade(String rua, Integer localidadeId) {
+        return enderecoRepository
+                .findByRuaIgnoreCaseAndLocalidadeId(rua.trim(), localidadeId)
+                .map(enderecoMapper::toExtendedDto)
+                .orElse(null);
     }
 
     @Override

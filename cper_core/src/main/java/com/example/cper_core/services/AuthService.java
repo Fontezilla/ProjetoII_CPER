@@ -9,9 +9,11 @@ import com.example.cper_core.enums.JwtTipoUtilizador;
 import com.example.cper_core.repositories.ClienteRepository;
 import com.example.cper_core.repositories.FuncionarioRepository;
 import com.example.cper_core.utils.JwtUtils;
+import com.example.cper_core.utils.PasswordUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,26 +36,56 @@ public class AuthService {
     public LoginResponseDto login(JwtTipoUtilizador type, LoginRequestDto request) {
         String token;
         Integer setorPrincipal = -1;
-        Set<Integer> setoresAssociados = Set.of();
+        Set<Integer> setoresAssociados = new HashSet<>();
 
+        String passwordInput = request.getPassword();
 
         switch (type) {
             case CLIENTE -> {
                 Cliente cliente = clienteRepository.findByEmail(request.getEmail())
                         .orElseThrow(() -> new RuntimeException("Utilizador não encontrado"));
 
-                if (!cliente.getPassword().equals(request.getPassword())) {
+                String storedPassword = cliente.getPassword();
+                boolean autenticado = false;
+
+                if (PasswordUtils.isHashed(storedPassword)) {
+                    autenticado = PasswordUtils.checkPassword(passwordInput, storedPassword);
+                } else if (passwordInput.equals(storedPassword)) {
+                    autenticado = true;
+                    cliente.setPassword(PasswordUtils.hashPassword(passwordInput));
+                    clienteRepository.save(cliente);
+                }
+
+                if (!autenticado) {
                     throw new RuntimeException("Password inválida");
                 }
 
-                token = jwtUtil.generateToken(cliente.getEmail(), cliente.getNome(), cliente.getId(), type, setorPrincipal, setoresAssociados);
+                token = jwtUtil.generateToken(
+                        cliente.getEmail(),
+                        cliente.getNome(),
+                        cliente.getId(),
+                        type,
+                        setorPrincipal,
+                        setoresAssociados
+                );
             }
 
             case FUNCIONARIO -> {
                 Funcionario funcionario = funcionarioRepository.findByEmail(request.getEmail())
                         .orElseThrow(() -> new RuntimeException("Utilizador não encontrado"));
 
-                if (!funcionario.getPassword().equals(request.getPassword())) {
+                String storedPassword = funcionario.getPassword();
+                boolean autenticado = false;
+
+                if (PasswordUtils.isHashed(storedPassword)) {
+                    autenticado = PasswordUtils.checkPassword(passwordInput, storedPassword);
+                } else if (passwordInput.equals(storedPassword)) {
+                    autenticado = true;
+                    funcionario.setPassword(PasswordUtils.hashPassword(passwordInput));
+                    funcionarioRepository.save(funcionario);
+                }
+
+                if (!autenticado) {
                     throw new RuntimeException("Password inválida");
                 }
 
@@ -65,7 +97,14 @@ public class AuthService {
                         .map(Departamento::getSetor)
                         .collect(Collectors.toSet());
 
-                token = jwtUtil.generateToken(funcionario.getEmail(), funcionario.getNome(), funcionario.getId(), type, setorPrincipal, setoresAssociados);
+                token = jwtUtil.generateToken(
+                        funcionario.getEmail(),
+                        funcionario.getNome(),
+                        funcionario.getId(),
+                        type,
+                        setorPrincipal,
+                        setoresAssociados
+                );
             }
 
             default -> throw new RuntimeException("Tipo de utilizador inválido");

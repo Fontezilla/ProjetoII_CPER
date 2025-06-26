@@ -29,9 +29,6 @@ public class CperDesktopApplication extends Application {
 
         Parent root = loader.load();
         Scene scene = new Scene(root, 1280, 720);
-//        scene.getStylesheets().add(
-//                Objects.requireNonNull(getClass().getResource("/styles/MenuButtonItem.css")).toExternalForm()
-//        );
 
         Navigation.initialize(stage, springContext);
 

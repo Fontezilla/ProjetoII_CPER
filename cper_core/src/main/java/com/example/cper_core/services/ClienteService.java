@@ -10,6 +10,8 @@ import jakarta.validation.Validator;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.cper_core.utils.PasswordUtils;
+import static com.example.cper_core.utils.DtoUtils.*;
 
 @Service
 @Transactional
@@ -36,6 +38,20 @@ public class ClienteService extends AbstractXService<
     }
 
     @Override
+    public ClienteDetailsExtendedDto create(ClienteDetailsExtendedDto dto) {
+        validateDto(dto);
+
+        Cliente entity = toEntity(dto);
+
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            entity.setPassword(PasswordUtils.hashPassword(dto.getPassword()));
+        }
+
+        return toExtendedDto(repository.save(entity));
+    }
+
+
+    @Override
     protected Cliente toEntity(ClienteDetailsExtendedDto dto) {
         return clienteMapper.toEntity(dto);
     }
@@ -43,6 +59,10 @@ public class ClienteService extends AbstractXService<
     @Override
     protected void updateEntityFromDto(ClienteDetailsExtendedDto dto, Cliente entity) {
         clienteMapper.updateEntityFromExtendedDto(dto, entity);
+
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            entity.setPassword(PasswordUtils.hashPassword(dto.getPassword()));
+        }
     }
 
     @Override

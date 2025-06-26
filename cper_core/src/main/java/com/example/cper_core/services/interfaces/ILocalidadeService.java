@@ -13,5 +13,7 @@ public interface ILocalidadeService extends IXService<
         LocalidadeFiltroDto,
         LocalidadeWithRelationshipsDto,
         Integer
-        > { ;
+        > {
+
+    LocalidadeDetailsExtendedDto findByCodigoPostalAndNome(String codigoPostal, String nome);
 }

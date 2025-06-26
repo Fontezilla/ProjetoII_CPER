@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.cper_desktop.controllers.reusable_components.LoadingOverlayController"
+            style="-fx-background-color: rgba(0,0,0,0.35);"
+            visible="false" managed="false"
+            mouseTransparent="true" pickOnBounds="false"
+            fx:id="overlayRoot"
+            prefWidth="Infinity" prefHeight="Infinity">
+    <VBox alignment="CENTER" spacing="10.0"
+          AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <ProgressIndicator progress="-1.0"
+                           prefWidth="40" prefHeight="40"
+                           style="-fx-progress-color: #f1c40f;" />
+        <Label text="A carregar…" style="-fx-text-fill: white; -fx-font-size: 14;" />
+    </VBox>
+</AnchorPane>

@@ -24,6 +24,7 @@ public class LocalidadeService extends AbstractXService<
         > implements ILocalidadeService {
 
     private final LocalidadeMapper localidadeMapper;
+    private final LocalidadeRepository localidadeRepository;
 
     public LocalidadeService(
             LocalidadeRepository localidadeRepository,
@@ -32,6 +33,15 @@ public class LocalidadeService extends AbstractXService<
     ) {
         super(localidadeRepository, localidadeRepository, validator);
         this.localidadeMapper = localidadeMapper;
+        this.localidadeRepository = localidadeRepository;
+    }
+
+    @Override
+    public LocalidadeDetailsExtendedDto findByCodigoPostalAndNome(String codigoPostal, String nome) {
+        return localidadeRepository
+                .findByCodigoPostalAndNomeIgnoreCase(codigoPostal.trim(), nome.trim())
+                .map(localidadeMapper::toExtendedDto)
+                .orElse(null);
     }
 
     @Override
