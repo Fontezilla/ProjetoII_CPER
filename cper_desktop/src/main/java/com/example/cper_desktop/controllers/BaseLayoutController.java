@@ -334,27 +334,28 @@ public class BaseLayoutController {
 
     private void menusComercial() {
         setorLabel.setText("Comercial");
-        addMenuButton("Clientes", "/views/clientes.fxml");
-        addMenuButton("Contratos", "/views/contratos.fxml");
-        addMenuButton("Vendas", "/views/vendas.fxml");
+        addMenuButton("Clientes", "/views/Clientes.fxml");
+        addMenuButton("Contratos", "/views/Contratos.fxml"); // Contratos Extra
+        addMenuButton("Solicitações Energéticas", "/views/SolicitacoesEnergeticas.fxml");
+        addMenuButton("Suporte Técnico", "/views/SuporteTecnico.fxml");
     }
 
     private void menusFinanceiro() {
         setorLabel.setText("Financeiro");
-        addMenuButton("Faturas", "/views/faturas.fxml");
-        addMenuButton("Pagamentos", "/views/pagamentos.fxml");
+        addMenuButton("Clientes", "/views/Clientes.fxml");
+        addMenuButton("Contratos", "/views/Contratos.fxml"); // Contratos Extra
+        addMenuButton("Faturas", "/views/Faturas.fxml");
     }
 
     private void menusProducaoCentral() {
         setorLabel.setText("Produção - Central");
-        addMenuButton("Centrais", "/views/centrais.fxml");
-        addMenuButton("Geradores", "/views/geradores.fxml");
+        addMenuButton("Centrais", "/views/Centrais.fxml");
+        addMenuButton("Contratos", "/views/Contratos.fxml");
     }
 
     private void menusProducaoGerador() {
         setorLabel.setText("Produção - Gerador");
-        addMenuButton("Geradores", "/views/geradores.fxml");
-        addMenuButton("Produção", "/views/producao.fxml");
+        addMenuButton("Pedidos Geração", "/views/PedidosGeracao.fxml");
     }
 
     private void menusInspecao() {
