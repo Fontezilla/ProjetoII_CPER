@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="basePane" prefHeight="660.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cper_desktop.controllers.PerfilController">
+<StackPane fx:id="basePane" prefHeight="971.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cper_desktop.controllers.PerfilController">
    <children>
       <ScrollPane fx:id="mainPane" fitToHeight="false" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="963.0" prefWidth="1080.0" vbarPolicy="AS_NEEDED">
          <content>
@@ -342,12 +342,12 @@
                                           <Insets bottom="0" left="20" right="20" top="0" />
                                        </padding>
                                        <children>
-                                          <Button fx:id="cancelarBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 10; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 8; -fx-border-width: 2; -fx-border-style: solid;" text="CANCELAR" textAlignment="CENTER" textFill="WHITE">
+                                          <Button fx:id="cancelarBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 10; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 8; -fx-border-width: 2; -fx-border-style: solid;" text="CANCELAR" textAlignment="CENTER">
                                              <font>
                                                 <Font name="Segoe UI Bold" size="14.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="salvarBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 10; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 8; -fx-border-width: 2; -fx-border-style: solid;" text="SALVAR" textAlignment="CENTER" textFill="WHITE">
+                                          <Button fx:id="salvarBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 10; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 8; -fx-border-width: 2; -fx-border-style: solid;" text="SALVAR" textAlignment="CENTER">
                                              <font>
                                                 <Font name="Segoe UI Bold" size="14.0" />
                                              </font>
@@ -365,7 +365,7 @@
             </StackPane>
          </content>
       </ScrollPane>
-      <AnchorPane fx:id="passePopup" managed="false" prefHeight="200.0" prefWidth="200.0">
+      <AnchorPane fx:id="passePopup" managed="false" prefHeight="200.0" prefWidth="200.0" visible="false">
          <children>
             <Pane onMouseClicked="#fecharPopup" prefHeight="660.0" prefWidth="1080.0" style="-fx-background-color: rgba(0, 0, 0, 0.4);;" />
             <Pane layoutX="290.0" layoutY="80.0" prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: #f9f9f9; -fx-background-radius: 15; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 12; -fx-border-width: 2;">

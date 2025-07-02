@@ -6,4 +6,5 @@ import com.example.cper_desktop.controllers.reusable_components.ToastNotificatio
 public interface ReusableComponentsAware {
     void setLoadingOverlayController(LoadingOverlayController controller);
     void setToastNotificationController(ToastNotificationController controller);
+    default void applyInitialStyle() {}
 }

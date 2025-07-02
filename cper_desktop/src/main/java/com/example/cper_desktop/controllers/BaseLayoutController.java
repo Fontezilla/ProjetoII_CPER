@@ -1,5 +1,7 @@
 package com.example.cper_desktop.controllers;
 
+import com.example.cper_core.dtos.cliente.ClienteFiltroDto;
+import com.example.cper_core.dtos.solicitacao_energetica.SolicitacaoEnergeticaFiltroDto;
 import com.example.cper_core.enums.Setor;
 import com.example.cper_desktop.controllers.reusable_components.LoadingOverlayController;
 import com.example.cper_desktop.controllers.reusable_components.MenuButtonItem;
@@ -14,22 +16,24 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,6 +47,19 @@ public class BaseLayoutController {
     private static final Logger logger = Logger.getLogger(BaseLayoutController.class.getName());
 
     private final SpringFXMLLoader springFXMLLoader;
+
+    private static class NavigationEntry {
+        String fxmlPath;
+        Consumer<Object> controllerCallback;
+
+        NavigationEntry(String fxmlPath, Consumer<Object> callback) {
+            this.fxmlPath = fxmlPath;
+            this.controllerCallback = callback;
+        }
+    }
+
+    private final Deque<NavigationEntry> navigationStack = new ArrayDeque<>();
+    private boolean preventGoBack = false;
 
     private LoadingOverlayController loadingOverlayController;
 
@@ -65,8 +82,6 @@ public class BaseLayoutController {
     private final Map<Setor, Runnable> menuBuilders = new EnumMap<>(Setor.class);
 
     private ToastNotificationController toastController;
-    private AnchorPane toastRoot;
-
 
     @FXML
     public void initialize() {
@@ -88,8 +103,126 @@ public class BaseLayoutController {
             if (mainContent.getScene() != null) {
                 mainContent.getScene().getStylesheets().add(
                         Objects.requireNonNull(getClass().getResource("/styles/MenuButtonItem.css")).toExternalForm());
+                mainContent.getScene().addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPressed);
+            }
+
+            if (rootStack.getScene() != null) {
+                rootStack.getScene().getRoot().getProperties().put("baseController", this);
             }
         });
+    }
+
+    private void handleKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.BACK_SPACE || event.getCode() == KeyCode.ESCAPE) {
+            goBack();
+        }
+    }
+
+    public void clearHistory() {
+        navigationStack.clear();
+    }
+
+    public void setPreventGoBack(boolean prevent) {
+        this.preventGoBack = prevent;
+    }
+
+    public boolean isPreventGoBack() {
+        return preventGoBack;
+    }
+
+    public void goBack() {
+        if (preventGoBack) {
+            System.out.println("⚠ goBack está desativado nesta página.");
+            return;
+        }
+
+        if (!navigationStack.isEmpty()) {
+            navigationStack.pop(); // Remove página atual
+
+            if (!navigationStack.isEmpty()) {
+                NavigationEntry anterior = navigationStack.peek();
+
+                loadingOverlayController.show();
+
+                Task<Parent> reloadTask = new Task<>() {
+                    @Override
+                    protected Parent call() throws Exception {
+                        Parent[] rootOut = new Parent[1];
+                        Object controller = springFXMLLoader.loadWithController(anterior.fxmlPath, rootOut);
+
+                        if (controller instanceof ReusableComponentsAware reusable) {
+                            reusable.setLoadingOverlayController(loadingOverlayController);
+                            reusable.setToastNotificationController(toastController);
+                            reusable.applyInitialStyle();
+                        }
+
+                        if (anterior.controllerCallback != null) {
+                            anterior.controllerCallback.accept(controller);
+                        }
+
+                        return rootOut[0];
+                    }
+                };
+
+                reloadTask.setOnSucceeded(e -> {
+                    mainContent.getChildren().setAll(reloadTask.getValue());
+                    Platform.runLater(() -> loadingOverlayController.hide());
+                });
+
+                reloadTask.setOnFailed(e -> {
+                    loadingOverlayController.hide();
+                    logger.log(Level.SEVERE, "Erro ao recarregar FXML (goBack): " + anterior.fxmlPath, reloadTask.getException());
+                });
+
+                new Thread(reloadTask).start();
+
+            } else {
+                System.out.println("⚠ Stack está vazia após pop. Nenhuma página para voltar.");
+            }
+        } else {
+            System.out.println("⚠ goBack chamado mas stack já está vazia.");
+        }
+    }
+
+    public void navigateTo(String fxmlPath, Consumer<Object> controllerCallback, boolean keepMenuClosed) {
+        loadingOverlayController.show();
+
+        Task<Parent> loadTask = new Task<>() {
+            @Override
+            protected Parent call() throws Exception {
+                Parent[] rootOut = new Parent[1];
+                Object controller = springFXMLLoader.loadWithController(fxmlPath, rootOut);
+
+                if (controller instanceof ReusableComponentsAware reusable) {
+                    reusable.setLoadingOverlayController(loadingOverlayController);
+                    reusable.setToastNotificationController(toastController);
+                    reusable.applyInitialStyle();
+                }
+
+                if (controllerCallback != null) {
+                    Platform.runLater(() -> controllerCallback.accept(controller));
+                }
+
+                return rootOut[0];
+            }
+        };
+
+        loadTask.setOnSucceeded(e -> {
+            navigationStack.push(new NavigationEntry(fxmlPath, controllerCallback));
+
+
+            mainContent.getChildren().setAll(loadTask.getValue());
+
+            Platform.runLater(() -> loadingOverlayController.hide());
+            toggleMenu(keepMenuClosed);
+        });
+
+        loadTask.setOnFailed(e -> {
+            loadingOverlayController.hide();
+            logger.log(Level.SEVERE, "Erro ao carregar FXML: " + fxmlPath, loadTask.getException());
+        });
+
+        new Thread(loadTask).start();
     }
 
     @FXML
@@ -108,56 +241,13 @@ public class BaseLayoutController {
 
     @FXML
     private void onSettingsClick() {
-        carregarPagina("/views/perfil.fxml", true);
+        navigateTo("/views/perfil.fxml", null, true);
     }
 
     @FXML
     private void onLogOutClick() {
         SessionStorage.clear();
         Navigation.goTo("Login.fxml");
-    }
-
-    private void carregarPagina(String fxmlPath, boolean keepMenuClosed) {
-        loadingOverlayController.show();
-
-        Task<Parent> loadTask = new Task<>() {
-            @Override
-            protected Parent call() throws Exception {
-                Parent[] rootOut = new Parent[1];
-                Object controller = springFXMLLoader.loadWithController(fxmlPath, rootOut);
-
-                if (controller instanceof ReusableComponentsAware aware) {
-                    aware.setLoadingOverlayController(loadingOverlayController);
-                    aware.setToastNotificationController(toastController);
-                }
-
-                return rootOut[0];
-            }
-        };
-
-        loadTask.setOnSucceeded(e -> {
-            Parent conteudo = loadTask.getValue();
-            mainContent.getChildren().setAll(conteudo);
-
-            Platform.runLater(() -> {
-                if (!rootStack.getChildren().contains(loadingOverlayController.getView())) {
-                    rootStack.getChildren().add(loadingOverlayController.getView());
-                }
-                loadingOverlayController.getView().toFront();
-                StackPane.setAlignment(loadingOverlayController.getView(), Pos.CENTER);
-                loadingOverlayController.hide();
-            });
-
-            toggleMenu(keepMenuClosed);
-        });
-
-
-        loadTask.setOnFailed(e -> {
-            loadingOverlayController.hide();
-            logger.log(Level.SEVERE, "Erro ao carregar FXML: " + fxmlPath, loadTask.getException());
-        });
-
-        new Thread(loadTask).start();
     }
 
     private void carregarOverlay() {
@@ -178,26 +268,25 @@ public class BaseLayoutController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/components/ToastNotification.fxml"));
             AnchorPane toast = loader.load();
             toastController = loader.getController();
-            toastRoot = toast;
 
-            rootStack.getChildren().add(toastRoot);
+            rootStack.getChildren().add(toast);
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Erro ao carregar o toast", e);
         }
     }
 
     private void inicializarMenuBuilders() {
-        menuBuilders.put(Setor.ADMINISTRATIVO, this::menusAdministrativo);
+//        menuBuilders.put(Setor.ADMINISTRATIVO, this::menusAdministrativo);
         menuBuilders.put(Setor.COMERCIAL,        this::menusComercial);
-        menuBuilders.put(Setor.FINANCEIRO,       this::menusFinanceiro);
-        menuBuilders.put(Setor.PRODUCAO_CENTRAL, this::menusProducaoCentral);
-        menuBuilders.put(Setor.PRODUCAO_GERADOR, this::menusProducaoGerador);
-        menuBuilders.put(Setor.INSPECAO,         this::menusInspecao);
-        menuBuilders.put(Setor.PLANEAMENTO,      this::menusPlaneamento);
-        menuBuilders.put(Setor.MANUTENCAO,       this::menusManutencao);
-        menuBuilders.put(Setor.ARMAZEM,          this::menusArmazem);
-        menuBuilders.put(Setor.CONSTRUCAO,       this::menusConstrucao);
-        menuBuilders.put(Setor.RH,               this::menusRh);
+//        menuBuilders.put(Setor.FINANCEIRO,       this::menusFinanceiro);
+//        menuBuilders.put(Setor.PRODUCAO_CENTRAL, this::menusProducaoCentral);
+//        menuBuilders.put(Setor.PRODUCAO_GERADOR, this::menusProducaoGerador);
+//        menuBuilders.put(Setor.INSPECAO,         this::menusInspecao);
+//        menuBuilders.put(Setor.PLANEAMENTO,      this::menusPlaneamento);
+//        menuBuilders.put(Setor.MANUTENCAO,       this::menusManutencao);
+//        menuBuilders.put(Setor.ARMAZEM,          this::menusArmazem);
+//        menuBuilders.put(Setor.CONSTRUCAO,       this::menusConstrucao);
+//        menuBuilders.put(Setor.RH,               this::menusRh);
     }
 
     private void carregarMenuSetor() {
@@ -228,15 +317,6 @@ public class BaseLayoutController {
         }
     }
 
-    private void addMenuButton(String nome, String fxmlPath) {
-        MenuButtonItem item = new MenuButtonItem(nome, () -> {
-            carregarPagina(fxmlPath, false);
-            highlightMenu(nome);
-        });
-        menuVBox.getChildren().add(item);
-        botoesMenu.add(item.getButton());
-    }
-
     private void mostrarSetoresDisponiveis() {
         fadeOut(menuVBox);
         menuVBox1.getChildren().clear();
@@ -250,7 +330,7 @@ public class BaseLayoutController {
             if (id.equals(Setor.SEM_SETOR.getId())) continue;
             Setor s = Setor.fromId(id);
             menuVBox1.getChildren().add(
-                    new MenuButtonItem(s.name(), () -> {
+                    new MenuButtonItem(s.getLabel(), () -> {
                         setorMenuAtivo = s.getId();
                         carregarMenuSetor();
                         voltarAoMenuPrincipal();
@@ -326,71 +406,103 @@ public class BaseLayoutController {
         }
     }
 
-    private void menusAdministrativo() {
-        setorLabel.setText("Administrativo");
-        addMenuButton("Utilizadores", "/views/utilizadores.fxml");
-        addMenuButton("Logs do Sistema", "/views/logs.fxml");
-    }
+    private final Map<String, Pair<String, Consumer<Object>>> menuItemsComercial = new LinkedHashMap<>() {{
+        put("Clientes", new Pair<>("/views/Clientes.fxml", controller -> {
+            if (controller instanceof ClientesController c) {
+                ClienteFiltroDto filtro = new ClienteFiltroDto();
+                filtro.setIsDeleted(false);
+                c.setFiltroInicial(filtro);
+            }
+        }));
+        put("Contratos", new Pair<>("/views/Contratos.fxml", controller -> {}));
+        put("Solicitações Energéticas", new Pair<>("/views/SolicitacoesEnergeticas.fxml", controller -> {
+            if (controller instanceof SolicitacoesEnergeticasController c) {
+                SolicitacaoEnergeticaFiltroDto filtro = new SolicitacaoEnergeticaFiltroDto();
+                filtro.setIsDeleted(false);
+                c.setFiltroInicial(filtro);
+            }
+        }));
+        put("Suporte Técnico", new Pair<>("/views/SuporteTecnico.fxml", controller -> {}));
+    }};
+
 
     private void menusComercial() {
         setorLabel.setText("Comercial");
-        addMenuButton("Clientes", "/views/Clientes.fxml");
-        addMenuButton("Contratos", "/views/Contratos.fxml"); // Contratos Extra
-        addMenuButton("Solicitações Energéticas", "/views/SolicitacoesEnergeticas.fxml");
-        addMenuButton("Suporte Técnico", "/views/SuporteTecnico.fxml");
+
+        menuItemsComercial.forEach((nome, par) -> {
+            String fxml = par.getKey();
+            Consumer<Object> callback = par.getValue();
+            addMenuButton(nome, fxml, callback);
+        });
     }
 
-    private void menusFinanceiro() {
-        setorLabel.setText("Financeiro");
-        addMenuButton("Clientes", "/views/Clientes.fxml");
-        addMenuButton("Contratos", "/views/Contratos.fxml"); // Contratos Extra
-        addMenuButton("Faturas", "/views/Faturas.fxml");
+    private void addMenuButton(String nome, String fxmlPath, Consumer<Object> controllerCallback) {
+        MenuButtonItem item = new MenuButtonItem(nome, () -> {
+            navigateTo(fxmlPath, controllerCallback, false);
+            highlightMenu(nome);
+        });
+        menuVBox.getChildren().add(item);
+        botoesMenu.add(item.getButton());
     }
 
-    private void menusProducaoCentral() {
-        setorLabel.setText("Produção - Central");
-        addMenuButton("Centrais", "/views/Centrais.fxml");
-        addMenuButton("Contratos", "/views/Contratos.fxml");
-    }
 
-    private void menusProducaoGerador() {
-        setorLabel.setText("Produção - Gerador");
-        addMenuButton("Pedidos Geração", "/views/PedidosGeracao.fxml");
-    }
-
-    private void menusInspecao() {
-        setorLabel.setText("Inspeção");
-        addMenuButton("Inspeções", "/views/inspecoes.fxml");
-        addMenuButton("Relatórios Inspeção", "/views/relatorios_inspecao.fxml");
-    }
-
-    private void menusPlaneamento() {
-        setorLabel.setText("Planeamento");
-        addMenuButton("Planeamento", "/views/planeamento.fxml");
-        addMenuButton("Cronogramas", "/views/cronogramas.fxml");
-    }
-
-    private void menusManutencao() {
-        setorLabel.setText("Manutenção");
-        addMenuButton("Avarias", "/views/avarias.fxml");
-        addMenuButton("Intervenções", "/views/intervencoes.fxml");
-    }
-
-    private void menusArmazem() {
-        setorLabel.setText("Armazém");
-        addMenuButton("Materiais", "/views/materiais.fxml");
-        addMenuButton("Stock", "/views/stock.fxml");
-    }
-
-    private void menusConstrucao() {
-        setorLabel.setText("Construção");
-        addMenuButton("Projetos de Obra", "/views/projetos_obra.fxml");
-        addMenuButton("Relatórios de Obra", "/views/relatorios_obra.fxml");
-    }
-
-    private void menusRh() {
-        setorLabel.setText("Recursos Humanos");
-        addMenuButton("Funcionários", "/views/funcionarios.fxml");
-        addMenuButton("Presenças", "/views/presencas.fxml");
-    }
+//    private void menusAdministrativo() {
+//        setorLabel.setText("Administrativo");
+//        addMenuButton("Utilizadores", "/views/utilizadores.fxml");
+//        addMenuButton("Logs do Sistema", "/views/logs.fxml");
+//    }
+//
+//    private void menusFinanceiro() {
+//        setorLabel.setText("Financeiro");
+//        addMenuButton("Clientes", "/views/Clientes.fxml");
+//        addMenuButton("Contratos", "/views/Contratos.fxml");
+//        addMenuButton("Faturas", "/views/Faturas.fxml");
+//    }
+//
+//    private void menusProducaoCentral() {
+//        setorLabel.setText("Produção - Central");
+//        addMenuButton("Centrais", "/views/Centrais.fxml");
+//        addMenuButton("Contratos", "/views/Contratos.fxml");
+//    }
+//
+//    private void menusProducaoGerador() {
+//        setorLabel.setText("Produção - Gerador");
+//        addMenuButton("Pedidos Geração", "/views/PedidosGeracao.fxml");
+//    }
+//
+//    private void menusInspecao() {
+//        setorLabel.setText("Inspeção");
+//        addMenuButton("Inspeções", "/views/inspecoes.fxml");
+//        addMenuButton("Relatórios Inspeção", "/views/relatorios_inspecao.fxml");
+//    }
+//
+//    private void menusPlaneamento() {
+//        setorLabel.setText("Planeamento");
+//        addMenuButton("Planeamento", "/views/planeamento.fxml");
+//        addMenuButton("Cronogramas", "/views/cronogramas.fxml");
+//    }
+//
+//    private void menusManutencao() {
+//        setorLabel.setText("Manutenção");
+//        addMenuButton("Avarias", "/views/avarias.fxml");
+//        addMenuButton("Intervenções", "/views/intervencoes.fxml");
+//    }
+//
+//    private void menusArmazem() {
+//        setorLabel.setText("Armazém");
+//        addMenuButton("Materiais", "/views/materiais.fxml");
+//        addMenuButton("Stock", "/views/stock.fxml");
+//    }
+//
+//    private void menusConstrucao() {
+//        setorLabel.setText("Construção");
+//        addMenuButton("Projetos de Obra", "/views/projetos_obra.fxml");
+//        addMenuButton("Relatórios de Obra", "/views/relatorios_obra.fxml");
+//    }
+//
+//    private void menusRh() {
+//        setorLabel.setText("Recursos Humanos");
+//        addMenuButton("Funcionários", "/views/funcionarios.fxml");
+//        addMenuButton("Presenças", "/views/presencas.fxml");
+//    }
 }

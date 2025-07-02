@@ -3,10 +3,11 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -17,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="basePane" prefHeight="660.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cper_desktop.controllers.ClientesController">
+<StackPane fx:id="basePane" prefHeight="660.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cper_desktop.controllers.SolicitacoesEnergeticasController">
    <children>
       <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: #f9f9f9;">
          <content>
@@ -108,7 +109,7 @@
                         <Region prefHeight="10.0" />
                      </children>
                   </VBox>
-                  <StackPane alignment="BOTTOM_CENTER" style="-fx-background-color: #f9f9f9;" translateY="-160.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <StackPane alignment="BOTTOM_CENTER" style="-fx-background-color: #f9f9f9;" translateY="-125.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
                         <StackPane fx:id="filtersMenu" alignment="BOTTOM_CENTER" maxHeight="250.0" maxWidth="1000.0" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15;">
                            <children>
@@ -135,22 +136,22 @@
                                        <children>
                                           <VBox spacing="10.0">
                                              <children>
-                                                <Label text="Nome:">
+                                                <Label text="Data Início:">
                                                    <font>
                                                       <Font name="Segoe UI Bold" size="13.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="nomeField" prefHeight="30.0" prefWidth="385.0" style="-fx-background-color: #ffffff; -fx-background-radius: 12; -fx-background-insets: 0; -fx-border-color: #ffffff; -fx-border-radius: 10; -fx-border-style: solid; -fx-border-width: 1;" />
+                                                <DatePicker fx:id="dataIni" prefHeight="30.0" prefWidth="317.5" />
                                              </children>
                                           </VBox>
                                           <VBox spacing="10.0">
                                              <children>
-                                                <Label text="Telefone:">
+                                                <Label text="Data Fim:">
                                                    <font>
                                                       <Font name="Segoe UI Bold" size="13.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="telefoneField" prefHeight="30.0" prefWidth="250.0" style="-fx-background-color: #ffffff; -fx-background-radius: 12; -fx-background-insets: 0; -fx-border-color: #ffffff; -fx-border-radius: 10; -fx-border-style: solid; -fx-border-width: 1;" />
+                                                <DatePicker fx:id="dataFim" prefHeight="30.0" prefWidth="317.5" />
                                              </children>
                                           </VBox>
                                        </children>
@@ -163,22 +164,22 @@
                                                    <children>
                                                       <VBox spacing="10.0">
                                                          <children>
-                                                            <Label text="E-mail:">
+                                                            <Label text="Prioridade:">
                                                                <font>
                                                                   <Font name="Segoe UI Bold" size="13.0" />
                                                                </font>
                                                             </Label>
-                                                            <TextField fx:id="emailField" prefHeight="30.0" prefWidth="385.0" style="-fx-background-color: #ffffff; -fx-background-radius: 12; -fx-background-insets: 0; -fx-border-color: #ffffff; -fx-border-radius: 10; -fx-border-style: solid; -fx-border-width: 1;" />
+                                                            <ComboBox fx:id="prioridadeCombo" prefHeight="30.0" prefWidth="317.5" />
                                                          </children>
                                                       </VBox>
                                                       <VBox spacing="10.0">
                                                          <children>
-                                                            <Label text="NIF:">
+                                                            <Label text="Estado:">
                                                                <font>
                                                                   <Font name="Segoe UI Bold" size="13.0" />
                                                                </font>
                                                             </Label>
-                                                            <TextField fx:id="nifField" prefHeight="30.0" prefWidth="250.0" style="-fx-background-color: #ffffff; -fx-background-radius: 12; -fx-background-insets: 0; -fx-border-color: #ffffff; -fx-border-radius: 10; -fx-border-style: solid; -fx-border-width: 1;" />
+                                                            <ComboBox fx:id="estadoCombo" prefHeight="30.0" prefWidth="317.5" />
                                                          </children>
                                                       </VBox>
                                                    </children>
@@ -200,28 +201,24 @@
                               </VBox>
                            </children>
                         </StackPane>
-                        <StackPane fx:id="sortMenu" alignment="TOP_CENTER" maxHeight="285.0" maxWidth="150.0" style="-fx-background-color: #e1e3e1; -fx-background-insets: 0; -fx-background-radius: 15; -fx-border-color: #d4ab0d; -fx-border-radius: 12; -fx-border-width: 2; -fx-border-style: solid;" translateX="425.0">
+                        <StackPane fx:id="sortMenu" alignment="TOP_CENTER" maxHeight="0.0" maxWidth="150.0" style="-fx-background-color: #e1e3e1; -fx-background-insets: 0; -fx-background-radius: 15; -fx-border-color: #d4ab0d; -fx-border-radius: 12; -fx-border-width: 2; -fx-border-style: solid;" translateX="425.0">
                            <children>
                               <VBox>
                                  <StackPane.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="55.0" />
                                  </StackPane.margin>
                                  <children>
-                                    <Button fx:id="nameAscBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Nome ( A - Z )" textAlignment="CENTER" />
+                                    <Button fx:id="dataAscBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Data ( ASC )" textAlignment="CENTER" />
                                     <Separator maxWidth="1.7976931348623157E308" />
-                                    <Button fx:id="nameDescBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Nome ( Z - A )" textAlignment="CENTER" />
+                                    <Button fx:id="dataDescBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Data ( DESC )" textAlignment="CENTER" />
                                     <Separator maxWidth="1.7976931348623157E308" />
-                                    <Button fx:id="emailAscBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="E-Mail ( A - Z )" textAlignment="CENTER" />
+                                    <Button fx:id="prioridadeAscBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Prioridade ( ASC )" textAlignment="CENTER" />
                                     <Separator maxWidth="1.7976931348623157E308" />
-                                    <Button fx:id="emailDescBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="E-Mail ( Z - A )" textAlignment="CENTER" />
+                                    <Button fx:id="prioridadeDescBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Prioridade ( DESC )" textAlignment="CENTER" />
                                     <Separator maxWidth="1.7976931348623157E308" />
-                                    <Button fx:id="phoneAscBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Telefone ( ASC )" textAlignment="CENTER" />
+                                    <Button fx:id="estadoAscBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Estado ( ASC )" textAlignment="CENTER" />
                                     <Separator maxWidth="1.7976931348623157E308" />
-                                    <Button fx:id="phoneDescBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Telefone ( DESC )" textAlignment="CENTER" />
-                                    <Separator maxWidth="1.7976931348623157E308" />
-                                    <Button fx:id="nifAscBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="NIF ( ASC )" textAlignment="CENTER" />
-                                    <Separator maxWidth="1.7976931348623157E308" />
-                                    <Button fx:id="nifDescBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="NIF ( DESC )" textAlignment="CENTER" />
+                                    <Button fx:id="estadoDescBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Estado ( DESC )" textAlignment="CENTER" />
                                  </children>
                               </VBox>
                            </children>
@@ -240,7 +237,7 @@
                                  </children>
                               </StackPane>
                               <Separator orientation="VERTICAL" prefHeight="200.0" />
-                              <Label text="Clientes">
+                              <Label text="Solicitações">
                                  <font>
                                     <Font name="Segoe UI Bold" size="24.0" />
                                  </font>
@@ -257,7 +254,7 @@
                                              <children>
                                                 <StackPane fx:id="filtersBtn" alignment="CENTER_LEFT">
                                                    <children>
-                                                      <HBox alignment="CENTER" prefHeight="30.0" prefWidth="90.0" spacing="10.0" style="-fx-background-radius: 15; -fx-border-radius: 12;">
+                                                      <HBox alignment="CENTER" prefHeight="30.0" prefWidth="90.0" spacing="10.0">
                                                          <children>
                                                             <ImageView fitHeight="22.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -284,9 +281,9 @@
                                        <children>
                                           <Group>
                                              <children>
-                                                <StackPane fx:id="sortBtn">
+                                                <StackPane fx:id="sortBtn" prefHeight="30.0" prefWidth="120.0">
                                                    <children>
-                                                      <HBox alignment="CENTER" prefHeight="30.0" prefWidth="120.0" spacing="10.0" style="-fx-background-radius: 15; -fx-border-radius: 12;">
+                                                      <HBox alignment="CENTER" spacing="10.0">
                                                          <children>
                                                             <ImageView fitHeight="22.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>

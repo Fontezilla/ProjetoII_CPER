@@ -15,7 +15,6 @@ public class ToastNotificationController {
 
     @FXML
     public void initialize() {
-        // Garante que o toast começa invisível
         Platform.runLater(() -> {
             root.setVisible(false);
             root.setOpacity(0.0);
@@ -23,7 +22,6 @@ public class ToastNotificationController {
     }
 
     public void showMessage(String title, String desc, String type) {
-
         titulo.setText(title);
         descricao.setText(desc);
 
@@ -37,19 +35,23 @@ public class ToastNotificationController {
         fadeIn.setToValue(1);
 
         fadeIn.setOnFinished(e -> {
-
             FadeTransition fadeOut = new FadeTransition(Duration.millis(300), root);
             fadeOut.setDelay(Duration.seconds(2));
             fadeOut.setFromValue(1);
             fadeOut.setToValue(0);
-            fadeOut.setOnFinished(ev -> {
-                root.setVisible(false);
-            });
-
+            fadeOut.setOnFinished(ev -> root.setVisible(false));
             fadeOut.play();
         });
 
         fadeIn.play();
+    }
+
+    public void showSuccess(String title, String desc) {
+        showMessage(title, desc, "success");
+    }
+
+    public void showError(String title, String desc) {
+        showMessage(title, desc, "error");
     }
 
     public Pane getRoot() {

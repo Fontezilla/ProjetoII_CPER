@@ -1,6 +1,7 @@
 package com.example.cper_core.dtos.cliente;
 
 import com.example.cper_core.dtos.OnCreate;
+import com.example.cper_core.dtos.OnUpdate;
 import com.example.cper_core.dtos.endereco.EnderecoDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -28,7 +29,7 @@ public class ClienteDetailsExtendedDto extends ClienteDetailsDto {
     private BigDecimal consumoMedio;
 
     @NotNull(groups = OnCreate.class, message = "O número da porta é obrigatório")
-    @Size(groups = OnCreate.class, max = 10, message = "O número da porta deve ter no máximo 10 caracteres")
+    @Size(max = 10, message = "O número da porta deve ter no máximo 10 caracteres", groups = {OnCreate.class, OnUpdate.class})
     private String nPorta;
 
     @NotNull(groups = OnCreate.class, message = "O endereço é obrigatório")
