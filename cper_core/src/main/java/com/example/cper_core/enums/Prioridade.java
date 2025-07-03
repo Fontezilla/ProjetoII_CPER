@@ -30,6 +30,10 @@ public enum Prioridade implements EnumWithId<Prioridade> {
         return EnumWithId.fromName(Prioridade.class, name);
     }
 
+    public static Prioridade fromLabel(String label) {
+        return EnumWithId.fromLabel(Prioridade.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

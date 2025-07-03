@@ -36,4 +36,11 @@ public interface EnumWithId<T extends Enum<T> & EnumWithId<T>> {
         }
         throw new IllegalArgumentException("Nome inválido para enum " + enumClass.getSimpleName() + ": " + name);
     }
+
+    static <E extends Enum<E> & EnumWithId<E>> E fromLabel(Class<E> enumClass, String label) {
+        for (E e : enumClass.getEnumConstants()) {
+            if (e.getLabel().equalsIgnoreCase(label.trim())) return e;
+        }
+        throw new IllegalArgumentException("Label inválido para enum " + enumClass.getSimpleName() + ": " + label);
+    }
 }

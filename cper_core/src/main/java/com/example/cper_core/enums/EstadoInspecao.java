@@ -31,6 +31,10 @@ public enum EstadoInspecao implements EnumWithId<EstadoInspecao> {
         return EnumWithId.fromName(EstadoInspecao.class, name);
     }
 
+    public static EstadoInspecao fromLabel(String label) {
+        return EnumWithId.fromLabel(EstadoInspecao.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

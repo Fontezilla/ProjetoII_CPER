@@ -30,6 +30,10 @@ public enum EstadoTicket implements EnumWithId<EstadoTicket> {
         return EnumWithId.fromName(EstadoTicket.class, name);
     }
 
+    public static EstadoTicket fromLabel(String label) {
+        return EnumWithId.fromLabel(EstadoTicket.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

@@ -37,6 +37,10 @@ public enum Setor implements EnumWithId<Setor> {
         return EnumWithId.fromName(Setor.class, name);
     }
 
+    public static Setor fromLabel(String label) {
+        return EnumWithId.fromLabel(Setor.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

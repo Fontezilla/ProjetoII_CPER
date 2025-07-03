@@ -31,6 +31,10 @@ public enum EstadoAvaria implements EnumWithId<EstadoAvaria> {
         return EnumWithId.fromName(EstadoAvaria.class, name);
     }
 
+    public static EstadoAvaria fromLabel(String label) {
+        return EnumWithId.fromLabel(EstadoAvaria.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

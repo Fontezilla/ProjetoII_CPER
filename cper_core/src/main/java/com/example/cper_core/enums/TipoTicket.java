@@ -28,6 +28,10 @@ public enum TipoTicket implements EnumWithId<TipoTicket> {
         return EnumWithId.fromName(TipoTicket.class, name);
     }
 
+    public static TipoTicket fromLabel(String label) {
+        return EnumWithId.fromLabel(TipoTicket.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

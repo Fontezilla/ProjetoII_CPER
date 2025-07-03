@@ -31,6 +31,10 @@ public enum EstadoCentro implements EnumWithId<EstadoCentro> {
         return EnumWithId.fromName(EstadoCentro.class, name);
     }
 
+    public static EstadoCentro fromLabel(String label) {
+        return EnumWithId.fromLabel(EstadoCentro.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

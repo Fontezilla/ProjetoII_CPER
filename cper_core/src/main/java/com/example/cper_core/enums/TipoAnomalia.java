@@ -40,6 +40,10 @@ public enum TipoAnomalia implements EnumWithId<TipoAnomalia> {
         return EnumWithId.fromName(TipoAnomalia.class, name);
     }
 
+    public static TipoAnomalia fromLabel(String label) {
+        return EnumWithId.fromLabel(TipoAnomalia.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

@@ -31,6 +31,10 @@ public enum EstadoAnomalia implements EnumWithId<EstadoAnomalia> {
         return EnumWithId.fromName(EstadoAnomalia.class, name);
     }
 
+    public static EstadoAnomalia fromLabel(String label) {
+        return EnumWithId.fromLabel(EstadoAnomalia.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

@@ -31,6 +31,10 @@ public enum CategoriaConsumo implements EnumWithId<CategoriaConsumo> {
         return EnumWithId.fromName(CategoriaConsumo.class, name);
     }
 
+    public static CategoriaConsumo fromLabel(String label) {
+        return EnumWithId.fromLabel(CategoriaConsumo.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

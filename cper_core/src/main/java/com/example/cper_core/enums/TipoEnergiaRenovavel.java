@@ -34,6 +34,10 @@ public enum TipoEnergiaRenovavel implements EnumWithId<TipoEnergiaRenovavel> {
         return EnumWithId.fromName(TipoEnergiaRenovavel.class, name);
     }
 
+    public static TipoEnergiaRenovavel fromLabel(String label) {
+        return EnumWithId.fromLabel(TipoEnergiaRenovavel.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

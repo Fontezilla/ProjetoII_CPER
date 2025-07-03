@@ -29,6 +29,10 @@ public enum EstadoFuncionario implements EnumWithId<EstadoFuncionario> {
         return EnumWithId.fromName(EstadoFuncionario.class, name);
     }
 
+    public static EstadoFuncionario fromLabel(String label) {
+        return EnumWithId.fromLabel(EstadoFuncionario.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

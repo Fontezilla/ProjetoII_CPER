@@ -28,6 +28,10 @@ public enum UnidadePeso implements EnumWithId<UnidadePeso> {
         return EnumWithId.fromName(UnidadePeso.class, name);
     }
 
+    public static UnidadePeso fromLabel(String label) {
+        return EnumWithId.fromLabel(UnidadePeso.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

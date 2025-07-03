@@ -31,6 +31,10 @@ public enum EstadoFatura implements EnumWithId<EstadoFatura> {
         return EnumWithId.fromName(EstadoFatura.class, name);
     }
 
+    public static EstadoFatura fromLabel(String label) {
+        return EnumWithId.fromLabel(EstadoFatura.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

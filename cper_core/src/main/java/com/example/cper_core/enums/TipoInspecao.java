@@ -34,6 +34,10 @@ public enum TipoInspecao implements EnumWithId<TipoInspecao> {
         return EnumWithId.fromName(TipoInspecao.class, name);
     }
 
+    public static TipoInspecao fromLabel(String label) {
+        return EnumWithId.fromLabel(TipoInspecao.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

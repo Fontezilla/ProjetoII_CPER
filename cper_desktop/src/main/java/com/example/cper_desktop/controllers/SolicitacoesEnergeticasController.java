@@ -50,8 +50,8 @@ public class SolicitacoesEnergeticasController extends AbstractListController<So
         estadoAscBtn.setOnAction(e -> sortBy("estado", SortDirection.ASC));
         estadoDescBtn.setOnAction(e -> sortBy("estado", SortDirection.DESC));
 
-        for (Prioridade p : Prioridade.values()) prioridadeCombo.getItems().add(p.name());
-        for (EstadoSolicitacaoEnergetica e : EstadoSolicitacaoEnergetica.values()) estadoCombo.getItems().add(e.name());
+        for (Prioridade p : Prioridade.values()) prioridadeCombo.getItems().add(p.getLabel());
+        for (EstadoSolicitacaoEnergetica e : EstadoSolicitacaoEnergetica.values()) estadoCombo.getItems().add(e.getLabel());
 
         applyStyles();
     }

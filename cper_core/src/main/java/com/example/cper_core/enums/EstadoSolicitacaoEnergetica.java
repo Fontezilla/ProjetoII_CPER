@@ -32,6 +32,10 @@ public enum EstadoSolicitacaoEnergetica implements EnumWithId<EstadoSolicitacaoE
         return EnumWithId.fromName(EstadoSolicitacaoEnergetica.class, name);
     }
 
+    public static EstadoSolicitacaoEnergetica fromLabel(String label) {
+        return EnumWithId.fromLabel(EstadoSolicitacaoEnergetica.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

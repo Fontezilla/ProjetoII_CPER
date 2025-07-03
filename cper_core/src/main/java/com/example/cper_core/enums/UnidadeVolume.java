@@ -27,6 +27,10 @@ public enum UnidadeVolume implements EnumWithId<UnidadeVolume> {
         return EnumWithId.fromName(UnidadeVolume.class, name);
     }
 
+    public static UnidadeVolume fromLabel(String label) {
+        return EnumWithId.fromLabel(UnidadeVolume.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

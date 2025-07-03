@@ -30,6 +30,10 @@ public enum EstadoContrato implements EnumWithId<EstadoContrato> {
         return EnumWithId.fromName(EstadoContrato.class, name);
     }
 
+    public static EstadoContrato fromLabel(String label) {
+        return EnumWithId.fromLabel(EstadoContrato.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

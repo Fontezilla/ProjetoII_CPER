@@ -27,6 +27,10 @@ public enum EstadoSolicitacaoMaterial implements EnumWithId<EstadoSolicitacaoMat
         return EnumWithId.fromName(EstadoSolicitacaoMaterial.class, name);
     }
 
+    public static EstadoSolicitacaoMaterial fromLabel(String label) {
+        return EnumWithId.fromLabel(EstadoSolicitacaoMaterial.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

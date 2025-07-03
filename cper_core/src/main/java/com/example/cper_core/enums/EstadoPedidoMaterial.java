@@ -28,6 +28,10 @@ public enum EstadoPedidoMaterial implements EnumWithId<EstadoPedidoMaterial> {
         return EnumWithId.fromName(EstadoPedidoMaterial.class, name);
     }
 
+    public static EstadoPedidoMaterial fromLabel(String label) {
+        return EnumWithId.fromLabel(EstadoPedidoMaterial.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

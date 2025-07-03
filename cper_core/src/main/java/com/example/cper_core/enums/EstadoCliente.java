@@ -27,6 +27,10 @@ public enum EstadoCliente implements EnumWithId<EstadoCliente> {
         return EnumWithId.fromName(EstadoCliente.class, name);
     }
 
+    public static EstadoCliente fromLabel(String label) {
+        return EnumWithId.fromLabel(EstadoCliente.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

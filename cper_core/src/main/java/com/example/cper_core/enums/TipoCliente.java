@@ -31,6 +31,10 @@ public enum TipoCliente implements EnumWithId<TipoCliente> {
         return EnumWithId.fromName(TipoCliente.class, name);
     }
 
+    public static TipoCliente fromLabel(String label) {
+        return EnumWithId.fromLabel(TipoCliente.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

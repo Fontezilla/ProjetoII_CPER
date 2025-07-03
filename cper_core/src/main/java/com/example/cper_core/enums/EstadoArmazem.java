@@ -30,6 +30,10 @@ public enum EstadoArmazem implements EnumWithId<EstadoArmazem> {
         return EnumWithId.fromName(EstadoArmazem.class, name);
     }
 
+    public static EstadoArmazem fromLabel(String label) {
+        return EnumWithId.fromLabel(EstadoArmazem.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();

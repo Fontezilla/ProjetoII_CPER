@@ -30,6 +30,10 @@ public enum TipoContrato implements EnumWithId<TipoContrato> {
         return EnumWithId.fromName(TipoContrato.class, name);
     }
 
+    public static TipoContrato fromLabel(String label) {
+        return EnumWithId.fromLabel(TipoContrato.class, label);
+    }
+
     @Override
     public String toString() {
         return getLabel();
