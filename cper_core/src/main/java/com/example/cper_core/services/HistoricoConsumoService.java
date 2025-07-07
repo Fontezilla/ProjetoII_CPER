@@ -11,6 +11,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.OffsetDateTime;
+import java.util.List;
+
 @Service
 @Transactional
 public class HistoricoConsumoService extends AbstractXService<
@@ -62,5 +67,52 @@ public class HistoricoConsumoService extends AbstractXService<
     @Override
     protected void marcarComoEliminado(HistoricoConsumo entity) {
         entity.setIsDeleted(true);
+    }
+
+    public HistoricoConsumoMetricasDto calcularMetricas(HistoricoConsumoFiltroDto filtro) {
+        List<HistoricoConsumo> dados = specRepository.findAll(getSpecificationFromFiltro(filtro));
+
+        HistoricoConsumoMetricasDto dto = new HistoricoConsumoMetricasDto();
+
+        if (dados.isEmpty()) return dto;
+
+        BigDecimal energiaTotal = BigDecimal.ZERO;
+        BigDecimal consumoTotal = BigDecimal.ZERO;
+        BigDecimal energiaMax = null;
+        BigDecimal energiaMin = null;
+        OffsetDateTime dataMin = null;
+        OffsetDateTime dataMax = null;
+
+        for (HistoricoConsumo h : dados) {
+            if (h.getEnergiaTotal() != null) {
+                energiaTotal = energiaTotal.add(h.getEnergiaTotal());
+
+                if (energiaMax == null || h.getEnergiaTotal().compareTo(energiaMax) > 0)
+                    energiaMax = h.getEnergiaTotal();
+
+                if (energiaMin == null || h.getEnergiaTotal().compareTo(energiaMin) < 0)
+                    energiaMin = h.getEnergiaTotal();
+            }
+
+            if (h.getConsumoPorHora() != null)
+                consumoTotal = consumoTotal.add(h.getConsumoPorHora());
+
+            OffsetDateTime data = h.getDataRegisto();
+            if (dataMin == null || data.isBefore(dataMin)) dataMin = data;
+            if (dataMax == null || data.isAfter(dataMax)) dataMax = data;
+        }
+
+        dto.setTotalRegistos(dados.size());
+        dto.setEnergiaTotal(energiaTotal);
+        dto.setEnergiaMaxima(energiaMax);
+        dto.setEnergiaMinima(energiaMin);
+        dto.setDataMaisAntiga(dataMin);
+        dto.setDataMaisRecente(dataMax);
+
+        dto.setConsumoMedioPorHora(
+                consumoTotal.divide(BigDecimal.valueOf(dados.size()), 2, RoundingMode.HALF_UP)
+        );
+
+        return dto;
     }
 }

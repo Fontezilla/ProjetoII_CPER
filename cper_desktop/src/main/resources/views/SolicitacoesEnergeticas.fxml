@@ -31,7 +31,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="40.0" prefWidth="1000.0" spacing="10.0">
                                  <children>
-                                    <StackPane alignment="CENTER_LEFT" prefWidth="182.0">
+                                    <StackPane prefWidth="182.0">
                                        <children>
                                           <Label text="TIPO ENERGIA" textAlignment="CENTER">
                                              <font>
@@ -43,7 +43,7 @@
                                           <Insets left="10.0" right="10.0" />
                                        </padding>
                                     </StackPane>
-                                    <StackPane alignment="CENTER_LEFT" prefWidth="182.0">
+                                    <StackPane prefWidth="182.0">
                                        <children>
                                           <Label text="QUANTIDADE" textAlignment="CENTER">
                                              <font>
@@ -55,7 +55,7 @@
                                           <Insets left="10.0" right="10.0" />
                                        </padding>
                                     </StackPane>
-                                    <StackPane alignment="CENTER_LEFT" prefWidth="182.0">
+                                    <StackPane prefWidth="182.0">
                                        <children>
                                           <Label text="QUANTIDADE HORA" textAlignment="CENTER">
                                              <font>
@@ -67,7 +67,7 @@
                                           <Insets left="10.0" right="10.0" />
                                        </padding>
                                     </StackPane>
-                                    <StackPane alignment="CENTER_LEFT" prefWidth="182.0">
+                                    <StackPane prefWidth="182.0">
                                        <children>
                                           <Label text="PRIORIDADE" textAlignment="CENTER">
                                              <font>
@@ -79,7 +79,7 @@
                                           <Insets left="10.0" right="10.0" />
                                        </padding>
                                     </StackPane>
-                                    <StackPane alignment="CENTER_LEFT" prefWidth="182.0">
+                                    <StackPane prefWidth="182.0">
                                        <children>
                                           <Label text="ESTADO" textAlignment="CENTER">
                                              <font>

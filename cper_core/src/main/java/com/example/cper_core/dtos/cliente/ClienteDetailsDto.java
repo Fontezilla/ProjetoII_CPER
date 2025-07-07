@@ -18,6 +18,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class ClienteDetailsDto extends ClienteDto {
 
+    private String codigo;
+
     @NotNull(groups = OnCreate.class, message = "O tipo de cliente é obrigatório")
     private TipoCliente tipoCliente;
 

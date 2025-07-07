@@ -15,6 +15,8 @@ public class CentroProducaoFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private String nome;
 
     private TipoEnergiaRenovavel tipoEnergia;

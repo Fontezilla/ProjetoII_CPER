@@ -19,6 +19,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class CentroProducaoDetailsDto extends CentroProducaoDto {
 
+    private String codigo;
+
     @NotBlank(groups = OnCreate.class, message = "O nome do centro de produção e obrigatorio")
     @Size(max = 255, message = "O nome do centro de produção deve ter no máximo 255 caracteres")
     private String nome;

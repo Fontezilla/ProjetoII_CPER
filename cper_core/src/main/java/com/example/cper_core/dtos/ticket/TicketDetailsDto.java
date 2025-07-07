@@ -18,6 +18,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class TicketDetailsDto extends TicketDto {
 
+    private String codigo;
+
     @NotNull(groups = OnCreate.class, message = "A data de início é obrigatória")
     private OffsetDateTime dataIni;
 

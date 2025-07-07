@@ -17,6 +17,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class FuncionarioDetailsDto extends FuncionarioDto {
 
+    private String codigo;
+
     @NotBlank(groups = OnCreate.class, message = "O nome é obrigatório")
     private String nome;
 

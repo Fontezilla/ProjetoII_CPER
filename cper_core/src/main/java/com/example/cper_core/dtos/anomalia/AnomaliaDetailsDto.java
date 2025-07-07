@@ -17,6 +17,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class AnomaliaDetailsDto extends AnomaliaDto implements Serializable {
 
+    private String codigo;
+
     @NotNull(groups = OnCreate.class, message = "O tipo de anomalia é obrigatório")
     private TipoAnomalia tipoAnomalia;
 

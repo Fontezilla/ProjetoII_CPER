@@ -15,6 +15,8 @@ public class AvariaFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private String titulo;
 
     private String descricao;

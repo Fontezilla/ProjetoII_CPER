@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="basePane" prefHeight="660.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cper_desktop.controllers.ContratosController">
+   <children>
+      <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: #f9f9f9;">
+         <content>
+            <AnchorPane prefHeight="660.0" style="-fx-background-color: #f9f9f9;">
+               <children>
+                  <VBox fx:id="listContent" alignment="TOP_CENTER" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <Region prefHeight="160.0" />
+                        <Pane maxHeight="50.0" maxWidth="1000.0" prefHeight="40.0" prefWidth="1000.0" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #ffd300; -fx-background-radius: 15;">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="40.0" prefWidth="1000.0" spacing="10.0">
+                                 <children>
+                                    <StackPane prefWidth="235.0">
+                                       <children>
+                                          <Label text="TIPO ENERGIA" textAlignment="CENTER">
+                                             <font>
+                                                <Font name="Segoe UI Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <padding>
+                                          <Insets left="10.0" right="10.0" />
+                                       </padding>
+                                    </StackPane>
+                                    <StackPane prefWidth="235.0">
+                                       <children>
+                                          <Label text="QUANTIDADE" textAlignment="CENTER">
+                                             <font>
+                                                <Font name="Segoe UI Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <padding>
+                                          <Insets left="10.0" right="10.0" />
+                                       </padding>
+                                    </StackPane>
+                                    <StackPane prefWidth="235.0">
+                                       <children>
+                                          <Label text="QUANTIDADE HORA" textAlignment="CENTER">
+                                             <font>
+                                                <Font name="Segoe UI Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <padding>
+                                          <Insets left="10.0" right="10.0" />
+                                       </padding>
+                                    </StackPane>
+                                    <StackPane prefWidth="235.0">
+                                       <children>
+                                          <Label text="ESTADO" textAlignment="CENTER">
+                                             <font>
+                                                <Font name="Segoe UI Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <padding>
+                                          <Insets left="10.0" right="10.0" />
+                                       </padding>
+                                    </StackPane>
+                                 </children>
+                              </HBox>
+                           </children></Pane>
+                        <VBox fx:id="list" alignment="TOP_CENTER" maxWidth="1000.0" spacing="10.0">
+                           <padding>
+                              <Insets left="15.0" right="15.0" />
+                           </padding>
+                        </VBox>
+                        <StackPane fx:id="noResultsBox" maxWidth="970.0" prefHeight="200.0" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15;">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                                 <children>
+                                    <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/Alert%20circle.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label text="Não foi encontrado nenhum resultado.">
+                                       <font>
+                                          <Font name="Segoe UI Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                        <StackPane fx:id="paginationBar" maxWidth="1000.0" prefHeight="40.0" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #ffd300; -fx-background-radius: 15;" />
+                        <Region prefHeight="10.0" />
+                     </children>
+                  </VBox>
+                  <StackPane alignment="BOTTOM_CENTER" style="-fx-background-color: #f9f9f9;" translateY="-125.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <StackPane fx:id="filtersMenu" alignment="BOTTOM_CENTER" maxHeight="250.0" maxWidth="1000.0" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15;">
+                           <children>
+                              <VBox alignment="TOP_CENTER" spacing="15.0">
+                                 <StackPane.margin>
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="65.0" />
+                                 </StackPane.margin>
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                       <children>
+                                          <ImageView fitHeight="22.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/Search.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label text="Filtros">
+                                             <font>
+                                                <Font name="Segoe UI Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="10.0">
+                                       <children>
+                                          <VBox spacing="10.0">
+                                             <children>
+                                                <Label text="Data Início (de):">
+                                                   <font>
+                                                      <Font name="Segoe UI Bold" size="13.0" />
+                                                   </font>
+                                                </Label>
+                                                <DatePicker fx:id="dataIniDe" prefHeight="30.0" prefWidth="223.33" />
+                                             </children>
+                                          </VBox>
+                                          <VBox spacing="10.0">
+                                             <children>
+                                                <Label text="Data Início (até):">
+                                                   <font>
+                                                      <Font name="Segoe UI Bold" size="13.0" />
+                                                   </font>
+                                                </Label>
+                                                <DatePicker fx:id="dataIniAte" prefHeight="30.0" prefWidth="223.33" />
+                                             </children>
+                                          </VBox>
+                                          <VBox spacing="10.0">
+                                             <children>
+                                                <Label text="Tipo:">
+                                                   <font>
+                                                      <Font name="Segoe UI Bold" size="13.0" />
+                                                   </font>
+                                                </Label>
+                                                <ComboBox fx:id="tipoCombo" prefHeight="30.0" prefWidth="223.33" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                          <StackPane>
+                                             <children>
+                                                <HBox spacing="10.0">
+                                                   <children>
+                                                      <VBox spacing="10.0">
+                                                         <children>
+                                                            <Label text="Data Fim (de):">
+                                                               <font>
+                                                                  <Font name="Segoe UI Bold" size="13.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <DatePicker fx:id="dataFimDe" prefHeight="30.0" prefWidth="223.33" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox spacing="10.0">
+                                                         <children>
+                                                            <Label text="Data Fim (até):">
+                                                               <font>
+                                                                  <Font name="Segoe UI Bold" size="13.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <DatePicker fx:id="dataFimAte" prefHeight="30.0" prefWidth="223.33" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox spacing="10.0">
+                                                         <children>
+                                                            <Label text="Estado:">
+                                                               <font>
+                                                                  <Font name="Segoe UI Bold" size="13.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <ComboBox fx:id="estadoCombo" prefHeight="30.0" prefWidth="223.33" />
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </StackPane>
+                                          <StackPane alignment="BOTTOM_RIGHT" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Button fx:id="searchBtn" mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" style="-fx-background-color: #ffd300; -fx-background-radius: 10; -fx-background-insets: 0; -fx-border-color: #d4ab0d; -fx-border-radius: 8; -fx-border-width: 2; -fx-border-style: solid;" text="PROCURAR" textAlignment="CENTER">
+                                                   <font>
+                                                      <Font name="Segoe UI Bold" size="14.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                          </StackPane>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </StackPane>
+                        <StackPane fx:id="sortMenu" alignment="TOP_CENTER" maxHeight="0.0" maxWidth="150.0" style="-fx-background-color: #e1e3e1; -fx-background-insets: 0; -fx-background-radius: 15; -fx-border-color: #d4ab0d; -fx-border-radius: 12; -fx-border-width: 2; -fx-border-style: solid;" translateX="425.0">
+                           <children>
+                              <VBox>
+                                 <StackPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="55.0" />
+                                 </StackPane.margin>
+                                 <children>
+                                    <Button fx:id="dataInicioAscBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Data Início ( ASC )" textAlignment="CENTER" />
+                                    <Separator maxWidth="1.7976931348623157E308" />
+                                    <Button fx:id="dataInicioDescBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Data Início ( DESC )" textAlignment="CENTER" />
+                                    <Separator maxWidth="1.7976931348623157E308" />
+                                    <Button fx:id="dataFimAscBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Data Fim ( ASC )" textAlignment="CENTER" />
+                                    <Separator maxWidth="1.7976931348623157E308" />
+                                    <Button fx:id="dataFimDescBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Data Fim ( DESC )" textAlignment="CENTER" />
+                                    <Separator maxWidth="1.7976931348623157E308" />
+                                    <Button fx:id="estadoAscBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Estado ( ASC )" textAlignment="CENTER" />
+                                    <Separator maxWidth="1.7976931348623157E308" />
+                                    <Button fx:id="estadoDescBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: rgba(0,0,0,0);" text="Estado ( DESC )" textAlignment="CENTER" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </StackPane>
+                        <Pane maxHeight="75.0" maxWidth="1000.0" prefHeight="75.0" prefWidth="1000.0" style="-fx-background-color: #f9f9f9;" translateY="-50.0" />
+                        <Pane maxHeight="125.0" maxWidth="1000.0" prefHeight="120.0" prefWidth="1000.0" style="-fx-background-color: #f9f9f9; -fx-background-insets: 0; -fx-background-radius: 15; -fx-border-color: #f9f9f9; -fx-border-radius: 12; -fx-border-width: 2;" />
+                        <HBox alignment="CENTER_LEFT" maxHeight="32.0" maxWidth="1000.0" spacing="10.0" translateY="-71.5">
+                           <children>
+                              <StackPane fx:id="backBtn">
+                                 <children>
+                                    <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/Chevron%20left.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </StackPane>
+                              <Separator orientation="VERTICAL" prefHeight="200.0" />
+                              <Label text="Contratos">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <Pane fx:id="filtersHeaderBar" maxHeight="50.0" maxWidth="1000.0" prefHeight="50.0" prefWidth="1000.0" style="-fx-border-radius: 12; -fx-border-width: 2; -fx-border-color: #d4ab0d; -fx-border-style: solid; -fx-background-color: #ffd300; -fx-background-radius: 15;">
+                           <children>
+                              <HBox prefHeight="50.0" prefWidth="1000.0">
+                                 <children>
+                                    <StackPane alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="500.0">
+                                       <children>
+                                          <Group>
+                                             <children>
+                                                <StackPane fx:id="filtersBtn" alignment="CENTER_LEFT">
+                                                   <children>
+                                                      <HBox alignment="CENTER" prefHeight="30.0" prefWidth="90.0" spacing="10.0">
+                                                         <children>
+                                                            <ImageView fitHeight="22.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../images/slider.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Label text="Filtros">
+                                                               <font>
+                                                                  <Font name="Segoe UI Bold" size="15.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </Group>
+                                       </children>
+                                       <padding>
+                                          <Insets left="20.0" right="20.0" />
+                                       </padding>
+                                    </StackPane>
+                                    <StackPane alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="500.0">
+                                       <children>
+                                          <Group>
+                                             <children>
+                                                <StackPane fx:id="sortBtn" prefHeight="30.0" prefWidth="120.0">
+                                                   <children>
+                                                      <HBox alignment="CENTER" spacing="10.0">
+                                                         <children>
+                                                            <ImageView fitHeight="22.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../images/sort.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                            <Label text="Ordenar por">
+                                                               <font>
+                                                                  <Font name="Segoe UI Bold" size="15.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                </StackPane>
+                                             </children>
+                                          </Group>
+                                       </children>
+                                       <padding>
+                                          <Insets left="20.0" right="20.0" />
+                                       </padding>
+                                    </StackPane>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </Pane>
+                     </children>
+                  </StackPane>
+               </children>
+            </AnchorPane>
+         </content>
+         <padding>
+            <Insets left="20.0" right="35.0" />
+         </padding>
+      </ScrollPane>
+   </children>
+</StackPane>

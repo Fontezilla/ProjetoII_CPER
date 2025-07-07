@@ -35,6 +35,9 @@ public class Resposta {
     @Builder.Default
     private Boolean isCliente = false;
 
+    @Column(name = "codigo")
+    private String codigo;
+
     @Column(name = "is_deleted")
     @Builder.Default
     private Boolean isDeleted = false;

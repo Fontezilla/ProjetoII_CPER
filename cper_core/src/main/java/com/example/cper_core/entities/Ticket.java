@@ -52,6 +52,9 @@ public class Ticket {
     @Builder.Default
     private Boolean isClosed = false;
 
+    @Column(name = "codigo")
+    private String codigo;
+
     @Column(name = "is_deleted")
     @Builder.Default
     private Boolean isDeleted = false;

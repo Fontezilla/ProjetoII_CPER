@@ -49,6 +49,9 @@ public class CentroProducao {
     @Column(name = "estado")
     private Integer estado;
 
+    @Column(name = "codigo")
+    private String codigo;
+
     @Column(name = "n_porta")
     private String nPorta;
 

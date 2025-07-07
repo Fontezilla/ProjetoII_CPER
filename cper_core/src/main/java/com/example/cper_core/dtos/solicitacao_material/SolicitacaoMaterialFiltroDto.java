@@ -13,6 +13,8 @@ public class SolicitacaoMaterialFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private OffsetDateTime dataPedidoInicio;
     private OffsetDateTime dataPedidoFim;
 

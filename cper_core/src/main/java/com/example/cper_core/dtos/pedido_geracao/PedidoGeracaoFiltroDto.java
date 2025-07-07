@@ -16,6 +16,8 @@ public class PedidoGeracaoFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private LocalDate dataCriacaoInicio;
     private LocalDate dataCriacaoFim;
 

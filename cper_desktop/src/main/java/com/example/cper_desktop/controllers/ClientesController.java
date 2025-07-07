@@ -5,6 +5,7 @@ import com.example.cper_core.dtos.cliente.ClienteFiltroDto;
 import com.example.cper_core.services.ClienteService;
 import com.example.cper_desktop.controllers.base.AbstractListController;
 import com.example.cper_desktop.controllers.reusable_components.ListItemController;
+import com.example.cper_desktop.utils.InternalNavigationUtils;
 import com.example.cper_desktop.utils.StyleUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -97,8 +98,7 @@ public class ClientesController extends AbstractListController<ClienteDetailsDto
     @Override
     protected void carregarLista(ClienteFiltroDto filtro) {
         try {
-            Sort.Direction springDirection = sortDirection == SortDirection.ASC ? Sort.Direction.ASC : Sort.Direction.DESC;
-            PageRequest pageRequest = PageRequest.of(currentPage, 20, Sort.by(springDirection, sortField));
+            PageRequest pageRequest = buildPageRequest();
             Page<ClienteDetailsDto> page = clienteService.listFiltered(pageRequest, filtro);
 
             totalPages = page.getTotalPages();
@@ -133,19 +133,11 @@ public class ClientesController extends AbstractListController<ClienteDetailsDto
     }
 
     private void openClientePage(Integer clienteId) {
-        var scene = basePane.getScene();
-        if (scene == null) return;
-
-        var base = scene.getRoot().getProperties().get("baseController");
-        if (base instanceof BaseLayoutController baseLayout) {
-            baseLayout.navigateTo("/views/cliente.fxml", controller -> {
-                if (controller instanceof ClienteController clienteController) {
-                    clienteController.setClienteId(clienteId);
-                }
-            }, true);
-        } else {
-            System.err.println("BaseLayoutController não encontrado na scene.");
-        }
+        InternalNavigationUtils.goTo("/views/cliente.fxml", controller -> {
+            if (controller instanceof ClienteController c) {
+                c.setClienteId(clienteId);
+            }
+        });
     }
 
     @Override

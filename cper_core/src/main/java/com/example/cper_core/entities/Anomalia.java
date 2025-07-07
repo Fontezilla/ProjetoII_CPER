@@ -48,6 +48,9 @@ public class Anomalia {
     @Column(name = "estado")
     private Integer estado;
 
+    @Column(name = "codigo")
+    private String codigo;
+
     @Column(name = "is_deleted")
     @Builder.Default
     private Boolean isDeleted = false;

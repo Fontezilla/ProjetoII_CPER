@@ -1,22 +1,20 @@
 package com.example.cper_desktop.controllers;
 
 import com.example.cper_core.dtos.cliente.ClienteFiltroDto;
+import com.example.cper_core.dtos.contrato.ContratoFiltroDto;
 import com.example.cper_core.dtos.solicitacao_energetica.SolicitacaoEnergeticaFiltroDto;
 import com.example.cper_core.enums.Setor;
 import com.example.cper_desktop.controllers.reusable_components.LoadingOverlayController;
 import com.example.cper_desktop.controllers.reusable_components.MenuButtonItem;
 import com.example.cper_desktop.controllers.reusable_components.ToastNotificationController;
-import com.example.cper_desktop.utils.Navigation;
+import com.example.cper_desktop.utils.InternalNavigationUtils;
+import com.example.cper_desktop.utils.NavigationUtils;
 import com.example.cper_desktop.utils.SessionStorage;
-import com.example.cper_desktop.utils.SpringFXMLLoader;
-import com.example.cper_desktop.utils.ReusableComponentsAware;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -26,14 +24,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import javafx.util.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,28 +41,6 @@ public class BaseLayoutController {
 
     private static final Logger logger = Logger.getLogger(BaseLayoutController.class.getName());
 
-    private final SpringFXMLLoader springFXMLLoader;
-
-    private static class NavigationEntry {
-        String fxmlPath;
-        Consumer<Object> controllerCallback;
-
-        NavigationEntry(String fxmlPath, Consumer<Object> callback) {
-            this.fxmlPath = fxmlPath;
-            this.controllerCallback = callback;
-        }
-    }
-
-    private final Deque<NavigationEntry> navigationStack = new ArrayDeque<>();
-    private boolean preventGoBack = false;
-
-    private LoadingOverlayController loadingOverlayController;
-
-    @Autowired
-    public BaseLayoutController(ApplicationContext context, SpringFXMLLoader springFXMLLoader) {
-        this.springFXMLLoader = springFXMLLoader;
-    }
-
     @FXML private StackPane rootStack;
     @FXML private StackPane mainContent;
     @FXML private VBox menuVBox;
@@ -76,12 +49,13 @@ public class BaseLayoutController {
     @FXML private AnchorPane menuPane;
     @FXML private Label setorLabel;
 
+    private LoadingOverlayController loadingOverlayController;
+    private ToastNotificationController toastController;
+
     private boolean menuAberto = false;
     private Integer setorMenuAtivo;
     private final List<Button> botoesMenu = new ArrayList<>();
     private final Map<Setor, Runnable> menuBuilders = new EnumMap<>(Setor.class);
-
-    private ToastNotificationController toastController;
 
     @FXML
     public void initialize() {
@@ -99,130 +73,19 @@ public class BaseLayoutController {
             logger.warning("Setor principal é nulo. Menu não carregado.");
         }
 
+        // Injetar navegação centralizada
+        InternalNavigationUtils.initialize(this, mainContent, loadingOverlayController, toastController);
+
         Platform.runLater(() -> {
             if (mainContent.getScene() != null) {
                 mainContent.getScene().getStylesheets().add(
                         Objects.requireNonNull(getClass().getResource("/styles/MenuButtonItem.css")).toExternalForm());
-                mainContent.getScene().addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPressed);
             }
 
             if (rootStack.getScene() != null) {
                 rootStack.getScene().getRoot().getProperties().put("baseController", this);
             }
         });
-    }
-
-    private void handleKeyPressed(KeyEvent event) {
-        if (event.getCode() == KeyCode.BACK_SPACE || event.getCode() == KeyCode.ESCAPE) {
-            goBack();
-        }
-    }
-
-    public void clearHistory() {
-        navigationStack.clear();
-    }
-
-    public void setPreventGoBack(boolean prevent) {
-        this.preventGoBack = prevent;
-    }
-
-    public boolean isPreventGoBack() {
-        return preventGoBack;
-    }
-
-    public void goBack() {
-        if (preventGoBack) {
-            System.out.println("⚠ goBack está desativado nesta página.");
-            return;
-        }
-
-        if (!navigationStack.isEmpty()) {
-            navigationStack.pop(); // Remove página atual
-
-            if (!navigationStack.isEmpty()) {
-                NavigationEntry anterior = navigationStack.peek();
-
-                loadingOverlayController.show();
-
-                Task<Parent> reloadTask = new Task<>() {
-                    @Override
-                    protected Parent call() throws Exception {
-                        Parent[] rootOut = new Parent[1];
-                        Object controller = springFXMLLoader.loadWithController(anterior.fxmlPath, rootOut);
-
-                        if (controller instanceof ReusableComponentsAware reusable) {
-                            reusable.setLoadingOverlayController(loadingOverlayController);
-                            reusable.setToastNotificationController(toastController);
-                            reusable.applyInitialStyle();
-                        }
-
-                        if (anterior.controllerCallback != null) {
-                            anterior.controllerCallback.accept(controller);
-                        }
-
-                        return rootOut[0];
-                    }
-                };
-
-                reloadTask.setOnSucceeded(e -> {
-                    mainContent.getChildren().setAll(reloadTask.getValue());
-                    Platform.runLater(() -> loadingOverlayController.hide());
-                });
-
-                reloadTask.setOnFailed(e -> {
-                    loadingOverlayController.hide();
-                    logger.log(Level.SEVERE, "Erro ao recarregar FXML (goBack): " + anterior.fxmlPath, reloadTask.getException());
-                });
-
-                new Thread(reloadTask).start();
-
-            } else {
-                System.out.println("⚠ Stack está vazia após pop. Nenhuma página para voltar.");
-            }
-        } else {
-            System.out.println("⚠ goBack chamado mas stack já está vazia.");
-        }
-    }
-
-    public void navigateTo(String fxmlPath, Consumer<Object> controllerCallback, boolean keepMenuClosed) {
-        loadingOverlayController.show();
-
-        Task<Parent> loadTask = new Task<>() {
-            @Override
-            protected Parent call() throws Exception {
-                Parent[] rootOut = new Parent[1];
-                Object controller = springFXMLLoader.loadWithController(fxmlPath, rootOut);
-
-                if (controller instanceof ReusableComponentsAware reusable) {
-                    reusable.setLoadingOverlayController(loadingOverlayController);
-                    reusable.setToastNotificationController(toastController);
-                    reusable.applyInitialStyle();
-                }
-
-                if (controllerCallback != null) {
-                    Platform.runLater(() -> controllerCallback.accept(controller));
-                }
-
-                return rootOut[0];
-            }
-        };
-
-        loadTask.setOnSucceeded(e -> {
-            navigationStack.push(new NavigationEntry(fxmlPath, controllerCallback));
-
-
-            mainContent.getChildren().setAll(loadTask.getValue());
-
-            Platform.runLater(() -> loadingOverlayController.hide());
-            toggleMenu(keepMenuClosed);
-        });
-
-        loadTask.setOnFailed(e -> {
-            loadingOverlayController.hide();
-            logger.log(Level.SEVERE, "Erro ao carregar FXML: " + fxmlPath, loadTask.getException());
-        });
-
-        new Thread(loadTask).start();
     }
 
     @FXML
@@ -241,13 +104,13 @@ public class BaseLayoutController {
 
     @FXML
     private void onSettingsClick() {
-        navigateTo("/views/perfil.fxml", null, true);
+        InternalNavigationUtils.goTo("/views/perfil.fxml");
     }
 
     @FXML
     private void onLogOutClick() {
         SessionStorage.clear();
-        Navigation.goTo("Login.fxml");
+        NavigationUtils.goTo("Login.fxml");
     }
 
     private void carregarOverlay() {
@@ -277,16 +140,16 @@ public class BaseLayoutController {
 
     private void inicializarMenuBuilders() {
 //        menuBuilders.put(Setor.ADMINISTRATIVO, this::menusAdministrativo);
-        menuBuilders.put(Setor.COMERCIAL,        this::menusComercial);
-//        menuBuilders.put(Setor.FINANCEIRO,       this::menusFinanceiro);
+        menuBuilders.put(Setor.COMERCIAL, this::menusComercial);
+//        menuBuilders.put(Setor.FINANCEIRO, this::menusFinanceiro);
 //        menuBuilders.put(Setor.PRODUCAO_CENTRAL, this::menusProducaoCentral);
 //        menuBuilders.put(Setor.PRODUCAO_GERADOR, this::menusProducaoGerador);
-//        menuBuilders.put(Setor.INSPECAO,         this::menusInspecao);
-//        menuBuilders.put(Setor.PLANEAMENTO,      this::menusPlaneamento);
-//        menuBuilders.put(Setor.MANUTENCAO,       this::menusManutencao);
-//        menuBuilders.put(Setor.ARMAZEM,          this::menusArmazem);
-//        menuBuilders.put(Setor.CONSTRUCAO,       this::menusConstrucao);
-//        menuBuilders.put(Setor.RH,               this::menusRh);
+//        menuBuilders.put(Setor.INSPECAO, this::menusInspecao);
+//        menuBuilders.put(Setor.PLANEAMENTO, this::menusPlaneamento);
+//        menuBuilders.put(Setor.MANUTENCAO, this::menusManutencao);
+//        menuBuilders.put(Setor.ARMAZEM, this::menusArmazem);
+//        menuBuilders.put(Setor.CONSTRUCAO, this::menusConstrucao);
+//        menuBuilders.put(Setor.RH, this::menusRh);
     }
 
     private void carregarMenuSetor() {
@@ -414,7 +277,13 @@ public class BaseLayoutController {
                 c.setFiltroInicial(filtro);
             }
         }));
-        put("Contratos", new Pair<>("/views/Contratos.fxml", controller -> {}));
+        put("Contratos", new Pair<>("/views/Contratos.fxml", controller -> {
+            if (controller instanceof ContratosController c) {
+                ContratoFiltroDto filtro = new ContratoFiltroDto();
+                filtro.setIsDeleted(false);
+                c.setFiltroInicial(filtro);
+            }
+        }));
         put("Solicitações Energéticas", new Pair<>("/views/SolicitacoesEnergeticas.fxml", controller -> {
             if (controller instanceof SolicitacoesEnergeticasController c) {
                 SolicitacaoEnergeticaFiltroDto filtro = new SolicitacaoEnergeticaFiltroDto();
@@ -424,7 +293,6 @@ public class BaseLayoutController {
         }));
         put("Suporte Técnico", new Pair<>("/views/SuporteTecnico.fxml", controller -> {}));
     }};
-
 
     private void menusComercial() {
         setorLabel.setText("Comercial");
@@ -438,7 +306,7 @@ public class BaseLayoutController {
 
     private void addMenuButton(String nome, String fxmlPath, Consumer<Object> controllerCallback) {
         MenuButtonItem item = new MenuButtonItem(nome, () -> {
-            navigateTo(fxmlPath, controllerCallback, false);
+            InternalNavigationUtils.goTo(fxmlPath, controllerCallback);
             highlightMenu(nome);
         });
         menuVBox.getChildren().add(item);

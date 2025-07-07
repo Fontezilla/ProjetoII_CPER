@@ -17,6 +17,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class ContratoDetailsDto extends ContratoDto {
 
+    private String codigo;
+
     @NotNull(groups = OnCreate.class, message = "O tipo de contrato é obrigatório")
     private TipoContrato tipoContrato;
 

@@ -15,6 +15,8 @@ public class ClienteFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private String nome;
     private String nif;
     private String email;

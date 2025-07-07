@@ -51,6 +51,9 @@ public class Material {
     @Column(name = "volume", precision = 20, scale = 2)
     private BigDecimal volume;
 
+    @Column(name = "codigo")
+    private String codigo;
+
     @Column(name = "is_deleted")
     @Builder.Default
     private Boolean isDeleted = false;

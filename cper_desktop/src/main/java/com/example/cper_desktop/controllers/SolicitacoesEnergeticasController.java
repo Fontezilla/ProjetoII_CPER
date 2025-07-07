@@ -78,9 +78,18 @@ public class SolicitacoesEnergeticasController extends AbstractListController<So
             filtroAtual.setDataSolicitacaoFim(dataFim.getValue().plusDays(1).atStartOfDay().atOffset(ZoneOffset.UTC));
 
         if (prioridadeCombo.getValue() != null)
-            filtroAtual.setPrioridade(Prioridade.valueOf(prioridadeCombo.getValue()));
+            try{
+                filtroAtual.setPrioridade(Prioridade.fromLabel(prioridadeCombo.getValue()));
+            } catch (IllegalArgumentException e) {
+                System.err.println("Prioridade inválida: " + prioridadeCombo.getValue());
+            }
         if (estadoCombo.getValue() != null)
-            filtroAtual.setEstado(EstadoSolicitacaoEnergetica.valueOf(estadoCombo.getValue()));
+            try{
+                filtroAtual.setEstado(EstadoSolicitacaoEnergetica.fromLabel(estadoCombo.getValue()));
+            } catch (IllegalArgumentException e) {
+                System.err.println("Estado inválido: " + estadoCombo.getValue());
+            }
+
 
         currentPage = 0;
         toggleFilters();
@@ -115,8 +124,7 @@ public class SolicitacoesEnergeticasController extends AbstractListController<So
     @Override
     protected void carregarLista(SolicitacaoEnergeticaFiltroDto filtro) {
         try {
-            Sort.Direction springDirection = sortDirection == SortDirection.ASC ? Sort.Direction.ASC : Sort.Direction.DESC;
-            PageRequest pageRequest = PageRequest.of(currentPage, 20, Sort.by(springDirection, sortField));
+            PageRequest pageRequest = buildPageRequest();
             Page<SolicitacaoEnergeticaDetailsDto> page = solicitacaoService.listFiltered(pageRequest, filtro);
 
             totalPages = page.getTotalPages();
@@ -129,6 +137,7 @@ public class SolicitacoesEnergeticasController extends AbstractListController<So
         }
     }
 
+
     @Override
     protected Node createListItem(SolicitacaoEnergeticaDetailsDto dto) {
         try {
@@ -138,11 +147,11 @@ public class SolicitacoesEnergeticasController extends AbstractListController<So
 
             controller.setDataComLarguras(
                     List.of(
-                            dto.getTipoEnergia() != null ? dto.getTipoEnergia().name() : "N/A",
+                            dto.getTipoEnergia() != null ? dto.getTipoEnergia().getLabel() : "N/A",
                             dto.getQtdSolicitada() != null ? dto.getQtdSolicitada().toString() : "N/A",
                             dto.getQtdSolicitadaH() != null ? dto.getQtdSolicitadaH().toString() : "N/A",
-                            dto.getPrioridade() != null ? dto.getPrioridade().name() : "N/A",
-                            dto.getEstado() != null ? dto.getEstado().name() : "N/A"
+                            dto.getPrioridade() != null ? dto.getPrioridade().getLabel() : "N/A",
+                            dto.getEstado() != null ? dto.getEstado().getLabel() : "N/A"
                     ),
                     List.of(182.0, 182.0, 182.0, 182.0, 182.0),
                     clicked -> openSolicitacaoPage(dto.getId())
@@ -165,7 +174,7 @@ public class SolicitacoesEnergeticasController extends AbstractListController<So
 //                if (controller instanceof SolicitacaoController sc) {
 //                    sc.setSolicitacaoId(id);
 //                }
-//            }, true);
+//            }, trvaue);
 //        } else {
 //            System.err.println("BaseLayoutController não encontrado na scene.");
 //        }

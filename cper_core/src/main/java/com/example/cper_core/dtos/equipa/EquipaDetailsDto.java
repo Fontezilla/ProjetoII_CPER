@@ -17,6 +17,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class EquipaDetailsDto extends EquipaDto {
 
+    private String codigo;
+
     @NotBlank(groups = OnCreate.class, message = "O nome é obrigatório")
     @Size(max = 255, groups = OnCreate.class, message = "O nome deve ter no máximo 255 caracteres")
     private String nome;

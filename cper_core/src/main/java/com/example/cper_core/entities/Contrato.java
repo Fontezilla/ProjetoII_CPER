@@ -55,6 +55,18 @@ public class Contrato {
     @Column(name = "n_porta", length = 10)
     private String nPorta;
 
+    @Column(name = "v_electricidade", nullable = false)
+    private BigDecimal vElectricidade;
+
+    @Column(name = "taxa", nullable = false)
+    private Integer taxa;
+
+    @Column(name = "requer_validacao", nullable = false)
+    private Boolean requerValidacao;
+
+    @Column(name = "codigo")
+    private String codigo;
+
     @Column(name = "is_deleted")
     @Builder.Default
     private Boolean isDeleted = false;

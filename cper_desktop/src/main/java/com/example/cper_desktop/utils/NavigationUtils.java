@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 
-public class Navigation {
+public class NavigationUtils {
 
     private static Stage primaryStage;
     private static ApplicationContext springContext;
@@ -20,7 +20,7 @@ public class Navigation {
 
     public static void goTo(String fxmlPath) {
         try {
-            FXMLLoader loader = new FXMLLoader(Navigation.class.getResource("/views/" + fxmlPath));
+            FXMLLoader loader = new FXMLLoader(NavigationUtils.class.getResource("/views/" + fxmlPath));
             loader.setControllerFactory(springContext::getBean);
             Parent root = loader.load();
             primaryStage.setScene(new Scene(root));
@@ -28,6 +28,10 @@ public class Navigation {
         } catch (IOException e) {
             throw new RuntimeException("Erro ao carregar vista: " + fxmlPath, e);
         }
+    }
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     public static void reloadBaseLayout() {

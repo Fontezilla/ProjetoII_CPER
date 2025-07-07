@@ -14,6 +14,8 @@ public class PedidoMaterialFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private LocalDate dataCriacaoInicio;
     private LocalDate dataCriacaoFim;
 

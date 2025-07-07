@@ -1,6 +1,8 @@
 package com.example.cper_core.services;
 
+import com.example.cper_core.repositories.JpaRepositoryWithExtendedFetch;
 import com.example.cper_core.services.interfaces.IXService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.beans.BeanWrapper;
@@ -14,6 +16,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.example.cper_core.utils.EntityUtils.initializeAllRelations;
+
 public abstract class AbstractXService<
         TEntity,
         TDto,
@@ -24,11 +28,12 @@ public abstract class AbstractXService<
         TId
         > implements IXService<TDto, TDetailsDto, TExtendedDto, TFiltroDto, TWithRelationshipsDto, TId> {
 
-    protected final JpaRepository<TEntity, TId> repository;
+    protected final JpaRepositoryWithExtendedFetch<TEntity, TId> repository;
+
     protected final JpaSpecificationExecutor<TEntity> specRepository;
     protected final Validator validator;
 
-    protected AbstractXService(JpaRepository<TEntity, TId> repository,
+    protected AbstractXService(JpaRepositoryWithExtendedFetch<TEntity, TId> repository,
                                JpaSpecificationExecutor<TEntity> specRepository,
                                Validator validator) {
         this.repository = repository;
@@ -93,10 +98,18 @@ public abstract class AbstractXService<
     }
 
     @Override
+    @Transactional
     public TExtendedDto getExtendedById(TId id) {
-        return repository.findById(id)
-                .map(this::toExtendedDto)
+        return repository.findByIdExtended(id)
+                .map(entity -> {
+                    forceInitialize(entity); // inicializa relações lazy
+                    return toExtendedDto(entity);
+                })
                 .orElseThrow(() -> new IllegalArgumentException("Registo não encontrado com ID " + id));
+    }
+
+    protected void forceInitialize(TEntity entity) {
+        initializeAllRelations(entity);
     }
 
     @Override

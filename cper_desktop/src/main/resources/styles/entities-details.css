@@ -1,0 +1,108 @@
+.combo-box.hide-arrow .arrow-button {
+    -fx-shape: "";
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+.combo-box.hide-arrow .arrow {
+    -fx-background-color: transparent;
+}
+
+.date-picker.hide-arrow .arrow-button {
+    -fx-shape: "";
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+.date-picker.hide-arrow .arrow {
+    -fx-background-color: transparent;
+}
+
+.date-picker.custom-transparent {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+}
+.date-picker.custom-transparent > .text-field {
+    -fx-background-color: #ffffff;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 12;
+    -fx-padding: 4 6 4 6;
+    -fx-max-width: 222;
+}
+.date-picker.custom-transparent > .arrow-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0 4 0 0;
+}
+.date-picker.custom-transparent > .arrow-button > .arrow {
+    -fx-padding: 4;
+    -fx-translate-x: -4;
+}
+
+.date-picker.custom-transparent.edit-mode {
+    -fx-border-color: #d4ab0d;
+    -fx-border-width: 1;
+}
+
+.editable-field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-background-insets: 0;
+    -fx-border-radius: 10;
+    -fx-border-style: solid;
+    -fx-border-width: 1;
+    -fx-border-color: #d4ab0d;
+}
+
+.readonly-field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-background-insets: 0;
+    -fx-border-radius: 10;
+    -fx-border-style: solid;
+    -fx-border-width: 1;
+    -fx-border-color: #ffffff;
+}
+
+.invalid-field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-background-insets: 0;
+    -fx-border-radius: 10;
+    -fx-border-style: solid;
+    -fx-border-width: 1;
+    -fx-border-color: #e74c3c;
+}
+
+.button-yellow {
+    -fx-background-color: #ffd300;
+    -fx-background-radius: 10;
+    -fx-background-insets: 0;
+    -fx-padding: 6 12;
+    -fx-border-color: #d4ab0d;
+    -fx-border-radius: 8;
+    -fx-border-width: 2;
+    -fx-border-style: solid;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: black;
+    -fx-cursor: hand;
+}
+.button-yellow:hover {
+    -fx-background-color: #ffd300, #00000010;
+    -fx-background-radius: 10, 10;
+    -fx-background-insets: 0, 0;
+}
+
+.hover-transparent {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+.hover-transparent:hover {
+    -fx-background-color: #00000010;
+}

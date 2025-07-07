@@ -26,15 +26,18 @@ public class ClienteService extends AbstractXService<
         > implements IClienteService {
 
     private final ClienteMapper clienteMapper;
+    private final EnderecoRepository enderecoRepository;
+
 
     public ClienteService(
             ClienteRepository clienteRepository,
             ClienteMapper clienteMapper,
-            Validator validator
+            Validator validator, EnderecoRepository enderecoRepository
     ) {
         super(clienteRepository, clienteRepository, validator);
         this.clienteMapper = clienteMapper;
 
+        this.enderecoRepository = enderecoRepository;
     }
 
     @Override
@@ -59,6 +62,12 @@ public class ClienteService extends AbstractXService<
     @Override
     protected void updateEntityFromDto(ClienteDetailsExtendedDto dto, Cliente entity) {
         clienteMapper.updateEntityFromExtendedDto(dto, entity);
+
+        if (dto.getEndereco() != null && dto.getEndereco().getId() != null) {
+            Endereco endereco = enderecoRepository.findById(dto.getEndereco().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Endereço não encontrado com ID " + dto.getEndereco().getId()));
+            entity.setEndereco(endereco);
+        }
 
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             entity.setPassword(PasswordUtils.hashPassword(dto.getPassword()));

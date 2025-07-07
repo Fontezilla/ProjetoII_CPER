@@ -1,6 +1,6 @@
 package com.example.cper_desktop;
 
-import com.example.cper_desktop.utils.Navigation;
+import com.example.cper_desktop.utils.NavigationUtils;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,7 +30,7 @@ public class CperDesktopApplication extends Application {
         Parent root = loader.load();
         Scene scene = new Scene(root, 1280, 720);
 
-        Navigation.initialize(stage, springContext);
+        NavigationUtils.initialize(stage, springContext);
 
         stage.setScene(scene);
         stage.setTitle("CPER Desktop - Login");

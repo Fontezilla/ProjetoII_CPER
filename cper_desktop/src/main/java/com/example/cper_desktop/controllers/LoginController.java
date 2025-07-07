@@ -4,7 +4,7 @@ import com.example.cper_core.dtos.login.LoginRequestDto;
 import com.example.cper_core.dtos.login.LoginResponseDto;
 import com.example.cper_core.enums.JwtTipoUtilizador;
 import com.example.cper_core.services.AuthService;
-import com.example.cper_desktop.utils.Navigation;
+import com.example.cper_desktop.utils.NavigationUtils;
 import com.example.cper_desktop.utils.SessionStorage;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -17,7 +17,6 @@ public class LoginController {
 
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
-    @FXML private ComboBox<JwtTipoUtilizador> tipoCombo;
     @FXML private Label errorLabel;
 
     private final AuthService authService;
@@ -49,7 +48,7 @@ public class LoginController {
 
             SessionStorage.initializeFromToken(response.getToken());
 
-            Platform.runLater(() -> Navigation.goTo("layouts/BaseLayout.fxml"));
+            Platform.runLater(() -> NavigationUtils.goTo("layouts/BaseLayout.fxml"));
 
         } catch (RuntimeException e) {
             errorLabel.setText(e.getMessage());

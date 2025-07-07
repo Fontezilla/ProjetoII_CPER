@@ -13,6 +13,8 @@ public class DepartamentoFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private String nome;
 
     private Setor setor;

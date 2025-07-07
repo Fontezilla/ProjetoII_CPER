@@ -14,6 +14,8 @@ public class InspecaoFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private String descricao;
 
     private OffsetDateTime dataInicio;

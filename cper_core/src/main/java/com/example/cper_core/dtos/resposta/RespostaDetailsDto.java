@@ -14,6 +14,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class RespostaDetailsDto extends RespostaDto {
 
+    private String codigo;
+
     @NotBlank(groups = OnCreate.class, message = "A resposta é obrigatória")
     private String resposta;
 

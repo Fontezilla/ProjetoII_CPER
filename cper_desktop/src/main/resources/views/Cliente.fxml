@@ -82,20 +82,11 @@
                                                                                        <Font name="Segoe UI" size="16.0" />
                                                                                    </font>
                                                                                </Label>
-                                                                               <HBox prefHeight="11.0" prefWidth="178.0" spacing="5.0">
-                                                                                   <children>
-                                                                                       <Label text="nº">
-                                                                                           <font>
-                                                                                               <Font name="Segoe UI" size="16.0" />
-                                                                                           </font>
-                                                                                       </Label>
-                                                                                       <Label fx:id="funcionario_id">
-                                                                                           <font>
-                                                                                               <Font name="Segoe UI" size="16.0" />
-                                                                                           </font>
-                                                                                       </Label>
-                                                                                   </children>
-                                                                               </HBox>
+                                                                                 <Label fx:id="clienteId">
+                                                                                     <font>
+                                                                                         <Font name="Segoe UI" size="16.0" />
+                                                                                     </font>
+                                                                                 </Label>
                                                                            </children>
                                                                        </VBox>
                                                                    </children>

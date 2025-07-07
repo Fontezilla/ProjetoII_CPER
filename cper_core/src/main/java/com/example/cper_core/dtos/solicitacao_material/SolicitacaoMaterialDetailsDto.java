@@ -14,6 +14,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class SolicitacaoMaterialDetailsDto extends SolicitacaoMaterialDto {
 
+    private String codigo;
+
     @NotNull(groups = OnCreate.class, message = "A data do pedido é obrigatório.")
     private OffsetDateTime dataPedido;
 

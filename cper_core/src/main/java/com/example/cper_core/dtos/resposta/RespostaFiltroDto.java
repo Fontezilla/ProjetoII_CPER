@@ -12,6 +12,8 @@ public class RespostaFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private String resposta;
 
     private OffsetDateTime dataRespostaInicio;

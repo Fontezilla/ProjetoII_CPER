@@ -1,100 +1,51 @@
 package com.example.cper_desktop.utils;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.util.StringConverter;
 
+import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
 public class StyleUtils {
 
-    private static final String BASE_STYLE =
-            "-fx-background-color: #ffffff;" +
-                    "-fx-background-radius: 12;" +
-                    "-fx-background-insets: 0;" +
-                    "-fx-border-radius: 10;" +
-                    "-fx-border-style: solid;" +
-                    "-fx-border-width: 1;";
+    private static final DateTimeFormatter DD_MM_YYYY = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-    private static final String STYLE_EDITABLE =
-            BASE_STYLE + "-fx-border-color: #d4ab0d;";
-
-    private static final String STYLE_READONLY =
-            BASE_STYLE + "-fx-border-color: #ffffff;";
-
-    private static final String STYLE_INVALID =
-            BASE_STYLE + "-fx-border-color: #e74c3c;";
-
-    private static final String INLINE_CSS =
-            "data:text/css," +
-                    ".combo-box.hide-arrow .arrow-button {" +
-                    " -fx-shape: \"\";" +
-                    " -fx-background-color: transparent;" +
-                    " -fx-border-color: transparent;" +
-                    " -fx-padding: 0;" +
-                    "}" +
-                    ".combo-box.hide-arrow .arrow {" +
-                    " -fx-background-color: transparent;" +
-                    "}" +
-                    ".date-picker.hide-arrow .arrow-button {" +
-                    " -fx-shape: \"\";" +
-                    " -fx-background-color: transparent;" +
-                    " -fx-border-color: transparent;" +
-                    " -fx-padding: 0;" +
-                    "}" +
-                    ".date-picker.hide-arrow .arrow {" +
-                    " -fx-background-color: transparent;" +
-                    "}" +
-                    ".date-picker.custom-transparent {" +
-                    " -fx-background-color: transparent;" +
-                    " -fx-background-radius: 12;" +
-                    " -fx-border-radius: 12;" +
-                    " -fx-border-color: transparent;" +
-                    " -fx-border-width: 1;" +
-                    "}" +
-                    ".date-picker.custom-transparent > .text-field {" +
-                    " -fx-background-color: transparent;" +
-                    " -fx-background-insets: 0;" +
-                    " -fx-border-color: transparent;" +
-                    " -fx-border-width: 0;" +
-                    " -fx-background-radius: 12;" +
-                    " -fx-padding: 4 6 4 6;" +
-                    " -fx-max-width: 222;" +
-                    "}" +
-                    ".date-picker.custom-transparent > .arrow-button {" +
-                    " -fx-background-color: transparent;" +
-                    " -fx-border-color: transparent;" +
-                    " -fx-padding: 0 4 0 0;" +
-                    "}" +
-                    ".date-picker.custom-transparent > .arrow-button > .arrow {" +
-                    " -fx-padding: 4;" +
-                    " -fx-translate-x: -4;" +
-                    "}";
+    public static final String STYLE_EDITABLE = "editable-field";
+    public static final String STYLE_READONLY = "readonly-field";
+    public static final String STYLE_INVALID = "invalid-field";
+    public static final String STYLE_HIDE_ARROW = "hide-arrow";
+    public static final String STYLE_DATE_TRANSPARENT = "custom-transparent";
+    public static final String STYLE_BUTTON_YELLOW = "button-yellow";
+    public static final String STYLE_HOVER_TRANSPARENT = "hover-transparent";
 
     public static void applyEditStyle(Control control, boolean editable) {
-        control.setStyle(editable ? STYLE_EDITABLE : STYLE_READONLY);
+        control.getStyleClass().removeAll(STYLE_EDITABLE, STYLE_READONLY, STYLE_INVALID);
+        control.getStyleClass().add(editable ? STYLE_EDITABLE : STYLE_READONLY);
 
-        if (control instanceof ComboBox<?> comboBox) {
-            toggleHideArrow(comboBox, !editable);
-            injectInlineCSSIfNeeded(comboBox);
+        if (control instanceof ComboBox<?>) {
+            toggleHideArrow(control, !editable);
         }
 
         if (control instanceof DatePicker datePicker) {
-            toggleHideArrow(datePicker, !editable);
-            injectInlineCSSIfNeeded(datePicker);
+            toggleHideArrow(control, !editable);
+            if (!datePicker.getStyleClass().contains(STYLE_DATE_TRANSPARENT)) {
+                datePicker.getStyleClass().add(STYLE_DATE_TRANSPARENT);
+            }
         }
     }
 
     public static void markInvalid(Control control) {
-        control.setStyle(STYLE_INVALID);
+        control.getStyleClass().removeAll(STYLE_EDITABLE, STYLE_READONLY, STYLE_INVALID);
+        control.getStyleClass().add(STYLE_INVALID);
     }
 
     public static void clearInvalid(Control control, boolean editable) {
@@ -103,25 +54,11 @@ public class StyleUtils {
 
     private static void toggleHideArrow(Control control, boolean hide) {
         if (hide) {
-            if (!control.getStyleClass().contains("hide-arrow")) {
-                control.getStyleClass().add("hide-arrow");
+            if (!control.getStyleClass().contains(STYLE_HIDE_ARROW)) {
+                control.getStyleClass().add(STYLE_HIDE_ARROW);
             }
         } else {
-            control.getStyleClass().remove("hide-arrow");
-        }
-    }
-
-    private static void injectInlineCSSIfNeeded(Control control) {
-        ChangeListener<Scene> sceneListener = (obs, oldScene, newScene) -> {
-            if (newScene != null && !newScene.getStylesheets().contains(INLINE_CSS)) {
-                newScene.getStylesheets().add(INLINE_CSS);
-            }
-        };
-
-        if (control.getScene() != null) {
-            sceneListener.changed(null, null, control.getScene());
-        } else {
-            control.sceneProperty().addListener(sceneListener);
+            control.getStyleClass().remove(STYLE_HIDE_ARROW);
         }
     }
 
@@ -199,48 +136,15 @@ public class StyleUtils {
     }
 
     public static void applySubtleOverlayHoverEffect(Button button) {
-        String baseStyle = """
-            -fx-background-color: #ffd300;
-            -fx-background-radius: 10;
-            -fx-background-insets: 0;
-            -fx-padding: 6 12;
-            -fx-border-color: #d4ab0d;
-            -fx-border-radius: 8;
-            -fx-border-width: 2;
-            -fx-border-style: solid;
-            -fx-font-weight: bold;
-            -fx-font-size: 14px;
-            -fx-text-fill: black;
-            -fx-cursor: hand;
-        """;
-
-        String hoverStyle = """
-            -fx-background-color: #ffd300, #00000010;
-            -fx-background-radius: 10, 10;
-            -fx-background-insets: 0, 0;
-            -fx-padding: 6 12;
-            -fx-border-color: #d4ab0d;
-            -fx-border-radius: 8;
-            -fx-border-width: 2;
-            -fx-border-style: solid;
-            -fx-font-weight: bold;
-            -fx-font-size: 14px;
-            -fx-text-fill: black;
-            -fx-cursor: hand;
-        """;
-
-        button.setStyle(baseStyle);
-        button.setOnMouseEntered(e -> button.setStyle(hoverStyle));
-        button.setOnMouseExited(e -> button.setStyle(baseStyle));
+        if (!button.getStyleClass().contains(STYLE_BUTTON_YELLOW)) {
+            button.getStyleClass().add(STYLE_BUTTON_YELLOW);
+        }
     }
 
     public static void applyTransparentHoverEffect(Region region) {
-        String baseStyle = "-fx-background-color: transparent; -fx-cursor: hand;";
-        String hoverStyle = "-fx-background-color: #00000010; -fx-cursor: hand;";
-
-        region.setStyle(baseStyle);
-        region.setOnMouseEntered(e -> region.setStyle(hoverStyle));
-        region.setOnMouseExited(e -> region.setStyle(baseStyle));
+        if (!region.getStyleClass().contains(STYLE_HOVER_TRANSPARENT)) {
+            region.getStyleClass().add(STYLE_HOVER_TRANSPARENT);
+        }
     }
 
     public static void applyStackPaneHoverEffect(StackPane stackPane) {
@@ -250,5 +154,47 @@ public class StyleUtils {
 
     public static void applyButtonHoverEffect(Button button) {
         applyTransparentHoverEffect(button);
+    }
+
+    public static void ensureStylesheetApplied(Region node, String cssPath) {
+        node.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                URL resource = StyleUtils.class.getResource(cssPath);
+                if (resource == null) {
+                    System.err.println("Ficheiro CSS não encontrado: " + cssPath);
+                    return;
+                }
+
+                String path = resource.toExternalForm();
+                if (!newScene.getStylesheets().contains(path)) {
+                    newScene.getStylesheets().add(path);
+                }
+            }
+        });
+    }
+
+
+    public static void applyEditStylesOnSceneAvailable(Region node, Control... controls) {
+        node.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                for (Control c : controls) {
+                    applyEditStyle(c, false);
+                }
+            }
+        });
+    }
+
+    public static StringConverter<LocalDate> getDatePickerConverter() {
+        return new StringConverter<>() {
+            @Override
+            public String toString(LocalDate date) {
+                return date != null ? DD_MM_YYYY.format(date) : "";
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                return (string == null || string.isBlank()) ? null : LocalDate.parse(string, DD_MM_YYYY);
+            }
+        };
     }
 }

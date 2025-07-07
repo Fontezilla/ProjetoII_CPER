@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Data
@@ -27,6 +28,12 @@ public class ContratoDetailsExtendedDto extends ContratoDetailsDto {
     private Integer prazoPagamento;
 
     private Integer multaAtraso;
+
+    private BigDecimal vElectricidade;
+
+    private Integer taxa;
+
+    private Boolean requerValidacao;
 
     @NotNull(groups = OnCreate.class, message = "A solicitação energética é obrigatória")
     @Valid

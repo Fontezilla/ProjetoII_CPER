@@ -19,6 +19,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class PedidoGeracaoDetailsDto extends PedidoGeracaoDto {
 
+    private String codigo;
+
     @NotNull(groups = OnCreate.class, message = "A data de criação é obrigatória")
     private OffsetDateTime dataCriacao;
 

@@ -17,6 +17,9 @@ public class NotaSpecification {
             if (filtro.getId() != null) {
                 predicates.add(cb.equal(root.get("id"), filtro.getId()));
             }
+            if (filtro.getCodigo() != null && !filtro.getCodigo().isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("codigo")), "%" + filtro.getCodigo().toLowerCase() + "%"));
+            }
             if (filtro.getTitulo() != null && !filtro.getTitulo().isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("titulo")), "%" + filtro.getTitulo().toLowerCase() + "%"));
             }

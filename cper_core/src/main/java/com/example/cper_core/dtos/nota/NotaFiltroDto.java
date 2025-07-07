@@ -13,6 +13,8 @@ public class NotaFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private String titulo;
     private String descricao;
 

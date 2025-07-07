@@ -41,6 +41,9 @@ public class Nota {
     @ColumnDefault("1")
     private Integer prioridade;
 
+    @Column(name = "codigo")
+    private String codigo;
+
     @ColumnDefault("false")
     @Column(name = "is_deleted")
     @Builder.Default

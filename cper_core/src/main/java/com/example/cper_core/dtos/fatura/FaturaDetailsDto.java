@@ -17,6 +17,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class FaturaDetailsDto extends FaturaDto {
 
+    private String codigo;
+
     @NotNull(groups = OnCreate.class, message = "A data de emissao e obrigatoria")
     private OffsetDateTime dataEmissao;
 
@@ -38,4 +40,6 @@ public class FaturaDetailsDto extends FaturaDto {
 
     @NotNull(groups = OnCreate.class, message = "O estado e obrigatorio")
     private Integer estado;
+
+    private BigDecimal valorTotal;
 }

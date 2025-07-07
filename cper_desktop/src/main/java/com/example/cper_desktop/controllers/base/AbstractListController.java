@@ -3,6 +3,7 @@ package com.example.cper_desktop.controllers.base;
 import com.example.cper_desktop.controllers.BaseLayoutController;
 import com.example.cper_desktop.controllers.reusable_components.PaginationBarController;
 import com.example.cper_desktop.controllers.reusable_components.interfaces.PaginatableListController;
+import com.example.cper_desktop.utils.InternalNavigationUtils;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +13,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.io.IOException;
 import java.util.List;
@@ -146,8 +149,7 @@ public abstract class AbstractListController<T, F> implements PaginatableListCon
     }
 
     protected void onBackClick() {
-        BaseLayoutController base = getBaseController();
-        if (base != null) base.goBack();
+        InternalNavigationUtils.goBack();
     }
 
     protected BaseLayoutController getBaseController() {
@@ -172,6 +174,11 @@ public abstract class AbstractListController<T, F> implements PaginatableListCon
     protected abstract void applyHoverEffects();
     protected abstract void carregarLista(F filtro);
     protected abstract Node createListItem(T dto);
+
+    protected PageRequest buildPageRequest() {
+        Sort.Direction springDirection = sortDirection == SortDirection.ASC ? Sort.Direction.ASC : Sort.Direction.DESC;
+        return PageRequest.of(currentPage, 20, Sort.by(springDirection, sortField));
+    }
 
     @Override
     public void onPageChanged(int newPage) {

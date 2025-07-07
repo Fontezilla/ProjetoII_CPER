@@ -13,6 +13,8 @@ public class FaturaFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private OffsetDateTime dataEmissaoInicio;
     private OffsetDateTime dataEmissaoFim;
 

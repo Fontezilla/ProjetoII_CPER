@@ -15,8 +15,9 @@ public class ContratoFiltroDto {
 
     private Integer id;
 
-    private TipoContrato tipoContrato;
+    private String codigo;
 
+    private TipoContrato tipoContrato;
     private EstadoContrato estado;
 
     private OffsetDateTime dataInicioInicio;
@@ -41,5 +42,12 @@ public class ContratoFiltroDto {
 
     private Set<Integer> idsFuncionario;
     private Set<Integer> idsEndereco;
-}
 
+    private BigDecimal vElectricidadeMin;
+    private BigDecimal vElectricidadeMax;
+
+    private Integer taxaMin;
+    private Integer taxaMax;
+
+    private Boolean requerValidacao;
+}

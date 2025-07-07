@@ -14,6 +14,8 @@ public class AnomaliaFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private TipoAnomalia tipoAnomalia;
 
     private String titulo;

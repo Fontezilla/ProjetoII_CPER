@@ -17,6 +17,9 @@ public class ContratoSpecification {
             if (filtro.getId() != null) {
                 predicates.add(cb.equal(root.get("id"), filtro.getId()));
             }
+            if (filtro.getCodigo() != null && !filtro.getCodigo().isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("codigo")), "%" + filtro.getCodigo().toLowerCase() + "%"));
+            }
             if (filtro.getTipoContrato() != null) {
                 predicates.add(cb.equal(root.get("tipoContrato"), filtro.getTipoContrato().getId()));
             }
@@ -67,6 +70,21 @@ public class ContratoSpecification {
             }
             if (filtro.getIdsEndereco() != null && !filtro.getIdsEndereco().isEmpty()) {
                 predicates.add(root.get("endereco").get("id").in(filtro.getIdsEndereco()));
+            }
+            if (filtro.getVElectricidadeMin() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("vElectricidade"), filtro.getVElectricidadeMin()));
+            }
+            if (filtro.getVElectricidadeMax() != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("vElectricidade"), filtro.getVElectricidadeMax()));
+            }
+            if (filtro.getTaxaMin() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("taxa"), filtro.getTaxaMin()));
+            }
+            if (filtro.getTaxaMax() != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("taxa"), filtro.getTaxaMax()));
+            }
+            if (filtro.getRequerValidacao() != null) {
+                predicates.add(cb.equal(root.get("requerValidacao"), filtro.getRequerValidacao()));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

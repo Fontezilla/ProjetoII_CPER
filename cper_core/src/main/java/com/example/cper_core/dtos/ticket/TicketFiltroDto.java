@@ -12,6 +12,8 @@ public class TicketFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private OffsetDateTime dataIniInicio;
     private OffsetDateTime dataIniFim;
 

@@ -16,6 +16,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class AvariaDetailsDto extends AvariaDto {
 
+    private String codigo;
+
     @NotBlank(groups = OnCreate.class, message = "O título é obrigatório")
     @Size(max = 255, message = "O título deve ter no máximo 255 caracteres", groups = OnCreate.class)
     private String titulo;

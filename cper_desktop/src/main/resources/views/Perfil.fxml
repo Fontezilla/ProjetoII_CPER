@@ -56,20 +56,11 @@
                                                                         <Font name="Segoe UI" size="16.0" />
                                                                      </font>
                                                                   </Label>
-                                                                  <HBox prefHeight="11.0" prefWidth="178.0" spacing="5.0">
-                                                                     <children>
-                                                                        <Label text="nº">
-                                                                           <font>
-                                                                              <Font name="Segoe UI" size="16.0" />
-                                                                           </font>
-                                                                        </Label>
-                                                                        <Label fx:id="funcionario_id">
-                                                                           <font>
-                                                                              <Font name="Segoe UI" size="16.0" />
-                                                                           </font>
-                                                                        </Label>
-                                                                     </children>
-                                                                  </HBox>
+                                                                  <Label fx:id="funcionarioId">
+                                                                     <font>
+                                                                        <Font name="Segoe UI" size="16.0" />
+                                                                     </font>
+                                                                  </Label>
                                                                </children>
                                                             </VBox>
                                                          </children>
@@ -88,7 +79,7 @@
                                                    <children>
                                                       <Pane prefHeight="90.0" prefWidth="661.5" style="-fx-border-style: solid; -fx-background-color: #e1e3e1; -fx-background-radius: 15; -fx-border-color: #e1e3e1; -fx-border-radius: 12;">
                                                          <children>
-                                                            <TextField fx:id="funcionario_nome" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="641.5">
+                                                            <TextField fx:id="funcionarioNome" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="641.5">
                                                                <font>
                                                                   <Font name="Segoe UI" size="14.0" />
                                                                </font>
@@ -118,7 +109,7 @@
                                                             </Label>
                                                          </children>
                                                       </Pane>
-                                                      <TextField fx:id="funcionario_cargo" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="308.5">
+                                                      <TextField fx:id="funcionarioCargo" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="308.5">
                                                          <font>
                                                             <Font name="Segoe UI" size="14.0" />
                                                          </font>
@@ -139,7 +130,7 @@
                                                       </Label>
                                                    </children>
                                                 </Pane>
-                                                <TextField fx:id="funcionario_email" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="980.0">
+                                                <TextField fx:id="funcionarioEmail" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="980.0">
                                                    <font>
                                                       <Font name="Segoe UI" size="14.0" />
                                                    </font>
@@ -169,7 +160,7 @@
                                                             </Label>
                                                          </children>
                                                       </Pane>
-                                                      <TextField fx:id="funcionario_nif" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
+                                                      <TextField fx:id="funcionarioNif" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
                                                          <font>
                                                             <Font name="Segoe UI" size="14.0" />
                                                          </font>
@@ -188,7 +179,7 @@
                                                             </Label>
                                                          </children>
                                                       </Pane>
-                                                      <TextField fx:id="funcionario_telefone" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
+                                                      <TextField fx:id="funcionarioTelefone" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
                                                          <font>
                                                             <Font name="Segoe UI" size="14.0" />
                                                          </font>
@@ -207,7 +198,7 @@
                                                             </Label>
                                                          </children>
                                                       </Pane>
-                                                      <TextField fx:id="funcionario_dtNascimento" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
+                                                      <TextField fx:id="funcionarioDtNascimento" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
                                                          <font>
                                                             <Font name="Segoe UI" size="14.0" />
                                                          </font>
@@ -228,7 +219,7 @@
                                                       </Label>
                                                    </children>
                                                 </Pane>
-                                                <TextField fx:id="funcionario_morada" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="980.0">
+                                                <TextField fx:id="funcionarioMorada" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="980.0">
                                                    <font>
                                                       <Font name="Segoe UI" size="14.0" />
                                                    </font>
@@ -258,7 +249,7 @@
                                                             </Label>
                                                          </children>
                                                       </Pane>
-                                                      <TextField fx:id="funcionario_salario" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
+                                                      <TextField fx:id="funcionarioSalario" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
                                                          <font>
                                                             <Font name="Segoe UI" size="14.0" />
                                                          </font>
@@ -277,7 +268,7 @@
                                                             </Label>
                                                          </children>
                                                       </Pane>
-                                                      <TextField fx:id="funcionario_estado" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
+                                                      <TextField fx:id="funcionarioEstado" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
                                                          <font>
                                                             <Font name="Segoe UI" size="14.0" />
                                                          </font>
@@ -296,7 +287,7 @@
                                                             </Label>
                                                          </children>
                                                       </Pane>
-                                                      <TextField fx:id="funcionario_dtContratacao" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
+                                                      <TextField fx:id="funcionarioDtContratacao" layoutX="10.0" layoutY="50.0" prefHeight="30.0" prefWidth="306.67">
                                                          <font>
                                                             <Font name="Segoe UI" size="14.0" />
                                                          </font>

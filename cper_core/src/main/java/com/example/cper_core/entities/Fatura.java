@@ -46,6 +46,9 @@ public class Fatura {
     @Column(name = "taxa")
     private Integer taxa;
 
+    @Column(name = "codigo")
+    private String codigo;
+
     @Column(name = "is_deleted")
     @Builder.Default
     private Boolean isDeleted = false;

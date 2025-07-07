@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 public class MaterialDetailsDto extends MaterialDto {
 
+    private String codigo;
+
     @NotBlank(groups = OnCreate.class, message = "O nome é obrigatório")
     private String nome;
 

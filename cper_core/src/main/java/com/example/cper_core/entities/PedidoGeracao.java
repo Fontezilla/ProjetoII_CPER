@@ -68,6 +68,9 @@ public class PedidoGeracao {
     @Column(name = "estado")
     private Integer estado;
 
+    @Column(name = "codigo")
+    private String codigo;
+
     @ColumnDefault("false")
     @Column(name = "is_deleted")
     @Builder.Default

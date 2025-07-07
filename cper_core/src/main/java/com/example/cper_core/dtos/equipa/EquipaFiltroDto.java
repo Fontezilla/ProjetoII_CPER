@@ -12,6 +12,8 @@ public class EquipaFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private String nome;
 
     private String areaAtuacao;

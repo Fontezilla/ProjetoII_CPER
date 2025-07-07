@@ -70,6 +70,7 @@ public interface ClienteMapper {
     @Mapping(target = "tipoCliente", expression = "java(dto.getTipoCliente() != null ? dto.getTipoCliente().getId() : entity.getTipoCliente())")
     @Mapping(target = "estado", expression = "java(dto.getEstado() != null ? dto.getEstado().getId() : entity.getEstado())")
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "endereco", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromExtendedDto(ClienteDetailsExtendedDto dto, @MappingTarget Cliente entity);
 }

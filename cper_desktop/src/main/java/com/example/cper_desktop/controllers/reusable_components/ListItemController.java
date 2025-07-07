@@ -45,6 +45,7 @@ public class ListItemController {
         for (int i = 0; i < fields.size(); i++) {
             Label label = new Label(fields.get(i));
             label.setMaxWidth(Double.MAX_VALUE);
+            label.setAlignment(javafx.geometry.Pos.CENTER);
 
             StackPane wrapper = createWrapper(label);
             wrapper.setMinWidth(larguras.get(i));

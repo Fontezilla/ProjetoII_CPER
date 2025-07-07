@@ -36,6 +36,9 @@ public class Equipa {
     @Column(name = "area_atuacao", length = 256)
     private String areaAtuacao;
 
+    @Column(name = "codigo")
+    private String codigo;
+
     @Column(name = "is_deleted")
     @Builder.Default
     private Boolean isDeleted = false;

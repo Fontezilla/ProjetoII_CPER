@@ -19,6 +19,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class SolicitacaoEnergeticaDetailsDto extends SolicitacaoEnergeticaDto {
 
+    private String codigo;
+
     @NotNull(message = "O tipo de energia é obrigatório")
     private TipoEnergiaRenovavel tipoEnergia;
 

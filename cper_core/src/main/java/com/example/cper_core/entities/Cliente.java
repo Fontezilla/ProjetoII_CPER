@@ -64,6 +64,9 @@ public class Cliente {
     @Column(name = "n_porta", length = 10, nullable = false)
     private String nPorta;
 
+    @Column(name = "codigo")
+    private String codigo;
+
     @Column(name = "is_deleted")
     @Builder.Default
     private Boolean isDeleted = false;

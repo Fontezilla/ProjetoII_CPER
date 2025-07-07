@@ -46,6 +46,9 @@ public class Departamento {
     @Column(name = "orcamento")
     private BigDecimal orcamento;
 
+    @Column(name = "codigo")
+    private String codigo;
+
     @Column(name = "is_deleted")
     @Builder.Default
     private Boolean isDeleted = false;

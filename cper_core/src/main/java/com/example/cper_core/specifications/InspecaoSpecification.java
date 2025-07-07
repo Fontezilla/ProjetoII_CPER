@@ -17,6 +17,9 @@ public class InspecaoSpecification {
             if (filtro.getId() != null) {
                 predicates.add(cb.equal(root.get("id"), filtro.getId()));
             }
+            if (filtro.getCodigo() != null && !filtro.getCodigo().isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("codigo")), "%" + filtro.getCodigo().toLowerCase() + "%"));
+            }
             if (filtro.getDescricao() != null && !filtro.getDescricao().isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("descricao")), "%" + filtro.getDescricao().toLowerCase() + "%"));
             }

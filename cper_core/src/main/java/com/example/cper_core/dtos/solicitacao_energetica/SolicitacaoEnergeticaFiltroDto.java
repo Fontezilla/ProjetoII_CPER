@@ -16,6 +16,8 @@ public class SolicitacaoEnergeticaFiltroDto {
 
     private Integer id;
 
+    private String codigo;
+
     private OffsetDateTime dataSolicitacaoInicio;
     private OffsetDateTime dataSolicitacaoFim;
 

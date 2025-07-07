@@ -15,6 +15,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class NotaDetailsDto extends NotaDto {
 
+    private String codigo;
+
     @NotNull(groups = OnCreate.class, message = "O título é obrigatório")
     private String titulo;
 
