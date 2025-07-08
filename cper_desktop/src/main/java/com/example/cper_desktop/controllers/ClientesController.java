@@ -35,6 +35,7 @@ public class ClientesController extends AbstractListController<ClienteDetailsDto
     @FXML
     @Override
     public void initialize() {
+
         this.sortField = "nome";
         super.initialize();
 

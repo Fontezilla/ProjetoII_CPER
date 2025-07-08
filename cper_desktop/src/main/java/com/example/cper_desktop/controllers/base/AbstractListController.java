@@ -4,6 +4,7 @@ import com.example.cper_desktop.controllers.BaseLayoutController;
 import com.example.cper_desktop.controllers.reusable_components.PaginationBarController;
 import com.example.cper_desktop.controllers.reusable_components.interfaces.PaginatableListController;
 import com.example.cper_desktop.utils.InternalNavigationUtils;
+import com.example.cper_desktop.utils.StyleUtils;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,6 +47,8 @@ public abstract class AbstractListController<T, F> implements PaginatableListCon
     }
 
     public void initialize() {
+        StyleUtils.ensureStylesheetApplied(basePane, "/styles/style-fixed.css");
+
         filtersBtn.setOnMouseClicked(e -> toggleFilters());
         sortBtn.setOnMouseClicked(e -> toggleSort());
         backBtn.setOnMouseClicked(e -> onBackClick());

@@ -67,7 +67,7 @@ public class Avaria {
     @JoinColumn(name = "id_inspecao")
     private Inspecao inspecao;
 
-    @OneToMany(mappedBy = "avaria")
+    @OneToMany(mappedBy = "avaria", fetch = FetchType.LAZY)
     @Builder.Default
     private Set<Nota> notas = new LinkedHashSet<>();
 

@@ -46,22 +46,35 @@ public class FormatterUtils {
         return (obj == null || (obj instanceof String s && s.isBlank())) ? "N/A" : obj.toString();
     }
 
-    public static void configField(TextField campo, boolean editavel) {
+    public static void configField(TextField campo, boolean editavel, boolean isCreate) {
         campo.setEditable(editavel);
-        campo.getStyleClass().removeAll("editable", "readonly");
-        campo.getStyleClass().add(editavel ? "editable" : "readonly");
+        campo.getStyleClass().removeAll("editable", "readonly", "creatable");
+        if (editavel) {
+            campo.getStyleClass().add(isCreate ? "creatable" : "editable");
+        } else {
+            campo.getStyleClass().add("readonly");
+        }
     }
 
-    public static void configField(ComboBox<?> comboBox, boolean editavel) {
+    public static void configField(ComboBox<?> comboBox, boolean editavel, boolean isCreate) {
         comboBox.setDisable(!editavel);
-        comboBox.getStyleClass().removeAll("editable", "readonly");
-        comboBox.getStyleClass().add(editavel ? "editable" : "readonly");
+        comboBox.getStyleClass().removeAll("editable", "readonly", "creatable");
+        if (editavel) {
+            comboBox.getStyleClass().add(isCreate ? "creatable" : "editable");
+        } else {
+            comboBox.getStyleClass().add("readonly");
+        }
     }
 
-    public static void configField(DatePicker datePicker, boolean editavel) {
+
+    public static void configField(DatePicker datePicker, boolean editavel, boolean isCreate) {
         datePicker.setDisable(!editavel);
-        datePicker.getStyleClass().removeAll("editable", "readonly");
-        datePicker.getStyleClass().add(editavel ? "editable" : "readonly");
+        datePicker.getStyleClass().removeAll("editable", "readonly", "creatable");
+        if (editavel) {
+            datePicker.getStyleClass().add(isCreate ? "creatable" : "editable");
+        } else {
+            datePicker.getStyleClass().add("readonly");
+        }
     }
 
     public static String formatSimpleAddress(EnderecoDto idEndereco, String nPorta, IEnderecoService enderecoService, ILocalidadeService localidadeService) {

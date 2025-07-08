@@ -2,6 +2,8 @@ package com.example.cper_desktop.controllers;
 
 import com.example.cper_core.dtos.cliente.ClienteFiltroDto;
 import com.example.cper_core.dtos.contrato.ContratoFiltroDto;
+import com.example.cper_core.dtos.fatura.FaturaFiltroDto;
+import com.example.cper_core.dtos.pedido_geracao.PedidoGeracaoFiltroDto;
 import com.example.cper_core.dtos.solicitacao_energetica.SolicitacaoEnergeticaFiltroDto;
 import com.example.cper_core.enums.Setor;
 import com.example.cper_desktop.controllers.reusable_components.LoadingOverlayController;
@@ -139,10 +141,10 @@ public class BaseLayoutController {
     }
 
     private void inicializarMenuBuilders() {
-//        menuBuilders.put(Setor.ADMINISTRATIVO, this::menusAdministrativo);
+        menuBuilders.put(Setor.ADMINISTRATIVO, this::menusAdministrativo);
         menuBuilders.put(Setor.COMERCIAL, this::menusComercial);
-//        menuBuilders.put(Setor.FINANCEIRO, this::menusFinanceiro);
-//        menuBuilders.put(Setor.PRODUCAO_CENTRAL, this::menusProducaoCentral);
+        menuBuilders.put(Setor.FINANCEIRO, this::menusFinanceiro);
+        menuBuilders.put(Setor.PRODUCAO_CENTRAL, this::menusProducaoCentral);
 //        menuBuilders.put(Setor.PRODUCAO_GERADOR, this::menusProducaoGerador);
 //        menuBuilders.put(Setor.INSPECAO, this::menusInspecao);
 //        menuBuilders.put(Setor.PLANEAMENTO, this::menusPlaneamento);
@@ -269,6 +271,20 @@ public class BaseLayoutController {
         }
     }
 
+    private final Map<String, Pair<String, Consumer<Object>>> menuItemsAdministrativo = new LinkedHashMap<>() {{
+        // Adicionar os itens do menu administrativo
+    }};
+
+    private void menusAdministrativo() {
+        setorLabel.setText(Setor.ADMINISTRATIVO.getLabel());
+
+        menuItemsAdministrativo.forEach((nome, par) -> {
+            String fxml = par.getKey();
+            Consumer<Object> callback = par.getValue();
+            addMenuButton(nome, fxml, callback);
+        });
+    }
+
     private final Map<String, Pair<String, Consumer<Object>>> menuItemsComercial = new LinkedHashMap<>() {{
         put("Clientes", new Pair<>("/views/Clientes.fxml", controller -> {
             if (controller instanceof ClientesController c) {
@@ -295,9 +311,77 @@ public class BaseLayoutController {
     }};
 
     private void menusComercial() {
-        setorLabel.setText("Comercial");
+        setorLabel.setText(Setor.COMERCIAL.getLabel());
 
         menuItemsComercial.forEach((nome, par) -> {
+            String fxml = par.getKey();
+            Consumer<Object> callback = par.getValue();
+            addMenuButton(nome, fxml, callback);
+        });
+    }
+
+    private final Map<String, Pair<String, Consumer<Object>>> menuItemsFinanceiro = new LinkedHashMap<>() {{
+        put("Clientes", new Pair<>("/views/Clientes.fxml", controller -> {
+            if (controller instanceof ClientesController c) {
+                ClienteFiltroDto filtro = new ClienteFiltroDto();
+                filtro.setIsDeleted(false);
+                c.setFiltroInicial(filtro);
+            }
+        }));
+        put("Contratos", new Pair<>("/views/Contratos.fxml", controller -> {
+            if (controller instanceof ContratosController c) {
+                ContratoFiltroDto filtro = new ContratoFiltroDto();
+                filtro.setIsDeleted(false);
+                c.setFiltroInicial(filtro);
+            }
+        }));
+        put("Faturas", new Pair<>("/views/Faturas.fxml", controller -> {
+            if (controller instanceof FaturasController c) {
+                FaturaFiltroDto filtro = new FaturaFiltroDto();
+                filtro.setIsDeleted(false);
+                c.setFiltroInicial(filtro);
+            }
+        }));
+    }};
+
+    private void menusFinanceiro() {
+        setorLabel.setText(Setor.FINANCEIRO.getLabel());
+
+        menuItemsFinanceiro.forEach((nome, par) -> {
+            String fxml = par.getKey();
+            Consumer<Object> callback = par.getValue();
+            addMenuButton(nome, fxml, callback);
+        });
+    }
+
+    private final Map<String, Pair<String, Consumer<Object>>> menuItemsProducaoCentral= new LinkedHashMap<>() {{
+        put("Centrais", new Pair<>("/views/Centrais.fxml", controller -> {
+            if (controller instanceof ClientesController c) {
+                ClienteFiltroDto filtro = new ClienteFiltroDto();
+                filtro.setIsDeleted(false);
+                c.setFiltroInicial(filtro);
+            }
+        }));
+        put("Contratos", new Pair<>("/views/Contratos.fxml", controller -> {
+            if (controller instanceof ContratosController c) {
+                ContratoFiltroDto filtro = new ContratoFiltroDto();
+                filtro.setIsDeleted(false);
+                c.setFiltroInicial(filtro);
+            }
+        }));
+        put("Pedidos Geração", new Pair<>("/views/PedidosGeracao.fxml", controller -> {
+            if (controller instanceof PedidosGeracaoController c) {
+                PedidoGeracaoFiltroDto filtro = new PedidoGeracaoFiltroDto();
+                filtro.setIsDeleted(false);
+                c.setFiltroInicial(filtro);
+            }
+        }));
+    }};
+
+    private void menusProducaoCentral() {
+        setorLabel.setText(Setor.PRODUCAO_CENTRAL.getLabel());
+
+        menuItemsProducaoCentral.forEach((nome, par) -> {
             String fxml = par.getKey();
             Consumer<Object> callback = par.getValue();
             addMenuButton(nome, fxml, callback);
@@ -313,20 +397,6 @@ public class BaseLayoutController {
         botoesMenu.add(item.getButton());
     }
 
-
-//    private void menusAdministrativo() {
-//        setorLabel.setText("Administrativo");
-//        addMenuButton("Utilizadores", "/views/utilizadores.fxml");
-//        addMenuButton("Logs do Sistema", "/views/logs.fxml");
-//    }
-//
-//    private void menusFinanceiro() {
-//        setorLabel.setText("Financeiro");
-//        addMenuButton("Clientes", "/views/Clientes.fxml");
-//        addMenuButton("Contratos", "/views/Contratos.fxml");
-//        addMenuButton("Faturas", "/views/Faturas.fxml");
-//    }
-//
 //    private void menusProducaoCentral() {
 //        setorLabel.setText("Produção - Central");
 //        addMenuButton("Centrais", "/views/Centrais.fxml");

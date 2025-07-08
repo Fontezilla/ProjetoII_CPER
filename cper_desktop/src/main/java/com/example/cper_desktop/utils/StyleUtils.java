@@ -184,6 +184,26 @@ public class StyleUtils {
         });
     }
 
+    public static void applyTextAreaDefaultStyle(TextArea textArea) {
+        textArea.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                ensureStylesheetApplied(textArea, "/styles/style-fixed.css");
+
+                if (!textArea.getStyleClass().contains("text-area")) {
+                    textArea.getStyleClass().add("text-area");
+                }
+            }
+        });
+
+        if (textArea.getScene() != null) {
+            ensureStylesheetApplied(textArea, "/styles/style-fixed.css");
+
+            if (!textArea.getStyleClass().contains("text-area")) {
+                textArea.getStyleClass().add("text-area");
+            }
+        }
+    }
+
     public static StringConverter<LocalDate> getDatePickerConverter() {
         return new StringConverter<>() {
             @Override

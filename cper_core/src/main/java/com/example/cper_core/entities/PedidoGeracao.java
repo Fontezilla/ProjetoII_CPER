@@ -9,7 +9,9 @@ import org.hibernate.proxy.HibernateProxy;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -77,6 +79,10 @@ public class PedidoGeracao {
     private Boolean isDeleted = false;
 
     // Relationships
+
+    @OneToMany(mappedBy = "pedidoGeracao", fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<HistoricoEnergia> historicoEnergias = new LinkedHashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_contrato")

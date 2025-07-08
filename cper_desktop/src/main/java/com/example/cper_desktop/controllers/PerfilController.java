@@ -66,7 +66,7 @@ public class PerfilController extends AbstractDetailsController<FuncionarioDetai
     @Override
     protected void loadData() {
         roleAtual = PermissionUtils.getAllSetores();
-        funcionario = funcionarioService.getExtendedById(userId);
+        funcionario = funcionarioService.getExtendedById(id);
 
         funcionarioId.setText(value(funcionario.getCodigo()));
         funcionarioNome.setText(value(funcionario.getNome()));
@@ -117,8 +117,10 @@ public class PerfilController extends AbstractDetailsController<FuncionarioDetai
 
     @Override
     protected void postInitialize() {
-        ensureStylesheetApplied(basePane, "/styles/entities-details.css");
-        StyleUtils.ensureStylesheetApplied(basePane, "/styles/Toast.css");
+        this.id = SessionStorage.getUtilizadorId();
+
+        ensureStylesheetApplied(basePane, "/styles/style-fixed.css");
+        ensureStylesheetApplied(basePane, "/styles/Toast.css");
 
         applyEditStylesOnSceneAvailable(basePane,
                 funcionarioNome, funcionarioEmail, funcionarioCargo, funcionarioNif,
@@ -208,8 +210,8 @@ public class PerfilController extends AbstractDetailsController<FuncionarioDetai
         }
 
         try {
-            funcionarioService.update(userId, atualizado);
-            funcionario = funcionarioService.getExtendedById(userId);
+            funcionarioService.update(id, atualizado);
+            funcionario = funcionarioService.getExtendedById(id);
 
             Platform.runLater(() -> {
                 cancelarEdicao();
@@ -259,7 +261,7 @@ public class PerfilController extends AbstractDetailsController<FuncionarioDetai
         updatePassword.setCurrentPassword(passwordAtualField.getText());
 
         try {
-            funcionarioService.updatePassword(userId, updatePassword);
+            funcionarioService.updatePassword(id, updatePassword);
             fecharPopup();
             showSuccessToast("Guardado", "A palavra-passe foi alterada com sucesso.");
         } catch (IllegalArgumentException e) {

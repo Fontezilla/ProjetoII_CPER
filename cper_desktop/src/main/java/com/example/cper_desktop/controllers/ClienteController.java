@@ -63,7 +63,7 @@ public class ClienteController extends AbstractDetailsController<ClienteDetailsE
 
     @Override
     protected void loadData() {
-        cliente = clienteService.getExtendedById(userId);
+        cliente = clienteService.getExtendedById(id);
 
         clienteId.setText(value(cliente.getCodigo()));
         clienteNome.setText(value(cliente.getNome()));
@@ -120,7 +120,7 @@ public class ClienteController extends AbstractDetailsController<ClienteDetailsE
         editarBtn.setOnAction(e -> toggleEditMode(true));
         cancelarBtn.setOnAction(e -> {
             toggleEditMode(false);
-            loadData();
+            if (!createMode) loadData();
         });
         salvarBtn.setOnAction(e -> onSaveClick());
 
@@ -157,12 +157,21 @@ public class ClienteController extends AbstractDetailsController<ClienteDetailsE
 
         clienteDtNas.setConverter(StyleUtils.getDatePickerConverter());
 
-        StyleUtils.ensureStylesheetApplied(basePane, "/styles/entities-details.css");
+        StyleUtils.ensureStylesheetApplied(basePane, "/styles/style-fixed.css");
         StyleUtils.ensureStylesheetApplied(basePane, "/styles/Toast.css");
         StyleUtils.applyEditStylesOnSceneAvailable(basePane, clienteTipo, clienteEstado, clienteDtNas);
 
         applyHoverEffects();
+
+        clienteId.setVisible(!createMode);
+        clienteConsumo.setVisible(!createMode);
+        clienteDtCad.setVisible(!createMode);
+
+        if (createMode) {
+            toggleEditMode(true);
+        }
     }
+
 
     @Override
     protected void toggleEditMode(boolean edit) {
@@ -188,7 +197,12 @@ public class ClienteController extends AbstractDetailsController<ClienteDetailsE
     private void onSaveClick() {
         loadingOverlayController.show();
         ClienteDetailsExtendedDto dto = updateData();
-        var result = ValidationUtils.validar(dto, validator, com.example.cper_core.dtos.OnUpdate.class);
+
+        var grupoValidacao = createMode
+                ? com.example.cper_core.dtos.OnCreate.class
+                : com.example.cper_core.dtos.OnUpdate.class;
+
+        var result = ValidationUtils.validar(dto, validator, grupoValidacao);
 
         if (!result.valido()) {
             showErrorToast("Erro de Validação", ValidationUtils.generateErrorMessage(result.violacoes()).toString());
@@ -197,11 +211,17 @@ public class ClienteController extends AbstractDetailsController<ClienteDetailsE
         }
 
         try {
-            clienteService.update(cliente.getId(), dto);
-            cliente = clienteService.getExtendedById(cliente.getId());
+            if (createMode) {
+                cliente = clienteService.create(dto);
+                showSuccessToast("Criado", "O cliente foi criado com sucesso.");
+            } else {
+                clienteService.update(cliente.getId(), dto);
+                cliente = clienteService.getExtendedById(cliente.getId());
+                showSuccessToast("Guardado", "As alterações foram guardadas com sucesso.");
+            }
+
             loadData();
             toggleEditMode(false);
-            showSuccessToast("Guardado", "As alterações foram guardadas com sucesso.");
         } catch (Exception e) {
             showErrorToast("Erro ao guardar", "");
             System.out.println(Optional.ofNullable(e.getMessage()).orElse("Erro inesperado ao guardar."));
@@ -209,6 +229,7 @@ public class ClienteController extends AbstractDetailsController<ClienteDetailsE
             loadingOverlayController.hide();
         }
     }
+
 
     private void applyPermissionBySetor() {
         int setorPrincipal = SessionStorage.getSetorPrincipal();
@@ -229,7 +250,14 @@ public class ClienteController extends AbstractDetailsController<ClienteDetailsE
     }
 
     public void setClienteId(Integer id) {
-        this.userId = id;
-        loadData();
+        this.id = id;
+        this.createMode = (id == null);
+        this.editMode = createMode;
+
+        if (!createMode) {
+            loadData();
+        } else {
+            cliente = new ClienteDetailsExtendedDto();
+        }
     }
 }

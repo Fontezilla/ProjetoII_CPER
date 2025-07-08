@@ -104,5 +104,19 @@
     -fx-cursor: hand;
 }
 .hover-transparent:hover {
-    -fx-background-color: #00000010;
+    -fx-background-color: rgba(0, 0, 0, 0.06);
+    -fx-background-radius: 10px;
+}
+
+.text-area {
+    -fx-background-color: transparent;
+    -fx-border-color: #d4af37;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.text-area .content {
+    -fx-background-color: #f0f0f0; /* cor de fundo do interior */
+    -fx-background-radius: 10px;
 }

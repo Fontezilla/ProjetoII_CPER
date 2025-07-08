@@ -4,7 +4,6 @@ import com.example.cper_desktop.controllers.reusable_components.LoadingOverlayCo
 import com.example.cper_desktop.controllers.reusable_components.ToastNotificationController;
 import com.example.cper_desktop.utils.FormatterUtils;
 import com.example.cper_desktop.utils.ReusableComponentsAware;
-import com.example.cper_desktop.utils.SessionStorage;
 import com.example.cper_desktop.utils.StyleUtils;
 import jakarta.validation.Validator;
 import javafx.application.Platform;
@@ -21,14 +20,17 @@ public abstract class AbstractDetailsController<T> implements ReusableComponents
     protected ToastNotificationController toastNotificationController;
     protected final Validator validator;
     protected boolean editMode = false;
-    protected Integer userId;
-
-
+    protected boolean createMode = false;
+    protected Integer id;
 
     protected AbstractDetailsController(Validator validator) {
         this.validator = validator;
     }
 
+    public void setCreateMode(boolean createMode) {
+        this.createMode = createMode;
+        this.editMode = createMode;
+    }
     @Override
     public void setLoadingOverlayController(LoadingOverlayController controller) {
         this.loadingOverlayController = controller;
@@ -43,22 +45,15 @@ public abstract class AbstractDetailsController<T> implements ReusableComponents
 
     @FXML
     public final void initialize() {
-        this.userId = SessionStorage.getUtilizadorId();
-        if (userId == null) return;
-
         Platform.runLater(() -> {
-            if (loadingOverlayController != null) {
-                loadingOverlayController.show();
-            } else {
-                System.err.println("loadingOverlayController ainda está null no runLater!");
-            }
+            if (loadingOverlayController != null) loadingOverlayController.show();
 
-            loadData();
+            if (!createMode && id != null) {
+                loadData();
+            }
             postInitialize();
 
-            if (loadingOverlayController != null) {
-                loadingOverlayController.hide();
-            }
+            if (loadingOverlayController != null) loadingOverlayController.hide();
         });
     }
 
