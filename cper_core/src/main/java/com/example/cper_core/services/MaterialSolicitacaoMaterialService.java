@@ -19,7 +19,6 @@ public class MaterialSolicitacaoMaterialService extends AbstractXService<
         MaterialSolicitacaoMaterialDetailsDto,
         MaterialSolicitacaoMaterialDetailsDto,
         MaterialSolicitacaoMaterialFiltroDto,
-        MaterialSolicitacaoMaterialDto,
         MaterialSolicitacaoMaterialId
         > implements IMaterialSolicitacaoMaterialService {
 
@@ -71,7 +70,7 @@ public class MaterialSolicitacaoMaterialService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(MaterialSolicitacaoMaterial entity) {
+    protected void markedDeleted(MaterialSolicitacaoMaterial entity) {
         throw new UnsupportedOperationException("Eliminação lógica não suportada para MaterialSolicitacaoMaterial.");
     }
 }

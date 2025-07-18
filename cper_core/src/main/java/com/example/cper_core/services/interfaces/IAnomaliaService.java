@@ -7,7 +7,6 @@ public interface IAnomaliaService extends IXService<
         AnomaliaDetailsDto,
         AnomaliaDetailsExtendedDto,
         AnomaliaFiltroDto,
-        AnomaliaWithRelationshipsDto,
         Integer
         > {
 }

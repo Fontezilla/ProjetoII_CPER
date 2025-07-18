@@ -23,7 +23,6 @@ public class AvariaService extends AbstractXService<
         AvariaDetailsDto,
         AvariaDetailsExtendedDto,
         AvariaFiltroDto,
-        AvariaWithRelationshipsDto,
         Integer
         > implements IAvariaService {
 
@@ -72,7 +71,7 @@ public class AvariaService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Avaria entity) {
+    protected void markedDeleted(Avaria entity) {
         entity.setIsDeleted(true);
     }
 

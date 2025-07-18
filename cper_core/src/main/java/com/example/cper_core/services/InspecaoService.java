@@ -23,7 +23,6 @@ public class InspecaoService extends AbstractXService<
         InspecaoDetailsDto,
         InspecaoDetailsExtendedDto,
         InspecaoFiltroDto,
-        InspecaoWithRelationshipsDto,
         Integer
         > implements IInspecaoService {
 
@@ -69,7 +68,7 @@ public class InspecaoService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Inspecao entity) {
+    protected void markedDeleted(Inspecao entity) {
         entity.setIsDeleted(true);
     }
 

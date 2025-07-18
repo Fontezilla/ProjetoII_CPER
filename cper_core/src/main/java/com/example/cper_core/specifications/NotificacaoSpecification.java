@@ -2,6 +2,7 @@ package com.example.cper_core.specifications;
 
 import com.example.cper_core.dtos.notificacao.NotificacaoFiltroDto;
 import com.example.cper_core.entities.Notificacao;
+import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 
 import jakarta.persistence.criteria.Predicate;
@@ -34,6 +35,14 @@ public class NotificacaoSpecification {
             }
             if (filtro.getIsDeleted() != null) {
                 predicates.add(cb.equal(root.get("isDeleted"), filtro.getIsDeleted()));
+            }
+            if (filtro.getClienteId() != null) {
+                predicates.add(
+                        cb.equal(
+                                root.join("notificacaoDestinatarios", JoinType.INNER).get("cliente").get("id"),
+                                filtro.getClienteId()
+                        )
+                );
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

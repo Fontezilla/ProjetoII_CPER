@@ -20,7 +20,6 @@ public class NotificacaoDestinatarioService extends AbstractXService<
         NotificacaoDestinatarioDetailsDto,
         NotificacaoDestinatarioDetailsDto,
         NotificacaoDestinatarioFiltroDto,
-        NotificacaoDestinatarioDetailsDto,
         Integer
         > implements INotificacaoDestinatarioService {
 
@@ -63,7 +62,7 @@ public class NotificacaoDestinatarioService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(NotificacaoDestinatario entity) {
+    protected void markedDeleted(NotificacaoDestinatario entity) {
         throw new UnsupportedOperationException("Soft delete não suportado para associação de notificação e destinatário.");
     }
 
@@ -71,5 +70,9 @@ public class NotificacaoDestinatarioService extends AbstractXService<
     public Page<NotificacaoDestinatarioDetailsDto> listFiltered(Pageable pageable, NotificacaoDestinatarioFiltroDto filtro) {
         return notificacaoDestinatarioRepository.findAll(getSpecificationFromFiltro(filtro), pageable)
                 .map(this::toDetailsDto);
+    }
+
+    public boolean findClient(Integer idNotificacao, Integer idCliente) {
+        return notificacaoDestinatarioRepository.findClient(idNotificacao, idCliente);
     }
 }

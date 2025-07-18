@@ -19,7 +19,6 @@ public class NotaService extends AbstractXService<
         NotaDetailsDto,
         NotaDetailsExtendedDto,
         NotaFiltroDto,
-        NotaWithRelationshipsDto,
         Integer
         > implements INotaService {
 
@@ -60,7 +59,7 @@ public class NotaService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Nota entity) {
+    protected void markedDeleted(Nota entity) {
         entity.setIsDeleted(true);
     }
 }

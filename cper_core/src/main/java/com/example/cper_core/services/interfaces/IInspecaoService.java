@@ -11,7 +11,6 @@ public interface IInspecaoService extends IXService<
         InspecaoDetailsDto,
         InspecaoDetailsExtendedDto,
         InspecaoFiltroDto,
-        InspecaoWithRelationshipsDto,
         Integer
         > {
 

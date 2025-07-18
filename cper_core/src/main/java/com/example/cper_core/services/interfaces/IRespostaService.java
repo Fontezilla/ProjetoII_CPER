@@ -9,7 +9,6 @@ public interface IRespostaService extends IXService<
         RespostaDetailsDto,
         RespostaDetailsExtendedDto,
         RespostaFiltroDto,
-        RespostaWithRelationshipsDto,
         Integer
         > {
 }

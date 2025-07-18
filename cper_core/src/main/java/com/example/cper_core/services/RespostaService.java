@@ -18,7 +18,6 @@ public class RespostaService extends AbstractXService<
         RespostaDetailsDto,
         RespostaDetailsExtendedDto,
         RespostaFiltroDto,
-        RespostaWithRelationshipsDto,
         Integer
         > implements IRespostaService {
 
@@ -59,7 +58,7 @@ public class RespostaService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Resposta entity) {
+    protected void markedDeleted(Resposta entity) {
         entity.setIsDeleted(true);
     }
 }

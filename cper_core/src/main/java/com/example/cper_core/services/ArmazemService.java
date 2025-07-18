@@ -23,7 +23,6 @@ public class ArmazemService extends AbstractXService<
         ArmazemDetailsDto,
         ArmazemDetailsExtendedDto,
         ArmazemFiltroDto,
-        ArmazemWithRelationshipsDto,
         Integer
         > implements IArmazemService {
 
@@ -69,7 +68,7 @@ public class ArmazemService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Armazem entity) {
+    protected void markedDeleted(Armazem entity) {
         entity.setIsDeleted(true);
     }
 

@@ -9,7 +9,6 @@ public interface IPedidoGeracaoService extends IXService<
         PedidoGeracaoDetailsDto,
         PedidoGeracaoDetailsExtendedDto,
         PedidoGeracaoFiltroDto,
-        PedidoGeracaoWithRelationshipsDto,
         Integer
         > {
 }

@@ -7,7 +7,6 @@ public interface ILoteService extends IXService<
         LoteDetailsDto,
         LoteDetailsExtendedDto,
         LoteFiltroDto,
-        LoteWithRelationshipsDto,
         Integer
         > {
 }

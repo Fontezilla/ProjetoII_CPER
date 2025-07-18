@@ -9,7 +9,6 @@ public interface IDepartamentoService extends IXService<
         DepartamentoDetailsDto,
         DepartamentoDetailsExtendedDto,
         DepartamentoFiltroDto,
-        DepartamentoWithRelationshipsDto,
         Integer
         > {
 

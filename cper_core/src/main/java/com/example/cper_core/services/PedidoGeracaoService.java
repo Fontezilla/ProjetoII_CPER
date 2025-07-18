@@ -21,7 +21,6 @@ public class PedidoGeracaoService extends AbstractXService<
         PedidoGeracaoDetailsDto,
         PedidoGeracaoDetailsExtendedDto,
         PedidoGeracaoFiltroDto,
-        PedidoGeracaoWithRelationshipsDto,
         Integer
         > implements IPedidoGeracaoService {
 
@@ -62,7 +61,7 @@ public class PedidoGeracaoService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(PedidoGeracao entity) {
+    protected void markedDeleted(PedidoGeracao entity) {
         entity.setIsDeleted(true);
     }
 }

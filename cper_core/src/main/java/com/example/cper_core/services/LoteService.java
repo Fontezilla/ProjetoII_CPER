@@ -19,7 +19,6 @@ public class LoteService extends AbstractXService<
         LoteDetailsDto,
         LoteDetailsExtendedDto,
         LoteFiltroDto,
-        LoteWithRelationshipsDto,
         Integer
         > implements ILoteService {
 
@@ -60,7 +59,7 @@ public class LoteService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Lote entity) {
+    protected void markedDeleted(Lote entity) {
         entity.setIsDeleted(true);
     }
 }

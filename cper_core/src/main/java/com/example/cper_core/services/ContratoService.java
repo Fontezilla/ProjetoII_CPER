@@ -19,7 +19,6 @@ public class ContratoService extends AbstractXService<
         ContratoDetailsDto,
         ContratoDetailsExtendedDto,
         ContratoFiltroDto,
-        ContratoWithRelationshipsDto,
         Integer
         > implements IContratoService {
 
@@ -60,7 +59,7 @@ public class ContratoService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Contrato entity) {
+    protected void markedDeleted(Contrato entity) {
         entity.setIsDeleted(true);
     }
 }

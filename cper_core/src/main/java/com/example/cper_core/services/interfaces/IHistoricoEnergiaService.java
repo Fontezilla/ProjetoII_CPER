@@ -10,7 +10,6 @@ public interface IHistoricoEnergiaService extends IXService<
         HistoricoEnergiaDetailsDto,
         HistoricoEnergiaDetailsExtendedDto,
         HistoricoEnergiaFiltroDto,
-        HistoricoEnergiaDetailsExtendedDto,
         Integer
         > {
 }

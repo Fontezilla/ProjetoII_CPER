@@ -17,11 +17,11 @@ public class TicketService extends AbstractXService<
         TicketDetailsDto,
         TicketDetailsExtendedDto,
         TicketFiltroDto,
-        TicketWithRelationshipsDto,
         Integer
         > implements ITicketService {
 
     private final TicketMapper ticketMapper;
+    private final TicketRepository ticketRepository;
 
     public TicketService(
             TicketRepository ticketRepository,
@@ -30,6 +30,7 @@ public class TicketService extends AbstractXService<
     ) {
         super(ticketRepository, ticketRepository, validator);
         this.ticketMapper = ticketMapper;
+        this.ticketRepository = ticketRepository;
     }
 
     @Override
@@ -58,7 +59,11 @@ public class TicketService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Ticket entity) {
+    protected void markedDeleted(Ticket entity) {
         entity.setIsDeleted(true);
+    }
+
+    public boolean ticketBelongsToClient(Integer ticketId, Integer clientId) {
+        return ticketRepository.isTicketOwnedByClient(ticketId, clientId);
     }
 }

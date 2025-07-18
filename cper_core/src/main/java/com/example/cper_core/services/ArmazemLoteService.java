@@ -1,5 +1,6 @@
 package com.example.cper_core.services;
 
+import com.example.cper_core.dtos.armazem.ArmazemWithRelationshipsDto;
 import com.example.cper_core.dtos.armazem_lote.*;
 import com.example.cper_core.entities.Armazem;
 import com.example.cper_core.entities.ArmazemLote;
@@ -24,7 +25,6 @@ public class ArmazemLoteService extends AbstractXService<
         ArmazemLoteDetailsDto,
         ArmazemLoteDetailsExtendedDto,
         ArmazemLoteFiltroDto,
-        ArmazemLoteWithRelationshipsDto,
         ArmazemLoteId
         > implements IArmazemLoteService {
 
@@ -65,7 +65,6 @@ public class ArmazemLoteService extends AbstractXService<
     @Override
     protected void updateEntityFromDto(ArmazemLoteDetailsExtendedDto dto, ArmazemLote entity) {
         entity.setQuantidadeArmazenada(dto.getQuantidadeArmazenada());
-        // armazem e lote não são atualizados pois fazem parte da chave primária
     }
 
     @Override
@@ -84,7 +83,7 @@ public class ArmazemLoteService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(ArmazemLote entity) {
+    protected void markedDeleted(ArmazemLote entity) {
         throw new UnsupportedOperationException("Operação de eliminação não suportada para ArmazemLote.");
     }
 }

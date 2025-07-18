@@ -4,6 +4,7 @@ import com.example.cper_core.entities.NotificacaoDestinatario;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -17,7 +18,12 @@ public interface NotificacaoDestinatarioRepository extends JpaRepositoryWithExte
     @Override
     Optional<NotificacaoDestinatario> findByIdExtended(Integer id);
 
-    NotificacaoDestinatario findByNotificacaoIdAndFuncionarioId(Integer idNotificacao, Integer idFuncionario);
+    @Query("""
+        SELECT COUNT(nd) > 0
+        FROM NotificacaoDestinatario nd
+        WHERE nd.notificacao.id = :idNotificacao AND nd.cliente.id = :idCliente
+    """)
 
-    NotificacaoDestinatario findByNotificacaoIdAndClienteId(Integer idNotificacao, Integer idCliente);
+    boolean findClient(@Param("idNotificacao") Integer idNotificacao,
+                       @Param("idCliente") Integer idCliente);
 }

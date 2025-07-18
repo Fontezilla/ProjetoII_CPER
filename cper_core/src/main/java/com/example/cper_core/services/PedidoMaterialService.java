@@ -24,7 +24,6 @@ public class PedidoMaterialService extends AbstractXService<
         PedidoMaterialDetailsDto,
         PedidoMaterialDetailsExtendedDto,
         PedidoMaterialFiltroDto,
-        PedidoMaterialWithRelationshipsDto,
         Integer
         > implements IPedidoMaterialService {
 
@@ -69,7 +68,7 @@ public class PedidoMaterialService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(PedidoMaterial entity) {
+    protected void markedDeleted(PedidoMaterial entity) {
         entity.setIsDeleted(true);
     }
 

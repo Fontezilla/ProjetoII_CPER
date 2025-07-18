@@ -19,5 +19,7 @@ public class NotificacaoFiltroDto {
 
     private String tipoDestinatario;
 
+    private Integer clienteId;
+
     private Boolean isDeleted = false;
 }

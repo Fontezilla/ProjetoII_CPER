@@ -11,7 +11,6 @@ public interface ILocalidadeService extends IXService<
         LocalidadeDetailsDto,
         LocalidadeDetailsExtendedDto,
         LocalidadeFiltroDto,
-        LocalidadeWithRelationshipsDto,
         Integer
         > {
 

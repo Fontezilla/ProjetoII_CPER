@@ -8,7 +8,6 @@ public interface IXService<
         TDetailsDto,
         TExtendedDto,
         TFiltroDto,
-        TWithRelationshipsDto,
         TId
         > {
 

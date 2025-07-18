@@ -21,7 +21,6 @@ public class ClienteService extends AbstractXService<
         ClienteDetailsDto,
         ClienteDetailsExtendedDto,
         ClienteFiltroDto,
-        ClienteWithRelationshipsDto,
         Integer
         > implements IClienteService {
 
@@ -90,7 +89,7 @@ public class ClienteService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Cliente entity) {
+    protected void markedDeleted(Cliente entity) {
         entity.setIsDeleted(true);
     }
 }

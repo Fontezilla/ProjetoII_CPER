@@ -21,7 +21,6 @@ public class MaterialPedidoMaterialService extends AbstractXService<
         MaterialPedidoMaterialDetailsDto,
         MaterialPedidoMaterialDetailsDto,
         MaterialPedidoMaterialFiltroDto,
-        MaterialPedidoMaterialDto,
         MaterialPedidoMaterialId
         > implements IMaterialPedidoMaterialService {
 
@@ -81,7 +80,7 @@ public class MaterialPedidoMaterialService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(MaterialPedidoMaterial entity) {
+    protected void markedDeleted(MaterialPedidoMaterial entity) {
         throw new UnsupportedOperationException("Soft delete não é suportado nesta entidade associativa.");
     }
 }

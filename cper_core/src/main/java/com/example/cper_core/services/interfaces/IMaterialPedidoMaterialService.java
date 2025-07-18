@@ -8,7 +8,6 @@ public interface IMaterialPedidoMaterialService extends IXService<
         MaterialPedidoMaterialDetailsDto,
         MaterialPedidoMaterialDetailsDto,
         MaterialPedidoMaterialFiltroDto,
-        MaterialPedidoMaterialDto,
         MaterialPedidoMaterialId
         > {
 }

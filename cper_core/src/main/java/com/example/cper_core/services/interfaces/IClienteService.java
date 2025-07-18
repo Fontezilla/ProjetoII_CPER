@@ -9,7 +9,6 @@ public interface IClienteService extends IXService<
         ClienteDetailsDto,
         ClienteDetailsExtendedDto,
         ClienteFiltroDto,
-        ClienteWithRelationshipsDto,
         Integer
         > {
 }

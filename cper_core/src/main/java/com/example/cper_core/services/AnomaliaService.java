@@ -8,6 +8,7 @@ import com.example.cper_core.enums.TipoAnomalia;
 import com.example.cper_core.mappers.AnomaliaMapper;
 import com.example.cper_core.repositories.*;
 import com.example.cper_core.services.interfaces.IAnomaliaService;
+import com.example.cper_core.services.interfaces.IWithRelationshipsSupport;
 import com.example.cper_core.specifications.AnomaliaSpecification;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,8 @@ public class AnomaliaService extends AbstractXService<
         AnomaliaDetailsDto,
         AnomaliaDetailsExtendedDto,
         AnomaliaFiltroDto,
-        AnomaliaWithRelationshipsDto,
         Integer
-        > implements IAnomaliaService {
+        > implements IAnomaliaService, IWithRelationshipsSupport<Anomalia, AnomaliaWithRelationshipsDto, Integer> {
 
     private final AnomaliaMapper anomaliaMapper;
     private final CentroProducaoRepository centroProducaoRepository;
@@ -40,6 +40,11 @@ public class AnomaliaService extends AbstractXService<
         this.anomaliaMapper = anomaliaMapper;
         this.centroProducaoRepository = centroProducaoRepository;
         this.funcionarioRepository = funcionarioRepository;
+    }
+
+    @Override
+    public JpaRepositoryWithExtendedFetch<Anomalia, Integer> getRepository() {
+        return this.repository;
     }
 
     @Override
@@ -84,7 +89,12 @@ public class AnomaliaService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Anomalia entity) {
+    protected void markedDeleted(Anomalia entity) {
         entity.setIsDeleted(true);
+    }
+
+    @Override
+    public AnomaliaWithRelationshipsDto toWithRelationshipsDto(Anomalia entity) {
+        return anomaliaMapper.toWithRelationshipsDto(entity);
     }
 }

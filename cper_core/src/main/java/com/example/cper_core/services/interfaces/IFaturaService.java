@@ -9,7 +9,6 @@ public interface IFaturaService extends IXService<
         FaturaDetailsDto,
         FaturaDetailsExtendedDto,
         FaturaFiltroDto,
-        FaturaWithRelationshipsDto,
         Integer
         > {
 }

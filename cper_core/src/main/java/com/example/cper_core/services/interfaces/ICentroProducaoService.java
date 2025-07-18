@@ -9,7 +9,6 @@ public interface ICentroProducaoService extends IXService<
         CentroProducaoDetailsDto,
         CentroProducaoDetailsExtendedDto,
         CentroProducaoFiltroDto,
-        CentroProducaoWithRelationshipsDto,
         Integer
         > {
 

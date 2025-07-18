@@ -43,6 +43,8 @@ public class ContratoFiltroDto {
     private Set<Integer> idsFuncionario;
     private Set<Integer> idsEndereco;
 
+    private Integer clienteId;
+
     private BigDecimal vElectricidadeMin;
     private BigDecimal vElectricidadeMax;
 

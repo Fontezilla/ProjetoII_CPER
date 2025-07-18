@@ -30,7 +30,6 @@ public class HistoricoEnergiaService extends AbstractXService<
         HistoricoEnergiaDetailsDto,
         HistoricoEnergiaDetailsExtendedDto,
         HistoricoEnergiaFiltroDto,
-        HistoricoEnergiaDetailsExtendedDto,
         Integer
         > implements IHistoricoEnergiaService {
 
@@ -91,7 +90,7 @@ public class HistoricoEnergiaService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(HistoricoEnergia entity) {
+    protected void markedDeleted(HistoricoEnergia entity) {
         throw new UnsupportedOperationException("Histórico de energia não pode ser eliminado logicamente.");
     }
 

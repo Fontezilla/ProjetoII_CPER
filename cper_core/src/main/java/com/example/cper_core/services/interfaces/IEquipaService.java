@@ -10,7 +10,6 @@ public interface IEquipaService extends IXService<
         EquipaDetailsDto,
         EquipaDetailsExtendedDto,
         EquipaFiltroDto,
-        EquipaWithRelationshipsDto,
         Integer
         > {
 

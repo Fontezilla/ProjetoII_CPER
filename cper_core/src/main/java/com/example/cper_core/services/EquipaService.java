@@ -23,7 +23,6 @@ public class EquipaService extends AbstractXService<
         EquipaDetailsDto,
         EquipaDetailsExtendedDto,
         EquipaFiltroDto,
-        EquipaWithRelationshipsDto,
         Integer
         > implements IEquipaService {
 
@@ -75,7 +74,7 @@ public class EquipaService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Equipa entity) {
+    protected void markedDeleted(Equipa entity) {
         entity.setIsDeleted(true);
     }
 

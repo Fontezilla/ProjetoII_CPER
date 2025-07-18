@@ -7,7 +7,6 @@ public interface ISolicitacaoMaterialService extends IXService<
         SolicitacaoMaterialDetailsDto,
         SolicitacaoMaterialDetailsExtendedDto,
         SolicitacaoMaterialFiltroDto,
-        SolicitacaoMaterialWithRelationshipsDto,
         Integer
         > {
 }

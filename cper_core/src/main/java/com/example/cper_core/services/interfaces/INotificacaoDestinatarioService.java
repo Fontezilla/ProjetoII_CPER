@@ -9,8 +9,8 @@ public interface INotificacaoDestinatarioService extends IXService<
         NotificacaoDestinatarioDetailsDto,
         NotificacaoDestinatarioDetailsDto,
         NotificacaoDestinatarioFiltroDto,
-        NotificacaoDestinatarioDetailsDto,
         Integer
         > {
+    public boolean findClient(Integer idNotificacao, Integer idCliente);
 }
 

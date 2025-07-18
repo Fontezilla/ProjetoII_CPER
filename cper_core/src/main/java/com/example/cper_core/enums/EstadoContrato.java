@@ -3,11 +3,12 @@ package com.example.cper_core.enums;
 import com.example.cper_core.enums.Interface.EnumWithId;
 
 public enum EstadoContrato implements EnumWithId<EstadoContrato> {
-    ATIVO(1),
-    SUSPENSO(2),
-    CANCELADO(3),
-    TERMINADO(4),
-    EM_ANALISE(5);
+    EM_ANALISE(1),
+    ATIVO(2),
+    SUSPENSO(3),
+    CANCELADO(4),
+    TERMINADO(5);
+
 
     private final int id;
 

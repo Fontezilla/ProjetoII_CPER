@@ -19,7 +19,6 @@ public class LocalidadeService extends AbstractXService<
         LocalidadeDetailsDto,
         LocalidadeDetailsExtendedDto,
         LocalidadeFiltroDto,
-        LocalidadeWithRelationshipsDto,
         Integer
         > implements ILocalidadeService {
 
@@ -70,7 +69,7 @@ public class LocalidadeService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Localidade entity) {
+    protected void markedDeleted(Localidade entity) {
         throw new UnsupportedOperationException("Soft delete não suportado para Localidade.");
     }
 

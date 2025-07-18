@@ -19,7 +19,6 @@ public class FaturaService extends AbstractXService<
         FaturaDetailsDto,
         FaturaDetailsExtendedDto,
         FaturaFiltroDto,
-        FaturaWithRelationshipsDto,
         Integer
         > implements IFaturaService {
 
@@ -60,7 +59,7 @@ public class FaturaService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Fatura entity) {
+    protected void markedDeleted(Fatura entity) {
         entity.setIsDeleted(true);
     }
 }

@@ -1,5 +1,7 @@
 package com.example.cper_core.mappers;
 
+import com.example.cper_core.dtos.notificacao.NotificacaoWithRelationshipsDto;
+import com.example.cper_core.entities.Notificacao;
 import com.example.cper_core.enums.*;
 import com.example.cper_core.dtos.anomalia.*;
 import com.example.cper_core.entities.Anomalia;
@@ -53,12 +55,12 @@ public interface AnomaliaMapper {
     @IterableMapping(qualifiedByName = "toExtendedDto")
     List<AnomaliaDetailsExtendedDto> toExtendedDtoList(List<Anomalia> entities);
 
-    // -------- To WithNotas DTO --------
-    @Named("toWithNotasDto")
-    AnomaliaWithRelationshipsDto toWithNotasDto(Anomalia entity);
+    // --- To WithRelationships DTO ---
+    @Named("toWithRelationshipsDto")
+    AnomaliaWithRelationshipsDto toWithRelationshipsDto(Anomalia entity);
 
-    @IterableMapping(qualifiedByName = "toWithNotasDto")
-    List<AnomaliaWithRelationshipsDto> toWithNotasDtoList(List<Anomalia> entities);
+    @IterableMapping(qualifiedByName = "toWithRelationshipsDto")
+    List<AnomaliaWithRelationshipsDto> toWithRelationshipsDtoList(List<Anomalia> entities);
 
     // -------- To Entity --------
     Anomalia toEntity(AnomaliaDto dto);

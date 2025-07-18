@@ -18,7 +18,6 @@ public class SolicitacaoMaterialService extends AbstractXService<
         SolicitacaoMaterialDetailsDto,
         SolicitacaoMaterialDetailsExtendedDto,
         SolicitacaoMaterialFiltroDto,
-        SolicitacaoMaterialWithRelationshipsDto,
         Integer
         > implements ISolicitacaoMaterialService {
 
@@ -60,7 +59,7 @@ public class SolicitacaoMaterialService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(SolicitacaoMaterial entity) {
+    protected void markedDeleted(SolicitacaoMaterial entity) {
         entity.setIsDeleted(true);
     }
 }

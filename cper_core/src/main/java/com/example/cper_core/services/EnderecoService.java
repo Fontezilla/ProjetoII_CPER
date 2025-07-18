@@ -19,7 +19,6 @@ public class EnderecoService extends AbstractXService<
         EnderecoDetailsDto,
         EnderecoDetailsExtendedDto,
         EnderecoFiltroDto,
-        EnderecoWithRelationshipsDto,
         Integer
         > implements IEnderecoService {
 
@@ -70,7 +69,7 @@ public class EnderecoService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Endereco entity) {
+    protected void markedDeleted(Endereco entity) {
         throw new UnsupportedOperationException("Soft delete não suportado para Endereco.");
     }
 

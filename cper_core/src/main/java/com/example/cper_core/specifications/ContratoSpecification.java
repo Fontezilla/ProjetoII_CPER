@@ -86,6 +86,9 @@ public class ContratoSpecification {
             if (filtro.getRequerValidacao() != null) {
                 predicates.add(cb.equal(root.get("requerValidacao"), filtro.getRequerValidacao()));
             }
+            if (filtro.getClienteId() != null) {
+                predicates.add(cb.equal(root.get("solicitacaoEnergetica").get("cliente").get("id"), filtro.getClienteId()));
+            }
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };

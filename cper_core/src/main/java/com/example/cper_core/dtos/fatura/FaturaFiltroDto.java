@@ -38,5 +38,7 @@ public class FaturaFiltroDto {
 
     private Set<Integer> idsContrato;
     private Set<Integer> idsFuncionario;
+
+    private Integer clienteId;
 }
 

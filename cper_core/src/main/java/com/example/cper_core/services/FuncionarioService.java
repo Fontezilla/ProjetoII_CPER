@@ -12,7 +12,8 @@ import com.example.cper_core.repositories.FuncionarioRepository;
 import com.example.cper_core.services.interfaces.IFuncionarioService;
 import com.example.cper_core.specifications.FuncionarioSpecification;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,6 @@ public class FuncionarioService extends AbstractXService<
         FuncionarioDetailsDto,
         FuncionarioDetailsExtendedDto,
         FuncionarioFiltroDto,
-        FuncionarioWithRelationshipsDto,
         Integer
         > implements IFuncionarioService {
 
@@ -125,7 +125,30 @@ public class FuncionarioService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Funcionario entity) {
+    protected void markedDeleted(Funcionario entity) {
         entity.setIsDeleted(true);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<FuncionarioPublicDto> listarPublicamente(Pageable pageable, FuncionarioFiltroDto filtro) {
+        Specification<Funcionario> spec = FuncionarioSpecification.filter(filtro);
+        return funcionarioRepository.findAll(spec, pageable)
+                .map(func -> new FuncionarioPublicDto(
+                        func.getId(),
+                        func.getNome(),
+                        func.getCargo()
+                ));
+    }
+
+    @Transactional(readOnly = true)
+    public FuncionarioPublicDto getPublicById(Integer id) {
+        Funcionario func = funcionarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado"));
+
+        return new FuncionarioPublicDto(
+                func.getId(),
+                func.getNome(),
+                func.getCargo()
+        );
     }
 }

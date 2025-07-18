@@ -1,10 +1,14 @@
 package com.example.cper_core.services;
 
+import com.example.cper_core.dtos.anomalia.AnomaliaWithRelationshipsDto;
 import com.example.cper_core.dtos.notificacao.*;
+import com.example.cper_core.entities.Anomalia;
 import com.example.cper_core.entities.Notificacao;
 import com.example.cper_core.mappers.NotificacaoMapper;
+import com.example.cper_core.repositories.JpaRepositoryWithExtendedFetch;
 import com.example.cper_core.repositories.NotificacaoRepository;
 import com.example.cper_core.services.interfaces.INotificacaoService;
+import com.example.cper_core.services.interfaces.IWithRelationshipsSupport;
 import com.example.cper_core.specifications.NotificacaoSpecification;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -18,7 +22,6 @@ public class NotificacaoService extends AbstractXService<
         NotificacaoDetailsDto,
         NotificacaoDetailsExtendedDto,
         NotificacaoFiltroDto,
-        NotificacaoWithRelationshipsDto,
         Integer
         > implements INotificacaoService {
 
@@ -31,6 +34,11 @@ public class NotificacaoService extends AbstractXService<
     ) {
         super(notificacaoRepository, notificacaoRepository, validator);
         this.notificacaoMapper = notificacaoMapper;
+    }
+
+    @Override
+    public JpaRepositoryWithExtendedFetch<Notificacao, Integer> getRepository() {
+        return this.repository;
     }
 
     @Override
@@ -54,7 +62,7 @@ public class NotificacaoService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Notificacao entity) {
+    protected void markedDeleted(Notificacao entity) {
         entity.setIsDeleted(true);
     }
 
@@ -62,5 +70,10 @@ public class NotificacaoService extends AbstractXService<
     protected Specification<Notificacao> getSpecificationFromFiltro(NotificacaoFiltroDto filtro) {
         // Usando a especificação para criar a consulta filtrada
         return NotificacaoSpecification.filter(filtro);
+    }
+
+    @Override
+    public NotificacaoWithRelationshipsDto toWithRelationshipsDto(Notificacao entity) {
+        return notificacaoMapper.toWithRelationshipsDto(entity);
     }
 }

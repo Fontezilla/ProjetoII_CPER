@@ -24,7 +24,6 @@ public class SolicitacaoEnergeticaService extends AbstractXService<
         SolicitacaoEnergeticaDetailsDto,
         SolicitacaoEnergeticaDetailsExtendedDto,
         SolicitacaoEnergeticaFiltroDto,
-        SolicitacaoEnergeticaWithRelationshipsDto,
         Integer
         > implements ISolicitacaoEnergeticaService {
 
@@ -69,7 +68,7 @@ public class SolicitacaoEnergeticaService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(SolicitacaoEnergetica entity) {
+    protected void markedDeleted(SolicitacaoEnergetica entity) {
         entity.setIsDeleted(true);
     }
 

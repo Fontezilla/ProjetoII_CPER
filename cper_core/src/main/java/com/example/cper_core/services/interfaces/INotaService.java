@@ -7,7 +7,6 @@ public interface INotaService extends IXService<
         NotaDetailsDto,
         NotaDetailsExtendedDto,
         NotaFiltroDto,
-        NotaWithRelationshipsDto,
         Integer
         > {
 }

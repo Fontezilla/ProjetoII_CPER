@@ -12,7 +12,6 @@ public interface ISolicitacaoEnergeticaService extends IXService<
         SolicitacaoEnergeticaDetailsDto,
         SolicitacaoEnergeticaDetailsExtendedDto,
         SolicitacaoEnergeticaFiltroDto,
-        SolicitacaoEnergeticaWithRelationshipsDto,
         Integer
         > {
 

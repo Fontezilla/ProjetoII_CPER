@@ -7,7 +7,6 @@ public interface IEnderecoService extends IXService<
         EnderecoDetailsDto,
         EnderecoDetailsExtendedDto,
         EnderecoFiltroDto,
-        EnderecoWithRelationshipsDto,
         Integer
         > {
 

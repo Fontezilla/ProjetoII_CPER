@@ -11,7 +11,6 @@ public interface IPedidoMaterialService extends IXService<
         PedidoMaterialDetailsDto,
         PedidoMaterialDetailsExtendedDto,
         PedidoMaterialFiltroDto,
-        PedidoMaterialWithRelationshipsDto,
         Integer
         > {
 

@@ -23,7 +23,6 @@ public class DepartamentoService extends AbstractXService<
         DepartamentoDetailsDto,
         DepartamentoDetailsExtendedDto,
         DepartamentoFiltroDto,
-        DepartamentoWithRelationshipsDto,
         Integer
         > implements IDepartamentoService {
 
@@ -69,7 +68,7 @@ public class DepartamentoService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Departamento entity) {
+    protected void markedDeleted(Departamento entity) {
         entity.setIsDeleted(true);
     }
 

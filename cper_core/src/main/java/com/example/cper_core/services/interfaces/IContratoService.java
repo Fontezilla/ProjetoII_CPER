@@ -9,7 +9,6 @@ public interface IContratoService extends IXService<
         ContratoDetailsDto,
         ContratoDetailsExtendedDto,
         ContratoFiltroDto,
-        ContratoWithRelationshipsDto,
         Integer
         > {
 }

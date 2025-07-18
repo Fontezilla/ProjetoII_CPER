@@ -7,7 +7,6 @@ public interface IMaterialService extends IXService<
         MaterialDetailsDto,
         MaterialDetailsExtendedDto,
         MaterialFiltroDto,
-        MaterialWithRelationshipsDto,
         Integer
         > {
 }

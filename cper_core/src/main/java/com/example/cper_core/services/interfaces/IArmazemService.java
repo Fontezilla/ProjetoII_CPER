@@ -9,7 +9,6 @@ public interface IArmazemService extends IXService<
         ArmazemDetailsDto,
         ArmazemDetailsExtendedDto,
         ArmazemFiltroDto,
-        ArmazemWithRelationshipsDto,
         Integer
         > {
 

@@ -7,7 +7,7 @@ public interface IHistoricoConsumoService extends IXService<
         HistoricoConsumoDetailsDto,
         HistoricoConsumoDetailsExtendedDto,
         HistoricoConsumoFiltroDto,
-        HistoricoConsumoWithRelationshipsDto,
         Integer
         > {
+    public HistoricoConsumoMetricasDto calcularMetricas(HistoricoConsumoFiltroDto filtro);
 }

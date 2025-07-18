@@ -10,7 +10,6 @@ import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.Set;
@@ -24,9 +23,8 @@ public abstract class AbstractXService<
         TDetailsDto,
         TExtendedDto,
         TFiltroDto,
-        TWithRelationshipsDto,
         TId
-        > implements IXService<TDto, TDetailsDto, TExtendedDto, TFiltroDto, TWithRelationshipsDto, TId> {
+        > implements IXService< TDto, TDetailsDto, TExtendedDto, TFiltroDto, TId> {
 
     protected final JpaRepositoryWithExtendedFetch<TEntity, TId> repository;
 
@@ -51,7 +49,7 @@ public abstract class AbstractXService<
 
     protected abstract Specification<TEntity> getSpecificationFromFiltro(TFiltroDto filtro);
 
-    protected abstract void marcarComoEliminado(TEntity entity);
+    protected abstract void markedDeleted(TEntity entity);
 
     protected void validateDto(TExtendedDto dto) {
         Set<ConstraintViolation<TExtendedDto>> violations = validator.validate(dto);
@@ -85,7 +83,7 @@ public abstract class AbstractXService<
 
     @Override
     public TExtendedDto create(TExtendedDto dto) {
-        validateDto(dto); // valida todos os campos
+        validateDto(dto);
         TEntity entity = toEntity(dto);
         return toExtendedDto(repository.save(entity));
     }
@@ -136,7 +134,7 @@ public abstract class AbstractXService<
         TEntity entity = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Registo não encontrado com ID " + id));
         try {
-            marcarComoEliminado(entity);
+            markedDeleted(entity);
             repository.save(entity);
         } catch (UnsupportedOperationException e) {
             validateBeforeDeleting(entity);
@@ -145,6 +143,5 @@ public abstract class AbstractXService<
     }
 
     protected void validateBeforeDeleting(TEntity entity) {
-        // Por defeito não faz nada. Subclasses podem implementar.
     }
 }

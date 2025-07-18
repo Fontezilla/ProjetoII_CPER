@@ -19,7 +19,6 @@ public class MaterialService extends AbstractXService<
         MaterialDetailsDto,
         MaterialDetailsExtendedDto,
         MaterialFiltroDto,
-        MaterialWithRelationshipsDto,
         Integer
         > implements IMaterialService {
 
@@ -60,7 +59,7 @@ public class MaterialService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(Material entity) {
+    protected void markedDeleted(Material entity) {
         entity.setIsDeleted(true);
     }
 }

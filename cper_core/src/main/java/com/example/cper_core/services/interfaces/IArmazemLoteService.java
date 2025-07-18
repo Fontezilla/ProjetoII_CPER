@@ -8,7 +8,6 @@ public interface IArmazemLoteService extends IXService<
         ArmazemLoteDetailsDto,
         ArmazemLoteDetailsExtendedDto,
         ArmazemLoteFiltroDto,
-        ArmazemLoteWithRelationshipsDto,
         ArmazemLoteId
         > {
 }

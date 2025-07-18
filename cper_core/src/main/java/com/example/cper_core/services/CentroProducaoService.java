@@ -23,7 +23,6 @@ public class CentroProducaoService extends AbstractXService<
         CentroProducaoDetailsDto,
         CentroProducaoDetailsExtendedDto,
         CentroProducaoFiltroDto,
-        CentroProducaoWithRelationshipsDto,
         Integer
         > implements ICentroProducaoService {
 
@@ -87,7 +86,7 @@ public class CentroProducaoService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(CentroProducao entity) {
+    protected void markedDeleted(CentroProducao entity) {
         entity.setIsDeleted(true);
     }
 

@@ -9,7 +9,7 @@ public interface ITicketService extends IXService<
         TicketDetailsDto,
         TicketDetailsExtendedDto,
         TicketFiltroDto,
-        TicketWithRelationshipsDto,
         Integer
         > {
+    public boolean ticketBelongsToClient(Integer ticketId, Integer clientId);
 }

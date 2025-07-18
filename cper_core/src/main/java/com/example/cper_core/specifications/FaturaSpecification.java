@@ -20,7 +20,6 @@ public class FaturaSpecification {
             if (filtro.getCodigo() != null && !filtro.getCodigo().isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("codigo")), "%" + filtro.getCodigo().toLowerCase() + "%"));
             }
-
             if (filtro.getDataEmissaoInicio() != null) {
                 predicates.add(cb.greaterThanOrEqualTo(root.get("dataEmissao"), filtro.getDataEmissaoInicio()));
             }
@@ -65,6 +64,12 @@ public class FaturaSpecification {
             }
             if (filtro.getIdsFuncionario() != null && !filtro.getIdsFuncionario().isEmpty()) {
                 predicates.add(root.get("funcionario").get("id").in(filtro.getIdsFuncionario()));
+            }
+            if (filtro.getClienteId() != null) {
+                predicates.add(cb.equal(
+                        root.get("contrato").get("solicitacaoEnergetica").get("cliente").get("id"),
+                        filtro.getClienteId()
+                ));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

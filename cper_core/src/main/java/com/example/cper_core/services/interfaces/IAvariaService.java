@@ -8,7 +8,6 @@ public interface IAvariaService extends IXService<
         AvariaDetailsDto,
         AvariaDetailsExtendedDto,
         AvariaFiltroDto,
-        AvariaWithRelationshipsDto,
         Integer
         > {
 

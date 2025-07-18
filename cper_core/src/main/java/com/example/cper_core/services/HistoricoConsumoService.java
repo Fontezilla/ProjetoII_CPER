@@ -24,7 +24,6 @@ public class HistoricoConsumoService extends AbstractXService<
         HistoricoConsumoDetailsDto,
         HistoricoConsumoDetailsExtendedDto,
         HistoricoConsumoFiltroDto,
-        HistoricoConsumoWithRelationshipsDto,
         Integer
         > implements IHistoricoConsumoService {
 
@@ -65,7 +64,7 @@ public class HistoricoConsumoService extends AbstractXService<
     }
 
     @Override
-    protected void marcarComoEliminado(HistoricoConsumo entity) {
+    protected void markedDeleted(HistoricoConsumo entity) {
         entity.setIsDeleted(true);
     }
 
